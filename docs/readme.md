@@ -18,7 +18,7 @@ Well to be honest I'm not planning on having this be very big. I'm expecting thi
 
 If you need something that is meant for a large-scale server with several hundreds of people, this probably isn't the bot for you.
 
-# Doop...?
+## doop...?
 
 If you want the privacy policy, it's viewable [here](./privacy-policy.md).
 
