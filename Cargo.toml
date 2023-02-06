@@ -1,0 +1,58 @@
+[package]
+name = "mr-manager"
+description = "Open-source Discord guild management bot"
+keywords = ["discord", "bot", "serenity"]
+authors = ["Jaxydog"]
+
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+repository = "https://github.com/Jaxydog/mr-manager/"
+readme = "README.md"
+license = "MIT"
+
+[dependencies.chrono]
+version = "0.4"
+features = ["serde"]
+
+[dependencies.clap]
+version = "4.1"
+features = ["derive"]
+
+[dependencies.colored]
+version = "2.0"
+
+[dependencies.dotenvy]
+version = "0.15"
+
+[dependencies.rand]
+version = "0.8"
+
+[dependencies.rmp-serde]
+version = "1.1"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
+[dependencies.serenity]
+git = "https://github.com/serenity-rs/serenity"
+branch = "next"
+default-features = false
+features = [
+    "cache",
+    "chrono",
+    "client",
+    "gateway",
+    "model",
+    "rustls_backend",
+    "unstable_discord_api",
+]
+
+[dependencies.thiserror]
+version = "1.0"
+
+[dependencies.tokio]
+version = "1.25"
+features = ["full"]
