@@ -26,7 +26,7 @@ pub async fn command(context: &Context, command: &CommandInteraction) -> Result<
     let received = command.id.created_at().timestamp_millis();
     let delay = sent - received;
 
-    embed = embed.title(format!("Pong! ({delay}ms)"));
+    embed = embed.title(format!("doop! ({delay}ms)"));
 
     let builder = CreateInteractionResponseFollowup::new().embed(embed);
 

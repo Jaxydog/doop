@@ -17,11 +17,8 @@ pub async fn command(context: &Context, command: &CommandInteraction) -> Result<
     if let Some(guild_id) = command.guild_id {
         let commands = guild_id.get_application_commands(context).await?;
 
-        description.push_str("\n\n**__Guild commands__**\n");
-
-        if commands.is_empty() {
-            description.push_str("> *...looks like there's nothing here!*");
-        } else {
+        if !commands.is_empty() {
+            description.push_str("\n\n**__Guild commands__**\n");
             description.push_str(&stringify(commands));
         }
     }
@@ -45,7 +42,7 @@ pub async fn command(context: &Context, command: &CommandInteraction) -> Result<
         .author(author)
         .color(color)
         .description(description)
-        .title("Bot Command List");
+        .title("Thank you for using Doop!");
     let builder = CreateInteractionResponseFollowup::new()
         .embed(embed)
         .ephemeral(true);

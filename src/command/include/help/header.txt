@@ -1,1 +1,3 @@
-If you have any questions about the project, you can ask me directly <@206260650010345483> <3
+Doop is an open-source Discord bot whose primary purpose is to assist administrators with guild management, while also throwing in some fun features such as polls.
+
+If you have any questions about the project, you may [view the source](https://github.com/Jaxydog/doop), or you could always just ask me directly <@206260650010345483> <3
