@@ -13,7 +13,7 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 pub const IS_DEV: bool = cfg!(debug_assertions);
 pub const INTENTS: GatewayIntents = GatewayIntents::non_privileged();
-pub const BOT_COLOR: Color = Color::BLITZ_BLUE;
+pub const BOT_COLOR: Color = Color::new(0x27_89_CD);
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {

@@ -18,7 +18,6 @@ impl Handler {
     pub async fn create_commands(&self, http: &Http) -> Result<()> {
         let guild_id = get_dev_guild()?;
         let cmds = vec![
-            crate::command::data::new(),
             crate::command::embed::new(),
             crate::command::help::new(),
             crate::command::ping::new(),
@@ -135,7 +134,6 @@ impl EventHandler for Handler {
                 _ => err_wrap!("unknown autocomplete: {id}"),
             },
             Interaction::Command(cmd) => match cmd.data.name.as_str() {
-                crate::command::data::NAME => crate::command::data::command(&context, cmd).await,
                 crate::command::embed::NAME => crate::command::embed::command(&context, cmd).await,
                 crate::command::help::NAME => crate::command::help::command(&context, cmd).await,
                 crate::command::ping::NAME => crate::command::ping::command(&context, cmd).await,

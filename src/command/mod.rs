@@ -2,10 +2,8 @@ use serenity::all::{ResolvedOption, ResolvedValue};
 
 use crate::prelude::*;
 
-pub mod data;
 pub mod embed;
 pub mod help;
-pub mod mail;
 pub mod ping;
 
 #[macro_export]

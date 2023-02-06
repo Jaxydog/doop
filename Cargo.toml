@@ -9,7 +9,7 @@ edition = "2021"
 publish = false
 
 repository = "https://github.com/Jaxydog/mr-manager/"
-readme = "README.md"
+readme = "docs/readme.md"
 license = "MIT"
 
 [dependencies.chrono]
