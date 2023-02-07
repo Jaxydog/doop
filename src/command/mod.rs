@@ -25,6 +25,7 @@ macro_rules! define_command {
         }
     };
 }
+
 #[macro_export]
 macro_rules! define_option {
     ($name:literal ($type:ident) {
