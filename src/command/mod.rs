@@ -2,6 +2,7 @@ use serenity::all::{ResolvedOption, ResolvedValue};
 
 use crate::prelude::*;
 
+pub mod apply;
 pub mod embed;
 pub mod help;
 pub mod ping;
@@ -33,9 +34,9 @@ macro_rules! define_option {
         $(required: $required:literal,)?
         $(autocomplete: $autocomplete:literal,)?
         $(options: [ $($option:expr,)+ ],)?
-        $(choices(i32): { $($iname:literal: $ichoice:expr,)+ },)?
-        $(choices(str): { $($sname:literal: $schoice:expr,)+ },)?
-        $(choices(f64): { $($fname:literal: $fchoice:expr,)+ },)?
+        $(choices(i32): { $($iname:expr => $ichoice:expr,)+ },)?
+        $(choices(str): { $($sname:expr => $schoice:expr,)+ },)?
+        $(choices(f64): { $($fname:expr => $fchoice:expr,)+ },)?
         $(range(i32): $imin:literal..=$imax:literal,)?
         $(range(str): $smin:literal..=$smax:literal,)?
         $(range(f64): $fmin:literal..=$fmax:literal,)?
