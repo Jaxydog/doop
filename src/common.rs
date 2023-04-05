@@ -2,6 +2,7 @@ use std::fmt::{Display, Write};
 use std::str::FromStr;
 
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 use serenity::all::{
     ChannelId, GuildChannel, GuildId, Message, MessageId, PartialGuild, PrivateChannel,
 };
@@ -11,7 +12,7 @@ use crate::util::{Error, Result};
 use crate::{err, err_wrap};
 
 /// Represents a "message anchor", or link to a specific message in a guild or DM channel
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Anchor {
     /// A message within a DM channel
     Private(ChannelId, MessageId),
