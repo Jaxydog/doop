@@ -1,27 +1,39 @@
-use crate::prelude::*;
+use serenity::all::CommandInteraction;
+use serenity::builder::{
+    CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateInteractionResponse,
+    CreateInteractionResponseMessage,
+};
+use serenity::model::Color;
+use serenity::prelude::CacheHttp;
 
-define_command!("embed" {
+use crate::common::parse_escapes;
+use crate::util::{Result, BOT_COLOR};
+use crate::{command, err_wrap, option};
+
+use super::CommandDataResolver;
+
+command!("embed": {
     description: "Creates an embedded message",
     permissions: MANAGE_MESSAGES,
-    allow_dms: false,
+    dms_allowed: false,
     options: [
-        define_option!("author_icon" (String) {
+        option!("author_icon" <String>: {
             description: "The embed author's icon URL",
             required: false,
         }),
-        define_option!("author_link" (String) {
+        option!("author_link" <String>: {
             description: "The embed author's URL",
             required: false,
         }),
-        define_option!("author_name" (String) {
+        option!("author_name" <String>: {
             description: "The embed author's name",
             required: false,
-            range(str): 1..=256,
+            where <str>: 1..=256,
         }),
-        define_option!("color" (String) {
-            description: "The embed author's color",
+        option!("color" <Integer>: {
+            description: "The embed's color",
             required: false,
-            choices(str): {
+            match <str> {
                 "User" => String::new(),
                 "Bot" => BOT_COLOR.hex(),
                 "Red" => Color::RED.hex(),
@@ -44,58 +56,59 @@ define_command!("embed" {
                 "Black" => Color::DARKER_GREY.hex(),
             },
         }),
-        define_option!("description" (String) {
-            description: "The embed's description (supports \\n and Discord's markdown variant)",
+        option!("description" <String>: {
+            description: "The embed's description",
             required: false,
-            range(str): 1..=4096,
+            where <str>: 1..=4096,
         }),
-        define_option!("footer_icon" (String) {
+        option!("footer_icon" <String>: {
             description: "The embed footers's icon URL",
             required: false,
         }),
-        define_option!("footer_text" (String) {
+        option!("footer_text" <String>: {
             description: "The embed footers's text",
             required: false,
-            range(str): 1..=2048,
+            where <str>: 1..=2048,
         }),
-        define_option!("image_link" (String) {
+        option!("image_link" <String>: {
             description: "The embed's image URL",
             required: false,
         }),
-        define_option!("thumbnail_link" (String) {
+        option!("thumbnail_link" <String>: {
             description: "The embed's thumbnail URL",
             required: false,
         }),
-        define_option!("title_link" (String) {
+        option!("title_link" <String>: {
             description: "The embed title's URL",
             required: false,
         }),
-        define_option!("title_text" (String) {
+        option!("title_text" <String>: {
             description: "The embed title's text",
             required: false,
-            range(str): 1..=256,
+            where <str>: 1..=256,
         }),
-        define_option!("ephemeral" (Boolean) {
+        option!("ephemeral" <Boolean>: {
             description: "Whether the embed is ephemeral (only visible to you)",
             required: false,
         }),
     ],
 });
 
-pub async fn command(context: &Context, command: &CommandInteraction) -> Result<()> {
-    let o = &command.data.options();
+/// Executes the command
+pub async fn execute(cache_http: &impl CacheHttp, command: &CommandInteraction) -> Result<()> {
+    let data = CommandDataResolver::new(command);
     let mut embed = CreateEmbed::new();
     let mut length = 0;
     let mut valid = false;
 
-    if let Ok(name) = get_str(o, "author_name") {
+    if let Ok(name) = data.get_str("author_name") {
         let mut author = CreateEmbedAuthor::new(name);
 
-        if let Ok(icon) = get_str(o, "author_icon") {
-            author = author.icon_url(icon);
+        if let Ok(icon_url) = data.get_str("author_icon") {
+            author = author.icon_url(icon_url);
         }
-        if let Ok(link) = get_str(o, "author_link") {
-            author = author.url(link);
+        if let Ok(url) = data.get_str("author_link") {
+            author = author.url(url);
         }
 
         embed = embed.author(author);
@@ -103,31 +116,32 @@ pub async fn command(context: &Context, command: &CommandInteraction) -> Result<
         valid = true;
     }
 
-    if let Ok(hex) = get_str(o, "color") {
+    if let Ok(hex) = data.get_str("color") {
         let color = if hex.is_empty() {
-            let user = context.http().get_user(command.user.id).await?;
+            let user = cache_http.http().get_user(command.user.id).await?;
 
             user.accent_colour
         } else {
             u32::from_str_radix(hex, 16).ok().map(Color::new)
-        };
+        }
+        .unwrap_or(BOT_COLOR);
 
-        embed = embed.color(color.unwrap_or(Color::ROSEWATER));
+        embed = embed.color(color);
     }
 
-    if let Ok(description) = get_str(o, "description") {
-        let description = description.replace(r"\n", "\n");
+    if let Ok(description) = data.get_str("description") {
+        let description = &parse_escapes(description);
 
-        embed = embed.description(description.trim());
-        length += description.trim().chars().count();
+        embed = embed.description(description);
+        length += description.chars().count();
         valid = true;
     }
 
-    if let Ok(text) = get_str(o, "footer_text") {
+    if let Ok(text) = data.get_str("footer_text") {
         let mut footer = CreateEmbedFooter::new(text);
 
-        if let Ok(icon) = get_str(o, "footer_icon") {
-            footer = footer.icon_url(icon);
+        if let Ok(icon_url) = data.get_str("footer_icon") {
+            footer = footer.icon_url(icon_url);
         }
 
         embed = embed.footer(footer);
@@ -135,18 +149,18 @@ pub async fn command(context: &Context, command: &CommandInteraction) -> Result<
         valid = true;
     }
 
-    if let Ok(image) = get_str(o, "image_link") {
-        embed = embed.image(image);
+    if let Ok(url) = data.get_str("image_link") {
+        embed = embed.image(url);
         valid = true;
     }
 
-    if let Ok(thumbnail) = get_str(o, "thumbnail_link") {
-        embed = embed.thumbnail(thumbnail);
+    if let Ok(url) = data.get_str("thumbnail_link") {
+        embed = embed.thumbnail(url);
         valid = true;
     }
 
-    if let Ok(title) = get_str(o, "title_text") {
-        if let Ok(url) = get_str(o, "title_link") {
+    if let Ok(title) = data.get_str("title") {
+        if let Ok(url) = data.get_str("title_link") {
             embed = embed.url(url);
         }
 
@@ -156,22 +170,21 @@ pub async fn command(context: &Context, command: &CommandInteraction) -> Result<
     }
 
     if !valid {
-        command.defer_ephemeral(context).await?;
+        command.defer_ephemeral(cache_http).await?;
 
-        return err_wrap!("embeds must contain a visible element");
+        return err_wrap!("embeds must contain at least one visible element");
     }
     if length > 6000 {
-        command.defer_ephemeral(context).await?;
+        command.defer_ephemeral(cache_http).await?;
 
         return err_wrap!("embed content must have at most 6000 total characters");
     }
 
-    let ephemeral = get_bool(o, "ephemeral").unwrap_or_default();
-    let builder = CreateInteractionResponseMessage::new()
-        .embed(embed)
-        .ephemeral(ephemeral);
-    let builder = CreateInteractionResponse::Message(builder);
+    let ephemeral = data.get_bool("ephemeral").unwrap_or_default();
+    let builder = CreateInteractionResponseMessage::new().embed(embed);
+    let builder = CreateInteractionResponse::Message(builder.ephemeral(ephemeral));
 
-    command.create_response(context, builder).await?;
+    command.create_response(cache_http, builder).await?;
+
     Ok(())
 }

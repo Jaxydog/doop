@@ -1,61 +1,70 @@
+//! Doop! An open-source Discord guild moderation bot.
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
-#![warn(clippy::cargo, clippy::nursery, clippy::pedantic, clippy::todo)]
-#![allow(clippy::module_name_repetitions)]
-#![feature(iter_array_chunks)]
+#![warn(clippy::cargo, clippy::nursery, clippy::pedantic)]
+#![warn(clippy::todo, missing_docs)]
+#![allow(clippy::module_name_repetitions, clippy::multiple_crate_versions)]
+#![allow(clippy::missing_errors_doc, clippy::missing_panics_doc)]
 
-use clap::Parser;
+use std::sync::Arc;
+use std::time::Duration;
+
+use serenity::client::Cache;
+use serenity::http::Http;
 use serenity::Client;
+use tokio::spawn;
+use tokio::time::interval;
+use util::Result;
 
-use crate::{handler::Handler, prelude::*};
+use crate::event::EventHandler;
+use crate::util::{get_arguments, get_bot_token, BOT_INTENTS};
 
-pub(crate) mod command;
-pub(crate) mod handler;
-pub(crate) mod prelude;
-pub(crate) mod utility;
+/// Contains common code for commands and all command definitions
+pub mod cmd;
+/// Provides common structures and traits
+pub mod common;
+/// Provides definitions for the bot's event handler
+pub mod event;
+/// Contains useful functions, macros, and definitions
+pub mod util;
 
-#[derive(Debug, Parser)]
-#[command(about, author)]
-struct Arguments {
-    /// Disable logger console output
-    #[arg(long)]
-    pub no_log: bool,
-    /// Disable logger file output
-    #[arg(long, short)]
-    pub no_save: bool,
-    /// The number of seconds between function loop ticks
-    #[arg(long, short, default_value = "10")]
-    pub interval: u64,
-}
-
+/// Bot process entrypoint
 #[tokio::main]
-async fn main() -> Result<()> {
+pub async fn main() -> Result<()> {
     dotenvy::dotenv()?;
 
-    let arguments = Arguments::parse();
-    let token = get_token()?;
-    let logger = Logger::new(arguments.no_log, !arguments.no_save)?;
-    let handler = Handler::new(logger.clone());
+    info!("initializing client...");
 
-    info!(logger, "Starting client...");
-
-    let mut client = Client::builder(&token, INTENTS)
-        .event_handler(handler)
+    let mut client = Client::builder(get_bot_token()?, BOT_INTENTS)
+        .event_handler(EventHandler)
         .await?;
 
-    tokio::spawn(function_loop(logger, arguments.interval, token));
-    client.start_autosharded().await.map_err(Into::into)
+    tokio::spawn(function_loop_daemon());
+
+    Ok(client.start_autosharded().await?)
 }
 
-async fn function_loop(logger: Logger, interval: u64, token: String) -> ! {
-    let mut interval = tokio::time::interval(std::time::Duration::from_secs(interval));
-    let cache = std::sync::Arc::new(serenity::cache::Cache::new());
-    let http = serenity::http::Http::new(&token);
+/// Ensures that `function_loop` continues running forever
+pub async fn function_loop_daemon() -> ! {
+    let delay = get_arguments().function_loop_delay;
 
-    info!(logger, "Function loop started!");
+    info!("starting function loop daemon");
 
     loop {
-        let _http = (&cache, &http);
+        if let Err(error) = spawn(function_loop(delay)).await {
+            error!("function loop encountered an error: {error}");
+        }
+    }
+}
 
+/// Runs an inner loop every `seconds` seconds concurrently
+pub async fn function_loop(seconds: u64) -> Result<()> {
+    let mut interval = interval(Duration::from_secs(seconds));
+
+    let cache = Arc::new(Cache::new());
+    let http = Http::new(&get_bot_token()?);
+    let _http = (&cache, &http);
+
+    loop {
         interval.tick().await;
     }
 }

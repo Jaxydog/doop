@@ -1,0 +1,2138 @@
+{
+	"_version": "2.2.0",
+	"_customData": {
+		"_bookmarks": [{ "_time": 69.594, "_name": "In the second hand smoke", "_color": [1, 0.25, 0.941, 1] }],
+		"_time": 22.815
+	},
+	"_events": [
+		{ "_time": 0.5, "_type": 12, "_value": 1 },
+		{ "_time": 0.5, "_type": 13, "_value": 1 },
+		{ "_time": 5.75, "_type": 8, "_value": 7 },
+		{ "_time": 5.75, "_type": 2, "_value": 1 },
+		{ "_time": 6.25, "_type": 2, "_value": 3 },
+		{ "_time": 9.75, "_type": 9, "_value": 7 },
+		{ "_time": 9.75, "_type": 3, "_value": 5 },
+		{ "_time": 10.25, "_type": 3, "_value": 7 },
+		{ "_time": 13.75, "_type": 8, "_value": 7 },
+		{ "_time": 13.75, "_type": 2, "_value": 5 },
+		{ "_time": 14.25, "_type": 2, "_value": 7 },
+		{ "_time": 17.5, "_type": 3, "_value": 5 },
+		{ "_time": 17.5, "_type": 9, "_value": 7 },
+		{ "_time": 18, "_type": 8, "_value": 7 },
+		{ "_time": 18, "_type": 2, "_value": 1 },
+		{ "_time": 18, "_type": 3, "_value": 7 },
+		{ "_time": 18.5, "_type": 2, "_value": 3 },
+		{ "_time": 22, "_type": 2, "_value": 5 },
+		{ "_time": 22, "_type": 8, "_value": 7 },
+		{ "_time": 22.5, "_type": 2, "_value": 7 },
+		{ "_time": 25.5, "_type": 2, "_value": 1 },
+		{ "_time": 25.5, "_type": 8, "_value": 7 },
+		{ "_time": 26, "_type": 9, "_value": 7 },
+		{ "_time": 26, "_type": 3, "_value": 5 },
+		{ "_time": 26, "_type": 2, "_value": 3 },
+		{ "_time": 26.5, "_type": 3, "_value": 7 },
+		{ "_time": 30.25, "_type": 3, "_value": 1 },
+		{ "_time": 30.25, "_type": 9, "_value": 7 },
+		{ "_time": 30.75, "_type": 3, "_value": 3 },
+		{ "_time": 36.5, "_type": 8, "_value": 7 },
+		{ "_time": 36.5, "_type": 0, "_value": 1 },
+		{ "_time": 36.75, "_type": 1, "_value": 5 },
+		{ "_time": 37, "_type": 4, "_value": 1 },
+		{ "_time": 37.75, "_type": 3, "_value": 5 },
+		{ "_time": 38.5, "_type": 1, "_value": 7 },
+		{ "_time": 38.5, "_type": 9, "_value": 7 },
+		{ "_time": 38.5, "_type": 0, "_value": 3 },
+		{ "_time": 38.5, "_type": 2, "_value": 7 },
+		{ "_time": 38.5, "_type": 4, "_value": 3 },
+		{ "_time": 38.5, "_type": 8, "_value": 7 },
+		{ "_time": 38.5, "_type": 3, "_value": 7 },
+		{ "_time": 42.5, "_type": 3, "_value": 1 },
+		{ "_time": 43, "_type": 3, "_value": 3 },
+		{ "_time": 44, "_type": 9, "_value": 3 },
+		{ "_time": 44.5, "_type": 0, "_value": 7 },
+		{ "_time": 45, "_type": 0, "_value": 3 },
+		{ "_time": 45.5, "_type": 0, "_value": 7 },
+		{ "_time": 46, "_type": 0, "_value": 3 },
+		{ "_time": 46.5, "_type": 8, "_value": 3 },
+		{ "_time": 46.5, "_type": 2, "_value": 1 },
+		{ "_time": 47, "_type": 2, "_value": 3 },
+		{ "_time": 50, "_type": 3, "_value": 5 },
+		{ "_time": 50, "_type": 8, "_value": 3 },
+		{ "_time": 50.5, "_type": 2, "_value": 1 },
+		{ "_time": 50.5, "_type": 9, "_value": 3 },
+		{ "_time": 50.5, "_type": 3, "_value": 7 },
+		{ "_time": 51, "_type": 2, "_value": 3 },
+		{ "_time": 54.75, "_type": 8, "_value": 7 },
+		{ "_time": 54.75, "_type": 2, "_value": 1 },
+		{ "_time": 55.25, "_type": 2, "_value": 3 },
+		{ "_time": 58.25, "_type": 2, "_value": 5 },
+		{ "_time": 58.25, "_type": 9, "_value": 7 },
+		{ "_time": 58.75, "_type": 2, "_value": 7 },
+		{ "_time": 58.75, "_type": 3, "_value": 1 },
+		{ "_time": 58.75, "_type": 8, "_value": 7 },
+		{ "_time": 59.25, "_type": 3, "_value": 3 },
+		{ "_time": 62.75, "_type": 2, "_value": 5 },
+		{ "_time": 62.75, "_type": 9, "_value": 7 },
+		{ "_time": 63.25, "_type": 2, "_value": 7 },
+		{ "_time": 67, "_type": 9, "_value": 7 },
+		{ "_time": 67, "_type": 4, "_value": 7 },
+		{ "_time": 67, "_type": 8, "_value": 7 },
+		{ "_time": 71, "_type": 0, "_value": 5 },
+		{ "_time": 71, "_type": 4, "_value": 5 },
+		{ "_time": 71, "_type": 1, "_value": 5 },
+		{ "_time": 71, "_type": 12, "_value": 8 },
+		{ "_time": 71, "_type": 2, "_value": 5 },
+		{ "_time": 71, "_type": 3, "_value": 5 },
+		{ "_time": 71, "_type": 13, "_value": 8 },
+		{ "_time": 73, "_type": 4, "_value": 0 },
+		{ "_time": 73, "_type": 3, "_value": 0 },
+		{ "_time": 73, "_type": 1, "_value": 0 },
+		{ "_time": 73, "_type": 9, "_value": 7 },
+		{ "_time": 73, "_type": 2, "_value": 0 },
+		{ "_time": 73, "_type": 0, "_value": 0 },
+		{ "_time": 75, "_type": 1, "_value": 5 },
+		{ "_time": 75, "_type": 3, "_value": 1 },
+		{ "_time": 75, "_type": 4, "_value": 5 },
+		{ "_time": 75, "_type": 0, "_value": 5 },
+		{ "_time": 75, "_type": 2, "_value": 1 },
+		{ "_time": 77, "_type": 8, "_value": 7 },
+		{ "_time": 77, "_type": 4, "_value": 0 },
+		{ "_time": 77, "_type": 2, "_value": 0 },
+		{ "_time": 77, "_type": 1, "_value": 0 },
+		{ "_time": 77, "_type": 3, "_value": 0 },
+		{ "_time": 77, "_type": 0, "_value": 0 },
+		{ "_time": 79, "_type": 1, "_value": 1 },
+		{ "_time": 79, "_type": 3, "_value": 5 },
+		{ "_time": 79, "_type": 0, "_value": 1 },
+		{ "_time": 79, "_type": 2, "_value": 5 },
+		{ "_time": 79, "_type": 4, "_value": 1 },
+		{ "_time": 81, "_type": 9, "_value": 7 },
+		{ "_time": 81, "_type": 2, "_value": 0 },
+		{ "_time": 81, "_type": 4, "_value": 0 },
+		{ "_time": 81, "_type": 8, "_value": 7 },
+		{ "_time": 81, "_type": 3, "_value": 0 },
+		{ "_time": 81, "_type": 1, "_value": 0 },
+		{ "_time": 81, "_type": 0, "_value": 0 },
+		{ "_time": 83.188, "_type": 4, "_value": 1 },
+		{ "_time": 83.188, "_type": 2, "_value": 1 },
+		{ "_time": 83.188, "_type": 1, "_value": 5 },
+		{ "_time": 83.188, "_type": 0, "_value": 1 },
+		{ "_time": 83.188, "_type": 3, "_value": 5 },
+		{ "_time": 85.188, "_type": 9, "_value": 7 },
+		{ "_time": 85.188, "_type": 3, "_value": 0 },
+		{ "_time": 85.188, "_type": 2, "_value": 0 },
+		{ "_time": 85.188, "_type": 1, "_value": 0 },
+		{ "_time": 85.188, "_type": 4, "_value": 0 },
+		{ "_time": 85.188, "_type": 0, "_value": 0 },
+		{ "_time": 87.25, "_type": 8, "_value": 7 },
+		{ "_time": 87.25, "_type": 12, "_value": 7 },
+		{ "_time": 87.25, "_type": 13, "_value": 7 },
+		{ "_time": 87.25, "_type": 3, "_value": 7 },
+		{ "_time": 87.25, "_type": 9, "_value": 7 },
+		{ "_time": 88.406, "_type": 2, "_value": 7 },
+		{ "_time": 89.25, "_type": 3, "_value": 7 },
+		{ "_time": 90.25, "_type": 2, "_value": 7 },
+		{ "_time": 91.25, "_type": 12, "_value": 5 },
+		{ "_time": 91.25, "_type": 13, "_value": 5 },
+		{ "_time": 91.25, "_type": 3, "_value": 3 },
+		{ "_time": 91.25, "_type": 8, "_value": 7 },
+		{ "_time": 92, "_type": 2, "_value": 3 },
+		{ "_time": 94.25, "_type": 1, "_value": 7 },
+		{ "_time": 94.875, "_type": 3, "_value": 3 },
+		{ "_time": 95.75, "_type": 0, "_value": 3 },
+		{ "_time": 96.125, "_type": 2, "_value": 7 },
+		{ "_time": 99, "_type": 13, "_value": 2 },
+		{ "_time": 99, "_type": 12, "_value": 2 },
+		{ "_time": 99.125, "_type": 9, "_value": 7 },
+		{ "_time": 99.125, "_type": 2, "_value": 1 },
+		{ "_time": 99.125, "_type": 8, "_value": 7 },
+		{ "_time": 99.188, "_type": 2, "_value": 0 },
+		{ "_time": 99.25, "_type": 2, "_value": 1 },
+		{ "_time": 99.312, "_type": 2, "_value": 0 },
+		{ "_time": 99.375, "_type": 2, "_value": 1 },
+		{ "_time": 99.438, "_type": 2, "_value": 0 },
+		{ "_time": 99.469, "_type": 2, "_value": 3 },
+		{ "_time": 101.125, "_type": 8, "_value": 7 },
+		{ "_time": 101.125, "_type": 3, "_value": 5 },
+		{ "_time": 101.188, "_type": 3, "_value": 0 },
+		{ "_time": 101.25, "_type": 3, "_value": 5 },
+		{ "_time": 101.312, "_type": 3, "_value": 0 },
+		{ "_time": 101.375, "_type": 3, "_value": 5 },
+		{ "_time": 101.438, "_type": 3, "_value": 0 },
+		{ "_time": 101.5, "_type": 3, "_value": 7 },
+		{ "_time": 102.25, "_type": 4, "_value": 3 },
+		{ "_time": 102.25, "_type": 9, "_value": 7 },
+		{ "_time": 103, "_type": 9, "_value": 7 },
+		{ "_time": 103, "_type": 8, "_value": 7 },
+		{ "_time": 103, "_type": 1, "_value": 7 }
+	],
+	"_notes": [
+		{
+			"_time": 3.5,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[4.519, 5.425, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 4.125,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[0.626, 1.401, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 4.625,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 5,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.11, 2.724, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 5.125,
+			"_lineIndex": 1,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.672, 0.712, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 5.75,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.307, 1.742, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 8,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.703, 3.871, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 9.75,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.76, 1.847, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 11.375,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-1.892, -3.124, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 12,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 7,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-5.943, -3.325, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 12.625,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.53, 2.81, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 13.125,
+			"_lineIndex": 0,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-4.002, 3.595, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 13.75,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-2.349, 3.676, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 14.625,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.314, -0.558, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 15.25,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[5.013, -2.071, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 17.5,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.85, -3.246, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 18,
+			"_lineIndex": 1,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-1.572, -5.375, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 19.5,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-2.062, 0.985, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 20,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-6.576, 2.389, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 20.562,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 5,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-5.953, 1.598, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 21.25,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.294, -0.179, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 21.75,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-0.146, -4.171, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 22.375,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.847, -5.346, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 23,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[5.474, -0.377, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 25.5,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-0.312, 3.306, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 26,
+			"_lineIndex": 0,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[2.036, -5.559, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 28.062,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 5,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-4.258, 3.762, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 28.75,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 7,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[0.975, -5.725, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 29.25,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-5.904, 0.002, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 29.75,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[4.299, 4.657, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 30.25,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[4.468, 0.145, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 31,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 7,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[1.812, -2.893, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 32.656,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[5.782, -3.226, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 33.25,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-6.933, -5.786, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 34.5,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[2.405, 2.348, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 35.5,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-2.188, -2.36, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{ "_time": 35.812, "_lineIndex": 0, "_lineLayer": 0, "_type": 3, "_cutDirection": 1 },
+		{ "_time": 36, "_lineIndex": 2, "_lineLayer": 0, "_type": 3, "_cutDirection": 1 },
+		{ "_time": 36.188, "_lineIndex": 3, "_lineLayer": 0, "_type": 3, "_cutDirection": 1 },
+		{ "_time": 36.5, "_lineIndex": 1, "_lineLayer": 0, "_type": 1, "_cutDirection": 6 },
+		{
+			"_time": 36.75,
+			"_lineIndex": 0,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-1.43, -1.424, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 37,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[2.606, -2.696, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 37.75,
+			"_lineIndex": 1,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-6.407, -5.141, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 38.5,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[1.676, 2.559, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 40.5,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.273, -3.571, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 42.5,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.951, -5.872, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 44,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-5.376, 2.498, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 44.5,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[2.651, 4.12, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 45,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-4.346, -5.015, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 45.5,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 5,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-4.92, 3.938, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 46,
+			"_lineIndex": 1,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-3.793, -4.143, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 46.5,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 6,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-2.786, 1.494, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 47.312,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[1.35, 1.276, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 50,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-0.343, -0.212, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 50.5,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[5.354, 0.62, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 52.094,
+			"_lineIndex": 3,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-1.099, -1.319, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 52.625,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[4.373, 2.731, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 53.312,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-1.002, 5.543, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 54.25,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-5.893, 5.589, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 54.75,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[0.846, 4.117, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 55.5,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 7,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-6.666, 2.955, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 56.25,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[5.868, 0.909, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 58.25,
+			"_lineIndex": 3,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-4.011, -2.973, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 58.75,
+			"_lineIndex": 1,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-1.386, -5.933, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 60.25,
+			"_lineIndex": 2,
+			"_lineLayer": 2,
+			"_type": 1,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-0.944, 1.249, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 60.688,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[3.283, -5.36, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 61.375,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 6,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[5.796, -4.072, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 61.75,
+			"_lineIndex": 0,
+			"_lineLayer": 1,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[0.516, 4.07, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 62.438,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-5.342, 3.402, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 62.75,
+			"_lineIndex": 3,
+			"_lineLayer": 1,
+			"_type": 1,
+			"_cutDirection": 5,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-2.843, 4.154, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 64,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 1,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-2.264, -1.22, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{ "_time": 65, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{
+			"_time": 66,
+			"_lineIndex": 0,
+			"_lineLayer": 2,
+			"_type": 0,
+			"_cutDirection": 0,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[4.642, 5.121, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 67,
+			"_lineIndex": 1,
+			"_lineLayer": 0,
+			"_type": 0,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[-6.608, -3.733, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{
+			"_time": 67,
+			"_lineIndex": 2,
+			"_lineLayer": 0,
+			"_type": 1,
+			"_cutDirection": 8,
+			"_customData": {
+				"_track": " Intro",
+				"_animation": {
+					"_position": [
+						[1.543, 1.34, 0, 0],
+						[0, 0, 0, 0.35, "easeOutCubic"],
+						[0, 0, 0, 1]
+					],
+					"_dissolve": [
+						[0, 0],
+						[0.35, 0.1],
+						[0.95, 0.57]
+					],
+					"_dissolveArrow": [
+						[0, 0],
+						[0.45, 0.05],
+						[0.95, 0.45]
+					]
+				}
+			}
+		},
+		{ "_time": 70.5, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 71, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 6 },
+		{ "_time": 71, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 6 },
+		{ "_time": 72, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 72, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 73, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 73, "_lineIndex": 3, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 74, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 75, "_lineIndex": 3, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 75, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 77, "_lineIndex": 2, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 77.031, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 8 },
+		{ "_time": 78, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 8 },
+		{ "_time": 79, "_lineIndex": 0, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 79, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 80, "_lineIndex": 1, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 80, "_lineIndex": 1, "_lineLayer": 1, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 81, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 81, "_lineIndex": 3, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 82, "_lineIndex": 2, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 83.188, "_lineIndex": 0, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 83.188, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 85.125, "_lineIndex": 3, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 85.125, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 86.281, "_lineIndex": 1, "_lineLayer": 2, "_type": 0, "_cutDirection": 8 },
+		{ "_time": 86.281, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 8 },
+		{ "_time": 87.25, "_lineIndex": 1, "_lineLayer": 0, "_type": 1, "_cutDirection": 6 },
+		{ "_time": 88.406, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 5 },
+		{ "_time": 89.25, "_lineIndex": 2, "_lineLayer": 0, "_type": 0, "_cutDirection": 7 },
+		{ "_time": 90.25, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 4 },
+		{ "_time": 91.25, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 92, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 94.25, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 94.875, "_lineIndex": 1, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 95.75, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 96.125, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 99.125, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 99.156, "_lineIndex": 3, "_lineLayer": 2, "_type": 1, "_cutDirection": 8 },
+		{ "_time": 99.5, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 99.5, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 101.125, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 7 },
+		{ "_time": 101.156, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 8 },
+		{ "_time": 101.5, "_lineIndex": 3, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 101.5, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 102.25, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 102.25, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 103, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 103.562, "_lineIndex": 0, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 103.562, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 104.688, "_lineIndex": 3, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 104.688, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 105.594, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 105.594, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 106.625, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 107.625, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 107.625, "_lineIndex": 1, "_lineLayer": 1, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 108.656, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 109.688, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 109.688, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 110.719, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 111.75, "_lineIndex": 3, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 111.75, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 112.75, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 112.75, "_lineIndex": 1, "_lineLayer": 1, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 113.75, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 113.75, "_lineIndex": 3, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 114.75, "_lineIndex": 1, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 115.781, "_lineIndex": 0, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 115.781, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 117.812, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 117.812, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 118.594, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 6 },
+		{ "_time": 119.375, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 119.875, "_lineIndex": 3, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 120.969, "_lineIndex": 1, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 122, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 123.031, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 124, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 125.125, "_lineIndex": 0, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 126.156, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 7 },
+		{ "_time": 127.75, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 128.469, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 128.875, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 134.125, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 6 },
+		{ "_time": 134.75, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 135.094, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 135.562, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 136.25, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 138.25, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 141.75, "_lineIndex": 1, "_lineLayer": 2, "_type": 0, "_cutDirection": 0 },
+		{ "_time": 142.25, "_lineIndex": 3, "_lineLayer": 1, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 143, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 7 },
+		{ "_time": 143.75, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 4 },
+		{ "_time": 144.375, "_lineIndex": 2, "_lineLayer": 0, "_type": 1, "_cutDirection": 1 },
+		{ "_time": 145.156, "_lineIndex": 1, "_lineLayer": 0, "_type": 0, "_cutDirection": 1 },
+		{ "_time": 145.75, "_lineIndex": 2, "_lineLayer": 2, "_type": 1, "_cutDirection": 0 },
+		{ "_time": 146.406, "_lineIndex": 0, "_lineLayer": 1, "_type": 0, "_cutDirection": 8 }
+	],
+	"_obstacles": [],
+	"_waypoints": []
+}
