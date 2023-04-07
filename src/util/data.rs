@@ -33,7 +33,8 @@ where
     fn is_compressed(&self) -> bool {
         self.get_compression() == Compression::none()
     }
-    /// Attempts to compress the given byte slice using the format's compression value
+    /// Attempts to compress the given byte slice using the format's compression
+    /// value
     fn try_gz_encode(&self, bytes: &[u8]) -> Result<Vec<u8>> {
         let mut encoder = GzEncoder::new(bytes, self.get_compression());
         let mut output = Vec::with_capacity(bytes.len());
@@ -91,9 +92,11 @@ where
     fn try_into_bytes(&self, value: &T) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(value)?)
     }
+
     fn try_from_bytes(&self, bytes: &[u8]) -> Result<T> {
         Ok(rmp_serde::from_slice(bytes)?)
     }
+
     fn get_compression(&self) -> Compression {
         match self {
             Self::Plain => Compression::none(),
@@ -116,6 +119,7 @@ where
     fn try_into_bytes(&self, value: &T) -> Result<Vec<u8>> {
         Ok(toml::to_string_pretty(value).map(String::into_bytes)?)
     }
+
     fn try_from_bytes(&self, bytes: &[u8]) -> Result<T> {
         Ok(toml::from_str(&String::from_utf8_lossy(bytes))?)
     }
@@ -150,6 +154,7 @@ where
             _marker: PhantomData,
         }
     }
+
     /// Creates a new data identifier with a default format
     #[must_use]
     pub fn new(path: impl AsRef<Path>) -> Self {
@@ -160,6 +165,7 @@ where
     pub const fn get_path(&self) -> &PathBuf {
         &self.path
     }
+
     /// Returns a reference to the data's format
     pub const fn get_format(&self) -> &F {
         &self.format
@@ -169,6 +175,7 @@ where
     pub const fn create(self, value: T) -> Data<T, F> {
         Data::new(self, value)
     }
+
     /// Reads and decodes the value referenced by the [`DataId`]
     pub fn read(self) -> Result<Data<T, F>> {
         Data::read(self)
@@ -196,6 +203,7 @@ where
     pub const fn new(id: DataId<T, F>, value: T) -> Self {
         Self { id, value }
     }
+
     /// Reads and decodes the value referenced by the provided [`DataId`]
     pub fn read(id: DataId<T, F>) -> Result<Self> {
         let bytes = read(id.get_path())?;
@@ -208,6 +216,7 @@ where
     pub const fn get(&self) -> &T {
         &self.value
     }
+
     /// Returns a mutable reference to the stored value
     pub fn get_mut(&mut self) -> &mut T {
         &mut self.value
@@ -222,7 +231,9 @@ where
 
         Ok(self.id)
     }
-    /// Removes the data from the bot's storage, dropping the wrapper and returning its inner values
+
+    /// Removes the data from the bot's storage, dropping the wrapper and
+    /// returning its inner values
     pub fn remove(self) -> Result<(DataId<T, F>, T)> {
         remove_file(self.id.get_path())?;
 

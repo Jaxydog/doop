@@ -6,11 +6,10 @@ use serenity::builder::{
 use serenity::model::Color;
 use serenity::prelude::CacheHttp;
 
+use super::CommandDataResolver;
 use crate::common::parse_escapes;
 use crate::util::{Result, BOT_COLOR};
 use crate::{command, err_wrap, option};
-
-use super::CommandDataResolver;
 
 command!("embed": {
     description: "Creates an embedded message",
@@ -94,8 +93,11 @@ command!("embed": {
     ],
 });
 
-/// Executes the command
-pub async fn execute(cache_http: &impl CacheHttp, command: &CommandInteraction) -> Result<()> {
+/// Handles command interactions
+pub async fn handle_commands(
+    cache_http: &impl CacheHttp,
+    command: &CommandInteraction,
+) -> Result<()> {
     let data = CommandDataResolver::new(command);
     let mut embed = CreateEmbed::new();
     let mut length = 0;

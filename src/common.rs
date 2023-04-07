@@ -11,7 +11,8 @@ use serenity::prelude::CacheHttp;
 use crate::util::{Error, Result};
 use crate::{err, err_wrap};
 
-/// Represents a "message anchor", or link to a specific message in a guild or DM channel
+/// Represents a "message anchor", or link to a specific message in a guild or
+/// DM channel
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Anchor {
     /// A message within a DM channel
@@ -37,11 +38,13 @@ impl Anchor {
             Self::Private(channel_id, message_id)
         }
     }
+
     /// Creates a new private message anchor
     #[must_use]
     pub const fn new_private(channel_id: ChannelId, message_id: MessageId) -> Self {
         Self::new(None, channel_id, message_id)
     }
+
     /// Creates a new guild message anchor
     #[must_use]
     pub const fn new_guild(
@@ -71,6 +74,7 @@ impl Anchor {
 
         fetch_partial_guild(cache_http, guild_id).await
     }
+
     /// Returns the anchor's guild channel
     pub async fn to_guild_channel(self, cache_http: &impl CacheHttp) -> Result<GuildChannel> {
         let Self::Guild(guild_id, channel_id, ..) = self else {
@@ -79,6 +83,7 @@ impl Anchor {
 
         fetch_guild_channel(cache_http, guild_id, channel_id).await
     }
+
     /// Returns the anchor's private channel
     pub async fn to_private_channel(self, cache_http: &impl CacheHttp) -> Result<PrivateChannel> {
         let Self::Private(channel_id, ..) = self else {
@@ -87,6 +92,7 @@ impl Anchor {
 
         fetch_private_channel(cache_http, channel_id).await
     }
+
     /// Returns the anchor's message
     pub async fn to_message(self, cache_http: &impl CacheHttp) -> Result<Message> {
         match self {
@@ -129,23 +135,25 @@ pub struct CustomId {
 impl CustomId {
     /// The value that separates the identifier's embedded data
     pub const DATA_SEPARATOR: &str = ";";
-    /// The value that separates the identifier's base, name, and data values
-    pub const PART_SEPARATOR: &str = ".";
     /// The maximum number of characters allowed within the custom identifier
     pub const MAX_LENGTH: usize = 64;
+    /// The value that separates the identifier's base, name, and data values
+    pub const PART_SEPARATOR: &str = ".";
 
     /// Creates a new custom identifier with the provided data
     #[must_use]
     pub const fn new_with(base: String, name: String, data: Vec<String>) -> Self {
         Self { base, name, data }
     }
+
     /// Creates a new custom identifier with no additional data
     #[must_use]
     pub const fn new(base: String, name: String) -> Self {
         Self::new_with(base, name, vec![])
     }
 
-    /// Appends the given data to the end of the custom identifier's embedded data
+    /// Appends the given data to the end of the custom identifier's embedded
+    /// data
     pub fn append(&mut self, data: impl Into<String>) -> Result<()> {
         let string = data.into();
         let length = self.to_string().len() + string.len() + 1;
@@ -263,11 +271,13 @@ impl TimeString {
     pub const fn new_with_flag(unix_ms: i64, flag: TimeStringFlag) -> Self {
         Self(unix_ms, Some(flag))
     }
+
     /// Creates a new time string with the default flag
     #[must_use]
     pub fn new(unix_ms: i64) -> Self {
         Self::new_with_flag(unix_ms, TimeStringFlag::default())
     }
+
     /// Creates a new time string
     #[must_use]
     pub fn new_with_flag_in(added_ms: i64, flag: TimeStringFlag) -> Self {
@@ -275,6 +285,7 @@ impl TimeString {
 
         Self(now.saturating_add(added_ms), Some(flag))
     }
+
     /// Creates a new time string with the default flag
     #[must_use]
     pub fn new_in(added_ms: i64) -> Self {

@@ -14,8 +14,11 @@ command!("ping": {
     dms_allowed: true,
 });
 
-/// Executes the command
-pub async fn execute(cache_http: &impl CacheHttp, command: &CommandInteraction) -> Result<()> {
+/// Handles command interactions
+pub async fn handle_commands(
+    cache_http: &impl CacheHttp,
+    command: &CommandInteraction,
+) -> Result<()> {
     let embed = CreateEmbed::new().color(BOT_COLOR).title("Calculating...");
 
     let response = CreateInteractionResponseMessage::new()

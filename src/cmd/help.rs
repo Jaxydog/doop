@@ -14,8 +14,11 @@ command!("help": {
     dms_allowed: true,
 });
 
-/// Executes the command
-pub async fn execute(cache_http: &impl CacheHttp, command: &CommandInteraction) -> Result<()> {
+/// Handles command interactions
+pub async fn handle_commands(
+    cache_http: &impl CacheHttp,
+    command: &CommandInteraction,
+) -> Result<()> {
     command.defer_ephemeral(cache_http).await?;
 
     let mut description = HEADER.to_string();

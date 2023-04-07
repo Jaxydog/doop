@@ -50,6 +50,7 @@ impl<'lg> Log<'lg> {
             format!("{l}{time}{r}")
         }
     }
+
     /// Returns the log's kind string
     #[must_use]
     pub fn get_kind(&self, with_color: bool) -> String {
@@ -66,6 +67,7 @@ impl<'lg> Log<'lg> {
             LogKind::Error => format!("{l}{}{r}", kind.bright_red()),
         }
     }
+
     /// Returns the log's text string
     #[must_use]
     pub fn get_text(&self, with_color: bool) -> String {

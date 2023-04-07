@@ -8,7 +8,8 @@ use serenity::prelude::GatewayIntents;
 
 use self::log::Logger;
 
-/// Provides an interface for reading and writing data to / from the bot's storage
+/// Provides an interface for reading and writing data to / from the bot's
+/// storage
 pub mod data;
 /// Provides an interface for log output to / from the console and file system
 pub mod log;
@@ -87,6 +88,7 @@ impl Error {
     pub fn custom(error: impl Display) -> Self {
         Self::Custom(error.to_string())
     }
+
     /// Creates a custom error type, wrapped in [`Err`].
     ///
     /// This will never return [`Ok(T)`]
@@ -108,7 +110,8 @@ macro_rules! err {
         $crate::util::Error::custom(format_args!($( $arg )+))
     };
 }
-/// Constructs a new [`Error`] from the provided format string, wrapped in [`Err`].
+/// Constructs a new [`Error`] from the provided format string, wrapped in
+/// [`Err`].
 ///
 /// This will never return [`Ok(T)`]
 #[macro_export]
