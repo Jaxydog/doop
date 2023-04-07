@@ -37,6 +37,8 @@ where
     /// value
     fn try_gz_encode(&self, bytes: &[u8]) -> Result<Vec<u8>> {
         let mut encoder = GzEncoder::new(bytes, self.get_compression());
+        // I don't know for sure how much the compression will help so it's better to
+        // just over-allocate imo.
         let mut output = Vec::with_capacity(bytes.len());
 
         encoder.read_to_end(&mut output)?;
@@ -46,6 +48,8 @@ where
     /// Attempts to decompress the given byte slice
     fn try_gz_decode(&self, bytes: &[u8]) -> Result<Vec<u8>> {
         let mut encoder = GzDecoder::new(bytes);
+        // I don't know for sure how much the decompression will expand the data, so the
+        // best I can do without overshooting is just pass the original size and cope.
         let mut output = Vec::with_capacity(bytes.len());
 
         encoder.read_to_end(&mut output)?;
@@ -55,6 +59,7 @@ where
 
     /// Attempts to encode the given value
     fn encode(&self, value: &T) -> Result<Vec<u8>> {
+        // No point in passing it through gz if there's no compression
         if self.is_compressed() {
             self.try_gz_encode(&self.try_into_bytes(value)?)
         } else {
@@ -63,6 +68,7 @@ where
     }
     /// Attempts to decode the given byte slice
     fn decode(&self, bytes: &[u8]) -> Result<T> {
+        // No point in passing it through gz if there's no compression
         if self.is_compressed() {
             self.try_from_bytes(&self.try_gz_decode(bytes)?)
         } else {
@@ -121,6 +127,9 @@ where
     }
 
     fn try_from_bytes(&self, bytes: &[u8]) -> Result<T> {
+        // Any data lost within the string almost certainly means there was corruption,
+        // or I'm reading the wrong format. No harm in just erroring from any
+        // lost bytes, but if it works regardless that's (probably) great.
         Ok(toml::from_str(&String::from_utf8_lossy(bytes))?)
     }
 }
@@ -226,6 +235,9 @@ where
     pub fn write(self) -> Result<DataId<T, F>> {
         let bytes = self.id.get_format().encode(self.get())?;
 
+        // Gotta make sure the parent directories exist. Forgotten that too many times
+        // at this point to accidentally leave it out and get annoyed about my data not
+        // being saved.
         self.id.get_path().parent().map_or(Ok(()), create_dir_all)?;
         write(self.id.get_path(), bytes)?;
 

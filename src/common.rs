@@ -11,6 +11,13 @@ use serenity::prelude::CacheHttp;
 use crate::util::{Error, Result};
 use crate::{err, err_wrap};
 
+// This seems kind of arbitrary but it helps a lot for data structures in my
+// mind. A lot less of having tons of structs all with `guild_id`, `channel_id`,
+// etc. Now I get to just put `Anchor` and call it a day.
+
+// And it comes with the nice feature of being able to just type `.to_message`
+// and I just get it basically for free.
+
 /// Represents a "message anchor", or link to a specific message in a guild or
 /// DM channel
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -60,6 +67,8 @@ impl Anchor {
     pub fn as_link(&self) -> String {
         let u = Self::URL;
 
+        // I'm sure there's a better way to do this, but I don't really care enough and
+        // this is already plenty fast for how scarcely it'll be called.
         match self {
             Self::Private(c, m) => format!("{u}/{c}/{m}"),
             Self::Guild(g, c, m) => format!("{u}/{g}/{c}/{m}"),
@@ -95,6 +104,8 @@ impl Anchor {
 
     /// Returns the anchor's message
     pub async fn to_message(self, cache_http: &impl CacheHttp) -> Result<Message> {
+        // Oh man this indentation is terrible.
+        // TODO: see if there's something better. *Anything* better.
         match self {
             Self::Private(.., m) => Ok(self
                 .to_private_channel(cache_http)
@@ -114,12 +125,18 @@ impl<T: AsRef<Message>> From<T> for Anchor {
     fn from(value: T) -> Self {
         let message = value.as_ref();
 
-        message.guild_id.map_or_else(
-            || Self::new_private(message.channel_id, message.id),
-            |guild_id| Self::new_guild(guild_id, message.channel_id, message.id),
-        )
+        Self::new(message.guild_id, message.channel_id, message.id)
     }
 }
+
+// These Custom IDs are *incredibly* useful for transferring data between
+// interactions; it saves me a lot of headache from trying to figure out
+// collectors and I get it for basically free. I've been using them like this
+// since before I started using Rust, and I honestly can't imagine making a
+// complex bot like this without them.
+//
+// I'm sure a lot of bots also use them like this in their own ways, but this is
+// mine so it's OBVIOUSLY 100% better in every way. /s
 
 /// Represents a custom component identifier that contains embedded data
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -152,17 +169,22 @@ impl CustomId {
         Self::new_with(base, name, vec![])
     }
 
+    // I kind of get why types that implement `ToString` don't also implement
+    // `Into<String>`, but *MAN* it would be nice. I've definitely thought of
+    // writing an impl for it myself at least once or twice.
+
     /// Appends the given data to the end of the custom identifier's embedded
     /// data
     pub fn append(&mut self, data: impl Into<String>) -> Result<()> {
         let string = data.into();
-        let length = self.to_string().len() + string.len() + 1;
+        let length = self.to_string().len() + string.len();
 
         if length > Self::MAX_LENGTH {
             return err_wrap!("maximum length exceeded ({length} / {})", Self::MAX_LENGTH);
         }
 
         self.data.push(string);
+
         Ok(())
     }
 }
@@ -224,6 +246,9 @@ impl Display for CustomId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let Self { base, name, data } = self;
 
+        // Custom IDs should be formatted as {base}{sep}{name} if there's no data, or
+        // {base}{sep}{name}{sep}{data} if there is, with data having its own separator
+        // character.
         if data.is_empty() {
             write!(f, "{base}{}{name}", Self::PART_SEPARATOR)
         } else {
@@ -257,6 +282,11 @@ pub enum TimeStringFlag {
 
 impl Display for TimeStringFlag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // I'm really glad that I can store enum variant literals as character bytes,
+        // that's really cool and really helpful in this specific case.
+        //
+        // Because you see! We can turn them back into `char`s with casting!
+        // This really isn't that remarkable but I find it kinda neat.
         f.write_char(char::from(*self as u8))
     }
 }
@@ -301,12 +331,19 @@ impl From<DateTime<Utc>> for TimeString {
 
 impl Display for TimeString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // I don't know if it's really necessary to store milliseconds if we're going to
+        // convert last second anyways. Maybe good for retaining precision if I add some
+        // operations like addition / subtraction in the future? But for now it's just a
+        // little silly.
         let unix = self.0 / 1000;
         let flag = self.1.unwrap_or_default();
 
         write!(f, "<t:{unix}:{flag}>")
     }
 }
+
+// The next couple functions are very helpful, mostly for fetching guild or
+// channel metadata and for implementing `Anchor`s properly.
 
 /// Fetches a partial guild from the Discord API
 pub async fn fetch_partial_guild(
@@ -324,6 +361,7 @@ pub async fn fetch_guild_channel(
     let guild = fetch_partial_guild(cache_http, guild_id).await?;
     let mut list = guild.channels(cache_http.http()).await?;
 
+    // It kills me that this is on a newline.
     list.remove(&channel_id)
         .ok_or_else(|| err!("invalid channel identifier"))
 }
@@ -342,8 +380,11 @@ pub async fn fetch_private_channel(
 /// Parses escapes in the given string and trims it if needed
 #[must_use]
 pub fn parse_escapes(string: &str) -> String {
+    // This is rarely used but I much prefer having this convenience function over
+    // writing it out every time. It's mostly for things like embed descriptions
+    // when I want the end-user to have at least some extra formatting options.
     string
-        .replace(r"\t", "    ") // discord doesn't really support \t
+        .replace(r"\t", "    ") // Discord doesn't really support `\t`
         .replace(r"\n", "\n")
         .replace(r"\r", "\r")
         .trim()

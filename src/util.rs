@@ -25,8 +25,13 @@ pub const BOT_INTENTS: GatewayIntents =
 /// Whether the bot is running in development mode
 pub const DEV_BUILD: bool = cfg!(debug_assertions);
 
+// `OnceLock` my beloved. This saves us from having to parse the command-line
+// options more than once, while also being able to have them globally, pass out
+// 'static references, *and* have it all be Send + Sync. What a wonderful type.
 /// The bot process' command-line arguments
 static ARGUMENTS: OnceLock<Arguments> = OnceLock::new();
+// Same goes for this. There should only ever be one logger instance per
+// process, so we just save it in a `OnceLock` like the cl args.
 /// The bot process' logger instance
 static LOGGER: OnceLock<Logger> = OnceLock::new();
 
@@ -99,10 +104,16 @@ impl Error {
 
 impl Default for Error {
     fn default() -> Self {
+        // Probably shouldn't have a `Default` impl for the error types, but whatever,
+        // it's here if we need it.
         crate::err!("unknown error")
     }
 }
 
+// I don't know for certain, but I believe that using `format_args!` here
+// instead of just `format!` will save us an allocation. Again, don't know for
+// sure and my guess is that the compiler is smart enough to optimize it away
+// anyways, but it's here just to be safe.
 /// Constructs a new [`Error`] from the provided format string
 #[macro_export]
 macro_rules! err {

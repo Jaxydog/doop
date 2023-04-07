@@ -100,6 +100,11 @@ pub async fn handle_commands(
 ) -> Result<()> {
     let data = CommandDataResolver::new(command);
     let mut embed = CreateEmbed::new();
+
+    // To make sure we don't cause any unnecessary API requests, we validate embed
+    // contents manually here by keeping track of the total character length and
+    // whether it has visible elements in (what i suspect to be) the same way that
+    // Discord does internally
     let mut length = 0;
     let mut valid = false;
 
@@ -171,17 +176,28 @@ pub async fn handle_commands(
         valid = true;
     }
 
+    // Any embed without visible elements is denied
     if !valid {
         command.defer_ephemeral(cache_http).await?;
 
         return err_wrap!("embeds must contain at least one visible element");
     }
+    // And any embed that has too many characters is denied
     if length > 6000 {
         command.defer_ephemeral(cache_http).await?;
 
         return err_wrap!("embed content must have at most 6000 total characters");
     }
 
+    // This boolean is the only reason that I don't defer the interaction at the top
+    // of this command. To call it at the top, I'd need to somehow know if the embed
+    // is valid before even checking it so it's impossible.
+    //
+    // If it was always ephemeral like most commands I could do it, but instead I
+    // need to call it before returning errors like I do above.
+    //
+    // And of course this late in the function there's no point since I'm about to
+    // respond anyways.
     let ephemeral = data.get_bool("ephemeral").unwrap_or_default();
     let builder = CreateInteractionResponseMessage::new().embed(embed);
     let builder = CreateInteractionResponse::Message(builder.ephemeral(ephemeral));

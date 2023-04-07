@@ -38,8 +38,14 @@ pub async fn main() -> Result<()> {
         .event_handler(EventHandler)
         .await?;
 
-    tokio::spawn(function_loop_daemon());
+    // This is a thread that spawns threads. If this crashes... well that really
+    // sucks doesn't it. I'm not making a daemon for the daemon. This *should*
+    // (assuming nothing panics) be able to run indefinitely.
+    spawn(function_loop_daemon());
 
+    // I highly doubt this bot will ever be big enough to be in more than maybe 3
+    // servers tops, but just in case, if there's for some reason a need to have
+    // more than one shard, we can.
     Ok(client.start_autosharded().await?)
 }
 
@@ -49,6 +55,9 @@ pub async fn function_loop_daemon() -> ! {
 
     info!("starting function loop daemon");
 
+    // This will suck if there's an error that happens *every time the loop starts*
+    // -- it'll spam my console in fact -- but I'd prefer that over having to
+    // wait `n` seconds after the loop crashes to start it again.
     loop {
         if let Err(error) = spawn(function_loop(delay)).await {
             error!("function loop encountered an error: {error}");
@@ -60,9 +69,14 @@ pub async fn function_loop_daemon() -> ! {
 pub async fn function_loop(seconds: u64) -> Result<()> {
     let mut interval = interval(Duration::from_secs(seconds));
 
+    // We do have a separate cache for the function loop, but I doubt it will matter
+    // too much. Wouldn't recommend it, but again I doubt it will matter.
     let cache = Arc::new(Cache::new());
     let http = Http::new(&get_bot_token()?);
-    let _http = (&cache, &http);
+
+    // This is so that this qualifies as `impl CacheHttp`, meaning it can be used in
+    // most of the bot's async functions instead of just regular `Http`.
+    let _cache_http = (&cache, &http); // TODO: remove the leading underscore once this is used
 
     loop {
         interval.tick().await;

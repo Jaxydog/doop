@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{create_dir_all, File};
 use std::io::Write;
 use std::path::PathBuf;
 
@@ -41,6 +41,9 @@ impl<'lg> Log<'lg> {
     /// Returns the log's time string
     #[must_use]
     pub fn get_time(&self, with_color: bool) -> String {
+        // Saving these `l` and `r` variables just feels... wrong...
+        // *But* it's helpful for when we have color to be able to have these values in
+        // one spot like this.
         let time = self.time.format("%x %X%.3f");
         let (l, r) = ('[', ']');
 
@@ -54,12 +57,15 @@ impl<'lg> Log<'lg> {
     /// Returns the log's kind string
     #[must_use]
     pub fn get_kind(&self, with_color: bool) -> String {
+        let (l, r) = ('(', ')');
+
+        // Early return saving me from a fat if / else statement.
         if !with_color {
-            return format!("({:?})", self.kind).to_lowercase();
+            return format!("{l}{:?}{r}", self.kind).to_lowercase();
         }
 
+        let (l, r) = (l.bright_black(), r.bright_black());
         let kind = format!("{:?}", self.kind).to_lowercase();
-        let (l, r) = ('('.bright_black(), ')'.bright_black());
 
         match self.kind {
             LogKind::Info => format!("{l}{}{r}", kind.bright_blue()),
@@ -127,6 +133,14 @@ impl Logger {
             println!("{}", log.get_entry(false));
         }
         if let Some(path) = self.path.as_deref() {
+            // Having this call every time sucks, but it's better to be sure that the
+            // directory is actually made so we don't throw an error every time we try to
+            // output a log.
+            //
+            // Since the directory will exist after one call, or at least it should, I
+            // imagine the overhead will be minimal.
+            create_dir_all(Self::LOG_DIR)?;
+
             let mut file = File::options().append(true).create(true).open(path)?;
 
             file.write_all(log.get_entry(true).as_bytes())?;
