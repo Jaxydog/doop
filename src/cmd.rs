@@ -12,6 +12,8 @@ use crate::util::Result;
 pub mod embed;
 /// The help command
 pub mod help;
+/// The mail command
+pub mod mail;
 /// The ping command
 pub mod ping;
 
@@ -19,6 +21,8 @@ pub mod ping;
 #[derive(Clone, Debug)]
 pub struct CommandDataResolver<'cmd> {
     command: &'cmd CommandInteraction,
+    // I'm really happy that this was stablized. Being able to cache values after I load them for
+    // the first time like this *and* having it be Send + Sync is *SO* nice.
     options: OnceLock<Vec<ResolvedOption<'cmd>>>,
 }
 
@@ -30,6 +34,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
 
         Self { command, options }
     }
+
     /// Creates a new command data resolver with the given options
     #[must_use]
     pub fn new_initialized(
@@ -45,10 +50,14 @@ impl<'cmd> CommandDataResolver<'cmd> {
     pub const fn command(&self) -> &CommandInteraction {
         self.command
     }
+
     /// Returns the inner command's resolved options
     pub fn options<'opt: 'cmd>(&'cmd self) -> &'opt [ResolvedOption<'cmd>] {
         self.options.get_or_init(|| self.command().data.options())
     }
+
+    // I'll... probably turn this into a macro in the future.
+    // A *lot* of repeated code coming up.
 
     /// Returns a boolean from the command's options
     pub fn get_bool(&'cmd self, name: &str) -> Result<bool> {
@@ -62,6 +71,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns an integer from the command's options
     pub fn get_i64(&'cmd self, name: &str) -> Result<i64> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -74,6 +84,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns a number from the command's options
     pub fn get_f64(&'cmd self, name: &str) -> Result<f64> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -86,6 +97,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns a partial channel from the command's options
     pub fn get_partial_channel(&'cmd self, name: &str) -> Result<&'cmd PartialChannel> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -98,6 +110,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns a role from the command's options
     pub fn get_role(&'cmd self, name: &str) -> Result<&'cmd Role> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -110,6 +123,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns a string from the command's options
     pub fn get_str(&'cmd self, name: &str) -> Result<&'cmd str> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -122,6 +136,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns a user from the command's options
     pub fn get_user(&'cmd self, name: &str) -> Result<(&'cmd User, Option<&'cmd PartialMember>)> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -134,6 +149,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             _ => err_wrap!("invalid data type for option '{name}'"),
         }
     }
+
     /// Returns a subcommand from the command's options
     pub fn get_subcommand(&'cmd self, name: &str) -> Result<Self> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -147,6 +163,7 @@ impl<'cmd> CommandDataResolver<'cmd> {
             err_wrap!("invalid data type for option '{name}'")
         }
     }
+
     /// Returns a subcommand group from the command's options
     pub fn get_subcommand_group(&'cmd self, name: &str) -> Result<Self> {
         let resolved = self.options().iter().find(|r| r.name == name).map_or_else(
@@ -168,6 +185,10 @@ impl<'cmd> From<&'cmd CommandInteraction> for CommandDataResolver<'cmd> {
     }
 }
 
+// Technically a wrapper for modals isn't needed in the same way that one for
+// command data is needed, *but* it lets me future-proof this so I can expand it
+// as modals are updated.
+
 /// Utility wrapper struct for resolving modal data
 #[derive(Clone, Debug)]
 pub struct ModalDataResolver<'mdl> {
@@ -186,6 +207,7 @@ impl<'mdl> ModalDataResolver<'mdl> {
     pub const fn modal(&self) -> &ModalInteraction {
         self.modal
     }
+
     /// Returns the inner modal's rows
     #[must_use]
     pub fn rows(&self) -> &[ActionRow] {
@@ -195,6 +217,8 @@ impl<'mdl> ModalDataResolver<'mdl> {
     /// Returns a string from the modal's inputs
     pub fn get_input_text(&self, name: &str) -> Result<&str> {
         for row in self.rows() {
+            // Having input components inside of their own personal action rows always
+            // seemed really odd to me, but that's just how Discord wants it I guess...
             let Some(ActionRowComponent::InputText(input)) = row.components.first() else {
                 continue;
             };
@@ -207,6 +231,9 @@ impl<'mdl> ModalDataResolver<'mdl> {
         err_wrap!("missing data for input '{name}'")
     }
 }
+
+// And enter! The most helpful macro ever. I'm so tired of writing
+// CommandData::new().whatever so many times.
 
 /// Defines a new application command
 #[macro_export]
@@ -238,7 +265,7 @@ macro_rules! option {
         description: $desc: literal,
         $( required: $req: literal, )?
         $( autocomplete: $auto: literal, )?
-        $( channels: [ $( $channel: ident, )* ], )?
+        $( channels: [ $( $channel: ident ),* ], )?
         $( options: [ $( $option: expr, )* ], )?
 
         $( where <i32>: $imin: literal ..= $imax: literal, )?
@@ -263,3 +290,6 @@ macro_rules! option {
             $( $( .add_string_choice($skey, $sval) )* )?
     };
 }
+// I will never understand why `.min_length` and `.max_length` return a
+// reference. I'll probably make a PR about this since it's really unfortunate
+// having to clone like this.

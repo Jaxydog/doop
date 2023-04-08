@@ -20,12 +20,16 @@ impl EventHandler {
     /// Returns the bot's application commands
     #[must_use]
     pub fn get_command_builders() -> Vec<CreateCommand> {
+        // I think it's better to have these in their own function rather than inside of
+        // the `create_commands` function like I used to do on older bots.
         vec![
             crate::cmd::embed::create(),
             crate::cmd::help::create(),
+            crate::cmd::mail::create(),
             crate::cmd::ping::create(),
         ]
     }
+
     /// Returns the internal label for the provided interaction
     #[must_use]
     pub fn get_interaction_label(interaction: &Interaction) -> String {
@@ -77,7 +81,9 @@ impl EventHandler {
 
         Ok(())
     }
-    /// Displays an error message to the configured error channel upon encountering an error
+
+    /// Displays an error message to the configured error channel upon
+    /// encountering an error
     pub async fn error_output_log(
         &self,
         context: &Context,
@@ -108,6 +114,7 @@ impl EventHandler {
 
         Ok(())
     }
+
     /// Called when an error is encountered to handle it automatically
     pub async fn error(&self, context: &Context, interaction: &Interaction, error: &Error) {
         if let Err(error) = self.error_notify_user(context, interaction, error).await {
@@ -134,6 +141,7 @@ impl serenity::all::EventHandler for EventHandler {
             error!("error updating commands: {error}");
         }
     }
+
     #[allow(clippy::match_single_binding)] // TODO: remove this once all single cases are gone
     async fn interaction_create(&self, context: Context, mut interaction: Interaction) {
         let label = Self::get_interaction_label(&interaction);
@@ -143,9 +151,10 @@ impl serenity::all::EventHandler for EventHandler {
                 n => err_wrap!("unknown autocomplete: {n}"),
             },
             Interaction::Command(c) => match c.data.name.as_str() {
-                crate::cmd::embed::NAME => crate::cmd::embed::execute(&context, c).await,
-                crate::cmd::help::NAME => crate::cmd::help::execute(&context, c).await,
-                crate::cmd::ping::NAME => crate::cmd::ping::execute(&context, c).await,
+                crate::cmd::embed::NAME => crate::cmd::embed::handle_commands(&context, c).await,
+                crate::cmd::help::NAME => crate::cmd::help::handle_commands(&context, c).await,
+                crate::cmd::mail::NAME => crate::cmd::mail::handle_commands(&context, c).await,
+                crate::cmd::ping::NAME => crate::cmd::ping::handle_commands(&context, c).await,
                 n => err_wrap!("unknown command: {n}"),
             },
             Interaction::Component(c) => match CustomId::try_from(c.data.custom_id.as_str()) {

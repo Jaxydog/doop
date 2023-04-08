@@ -76,9 +76,13 @@ pub async fn function_loop(seconds: u64) -> Result<()> {
 
     // This is so that this qualifies as `impl CacheHttp`, meaning it can be used in
     // most of the bot's async functions instead of just regular `Http`.
-    let _cache_http = (&cache, &http); // TODO: remove the leading underscore once this is used
+    let cache_http = (&cache, &http);
 
+    // Functions run within this loop should try *really hard* to return `Ok(())`,
+    // only returning an error if absolutely necessary.
     loop {
+        cmd::mail::on_loop(&cache_http).await?;
+
         interval.tick().await;
     }
 }
