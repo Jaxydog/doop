@@ -16,6 +16,8 @@ pub mod help;
 pub mod mail;
 /// The ping command
 pub mod ping;
+/// The role command
+pub mod role;
 
 /// Utility wrapper struct for resolving command data
 #[derive(Clone, Debug)]
