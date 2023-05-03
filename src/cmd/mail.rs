@@ -15,7 +15,7 @@ use serenity::prelude::CacheHttp;
 use crate::cmd::CommandDataResolver;
 use crate::common::{fetch_guild_channel, Anchor, CustomId, TimeString, TimeStringFlag};
 use crate::util::data::{Data, DataId, MessagePack, Toml};
-use crate::util::{Result, BOT_COLOR};
+use crate::util::{Result, BOT_BRAND_COLOR};
 use crate::{command, data, err_wrap, option, warn};
 
 const DESCRIPTION: &str = include_str!("./include/mail/description.txt");
@@ -290,7 +290,7 @@ impl Display for ArchivedMessage {
 
 fn get_entry_embed() -> CreateEmbed {
     CreateEmbed::new()
-        .color(BOT_COLOR)
+        .color(BOT_BRAND_COLOR)
         .description(DESCRIPTION)
         .title("Create a ModMail Ticket")
 }
@@ -436,7 +436,7 @@ async fn configure<'cdr>(
     let bot = cache_http.http().get_current_user().await?;
     let embed = CreateEmbed::new()
         .author(CreateEmbedAuthor::new(bot.tag()).icon_url(bot.face()))
-        .color(bot.accent_colour.unwrap_or(BOT_COLOR))
+        .color(bot.accent_colour.unwrap_or(BOT_BRAND_COLOR))
         .title("ModMail has been configured!");
     let builder = CreateInteractionResponseFollowup::new()
         .embed(embed)

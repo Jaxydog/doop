@@ -6,7 +6,7 @@ use serenity::builder::{
 use serenity::prelude::CacheHttp;
 
 use crate::command;
-use crate::util::{Result, BOT_COLOR};
+use crate::util::{Result, BOT_BRAND_COLOR};
 
 command!("ping": {
     description: "Calculates the bot's API response time",
@@ -19,7 +19,9 @@ pub async fn handle_commands(
     cache_http: &impl CacheHttp,
     command: &CommandInteraction,
 ) -> Result<()> {
-    let embed = CreateEmbed::new().color(BOT_COLOR).title("Calculating...");
+    let embed = CreateEmbed::new()
+        .color(BOT_BRAND_COLOR)
+        .title("Calculating...");
 
     // We first send a message to create a sort of base for measuring the API's
     // response time. This should be done as fast as possible, hence the minimal

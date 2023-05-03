@@ -18,7 +18,11 @@ pub mod log;
 pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 /// The bot's default branding color
-pub const BOT_COLOR: Color = Color::new(0x27_89_CD);
+pub const BOT_BRAND_COLOR: Color = Color::new(0x27_89_CD);
+/// The bot's default success color
+pub const BOT_SUCCESS_COLOR: Color = Color::new(0x61_A5_3F);
+/// The bot's default failure color
+pub const BOT_FAILURE_COLOR: Color = Color::new(0xB2_52_66);
 /// The bot's gateway intents
 pub const BOT_INTENTS: GatewayIntents =
     GatewayIntents::non_privileged().union(GatewayIntents::GUILD_MEMBERS);

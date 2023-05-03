@@ -3,7 +3,7 @@ use serenity::builder::{CreateEmbed, CreateEmbedAuthor, CreateInteractionRespons
 use serenity::prelude::CacheHttp;
 
 use crate::command;
-use crate::util::{Result, BOT_COLOR};
+use crate::util::{Result, BOT_BRAND_COLOR};
 
 const HEADER: &str = include_str!("include/help/header.txt");
 const FOOTER: &str = include_str!("include/help/footer.txt");
@@ -61,7 +61,7 @@ pub async fn handle_commands(
     let bot = cache_http.http().get_current_user().await?;
     let embed = CreateEmbed::new()
         .author(CreateEmbedAuthor::new(bot.tag()).icon_url(bot.face()))
-        .color(bot.accent_colour.unwrap_or(BOT_COLOR))
+        .color(bot.accent_colour.unwrap_or(BOT_BRAND_COLOR))
         .description(description)
         .title("Thank you for using Doop!");
     let builder = CreateInteractionResponseFollowup::new()

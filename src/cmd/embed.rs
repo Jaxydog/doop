@@ -8,7 +8,7 @@ use serenity::prelude::CacheHttp;
 
 use super::CommandDataResolver;
 use crate::common::parse_escapes;
-use crate::util::{Result, BOT_COLOR};
+use crate::util::{Result, BOT_BRAND_COLOR};
 use crate::{command, err_wrap, option};
 
 command!("embed": {
@@ -34,7 +34,7 @@ command!("embed": {
             required: false,
             match <str> {
                 "User" => String::new(),
-                "Bot" => BOT_COLOR.hex(),
+                "Bot" => BOT_BRAND_COLOR.hex(),
                 "Red" => Color::RED.hex(),
                 "Orange" => Color::ORANGE.hex(),
                 "Yellow" => Color::GOLD.hex(),
@@ -131,7 +131,7 @@ pub async fn handle_commands(
         } else {
             u32::from_str_radix(hex, 16).ok().map(Color::new)
         }
-        .unwrap_or(BOT_COLOR);
+        .unwrap_or(BOT_BRAND_COLOR);
 
         embed = embed.color(color);
     }
