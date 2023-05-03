@@ -223,8 +223,11 @@ impl<'mdl> ModalDataResolver<'mdl> {
                 continue;
             };
 
-            if !input.value.is_empty() && input.custom_id == name {
-                return Ok(&input.value);
+            if input.custom_id != name {
+                continue;
+            }
+            if let Some(value) = input.value.as_deref() {
+                return Ok(value);
             }
         }
 

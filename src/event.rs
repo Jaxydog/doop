@@ -38,20 +38,20 @@ impl EventHandler {
 
     /// Registers all of the client's application commands
     pub async fn create_commands(&self, http: &Http) -> Result<()> {
-        let guild = get_dev_guild_id()?;
-        let cmds = Self::get_command_builders();
+        let guild_id = get_dev_guild_id()?;
+        let commands = Self::get_command_builders();
 
-        let l = http.create_guild_application_commands(guild, &cmds).await?;
+        let local = http.create_guild_commands(guild_id, &commands).await?;
 
-        info!("found {} local commands", l.len());
+        info!("found {} local commands", local.len());
 
-        let g = if DEV_BUILD {
-            http.get_global_application_commands().await?
+        let global = if DEV_BUILD {
+            http.get_global_commands().await?
         } else {
-            http.create_global_application_commands(&cmds).await?
+            http.create_global_commands(&commands).await?
         };
 
-        info!("found {} global commands", g.len());
+        info!("found {} global commands", global.len());
 
         Ok(())
     }
@@ -72,11 +72,11 @@ impl EventHandler {
             .ephemeral(true);
 
         match interaction {
-            Interaction::Ping(_) => err_wrap!("interaction does not support follow-ups")?,
             Interaction::Command(i) => i.create_followup(context, builder).await?,
             Interaction::Autocomplete(i) => i.create_followup(context, builder).await?,
             Interaction::Component(i) => i.create_followup(context, builder).await?,
             Interaction::Modal(i) => i.create_followup(context, builder).await?,
+            _ => err_wrap!("interaction does not support follow-ups")?,
         };
 
         Ok(())
@@ -97,10 +97,10 @@ impl EventHandler {
             .title("Encountered an error!");
 
         if let Some(user) = match interaction {
-            Interaction::Ping(_) => None,
             Interaction::Command(i) | Interaction::Autocomplete(i) => Some(&i.user),
             Interaction::Component(i) => Some(&i.user),
             Interaction::Modal(i) => Some(&i.user),
+            _ => None,
         } {
             embed = embed.author(CreateEmbedAuthor::new(user.tag()).icon_url(user.face()));
         }
@@ -170,6 +170,7 @@ impl serenity::all::EventHandler for EventHandler {
                 },
             },
             Interaction::Ping(_) => err_wrap!("unexpected ping"),
+            _ => err_wrap!("unsupported interaction type"),
         };
 
         if let Err(error) = result {

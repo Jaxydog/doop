@@ -28,7 +28,7 @@ pub async fn handle_commands(
     // No reason to print these if we aren't in a guild or if there aren't any
     // commands.
     if let Some(guild_id) = command.guild_id {
-        let commands = guild_id.get_application_commands(cache_http.http()).await?;
+        let commands = guild_id.get_commands(cache_http.http()).await?;
 
         if !commands.is_empty() {
             description += "\n\n**__Guild commands__**\n";
@@ -36,7 +36,7 @@ pub async fn handle_commands(
         }
     }
 
-    let commands = cache_http.http().get_global_application_commands().await?;
+    let commands = cache_http.http().get_global_commands().await?;
 
     description += "\n\n**__Global commands__**\n";
 
