@@ -1,5 +1,7 @@
 # doop!
 
+> ⚠️ Please be aware that Doop is currently a work-in-progess! Expect bugs and missing features! ⚠️
+
 Doop is an open-source Discord bot whose primary purpose is to assist administrators with guild management, while also throwing in some fun features such as polls.
 
 ## Why doop?
