@@ -29,7 +29,7 @@ command!("embed": {
             required: false,
             where <str>: 1..=256,
         }),
-        option!("color" <Integer>: {
+        option!("color" <String>: {
             description: "The embed's color",
             required: false,
             match <str> {
