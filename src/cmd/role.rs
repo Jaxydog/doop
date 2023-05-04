@@ -215,10 +215,18 @@ async fn send<'cdr>(
     guild_id: GuildId,
 ) -> Result<()> {
     let text = data.get_str("text")?;
-    let Ok(selectors) = Selectors::data_read((guild_id, command.user.id)) else {
-        return err_wrap!("role selectors have not been added");
-    };
+    let selectors = Selectors::data_default((guild_id, command.user.id));
     let buttons = selectors.get().get_buttons(false)?;
+
+    if buttons.is_empty() {
+        let embed = CreateEmbed::new()
+            .color(BOT_FAILURE_COLOR)
+            .title("No selectors have been added!");
+        let response = CreateInteractionResponseFollowup::new().embed(embed);
+
+        command.create_followup(cache_http, response).await?;
+        return Ok(());
+    }
 
     let channel = fetch_guild_channel(cache_http, guild_id, command.channel_id).await?;
     let embed = CreateEmbed::new().color(BOT_BRAND_COLOR).title(text);
