@@ -93,7 +93,7 @@ fn stringify_commands(commands: &[Command]) -> String {
                 format!("</{name}:{id}> - {desc}")
             };
 
-            if c.dm_permission.unwrap_or(true) {
+            if c.dm_permission.unwrap_or(false) {
                 flags.push("Usable in DMs");
             }
 
