@@ -179,7 +179,7 @@ pub fn get_dev_guild_id() -> Result<GuildId> {
 }
 /// Returns the bot's error log channel identifier from the environment
 pub fn get_err_channel_id() -> Result<ChannelId> {
-    let id = std::env::var("DEV_GUILD")?;
+    let id = std::env::var("ERR_CHANNEL")?;
     let Ok(id) = id.parse() else {
         return err_wrap!("invalid guild identifier");
     };
