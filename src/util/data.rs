@@ -12,7 +12,7 @@ use super::Result;
 /// Provides common functionality for data formats
 pub trait Format<T>
 where
-    Self: Default,
+    Self: Clone + Default,
     T: Serialize + for<'de> Deserialize<'de>,
 {
     /// The default file extension for this format
@@ -268,4 +268,43 @@ macro_rules! data {
     ($f: expr, $( $arg: tt )+) => {
         $crate::data!(<_> $f, $( $arg )+)
     };
+}
+
+/// Shared functionality for values stored within the file system
+pub trait StoredData
+where
+    Self: Serialize + for<'de> Deserialize<'de>,
+{
+    /// The values passed to create the value's data identifier
+    type Args: Serialize + for<'de> Deserialize<'de>;
+    /// The data [`Format`] of the implementing value
+    type Format: Format<Self>;
+
+    /// Returns the value's data identifier
+    fn data_id(args: Self::Args) -> DataId<Self, Self::Format>;
+
+    /// Creates a new [`Data`] wrapper with the given `value`
+    ///
+    /// Convenience method for `StoredData::data_id(args).create(value)`
+    fn data_create(args: Self::Args, value: Self) -> Data<Self, Self::Format> {
+        Self::data_id(args).create(value)
+    }
+    /// Reads and decodes the value referenced by the [`DataId`]
+    ///
+    /// Convenience method for `StoredData::data_id(args).read()`
+    fn data_read(args: Self::Args) -> Result<Data<Self, Self::Format>> {
+        Self::data_id(args).read()
+    }
+    /// Reads and decodes the value referenced by the [`DataId`], automatically
+    /// creating the value's default when an error occurs
+    fn data_default(args: Self::Args) -> Data<Self, Self::Format>
+    where
+        Self: Clone + Default,
+    {
+        let id = Self::data_id(args);
+
+        id.clone()
+            .read()
+            .unwrap_or_else(|_| id.create(Self::default()))
+    }
 }
