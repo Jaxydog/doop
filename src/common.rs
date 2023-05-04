@@ -180,7 +180,7 @@ impl CustomId {
         let length = self.to_string().len() + string.len();
 
         if length > Self::MAX_LENGTH {
-            return err_wrap!("maximum length exceeded ({length} / {})", Self::MAX_LENGTH);
+            return err_wrap!("max id length exceeded ({length} / {})", Self::MAX_LENGTH);
         }
 
         self.data.push(string);
