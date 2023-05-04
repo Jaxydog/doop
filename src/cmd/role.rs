@@ -173,6 +173,7 @@ async fn remove<'cdr>(
     let mut selectors = Selectors::data_default((guild_id, command.user.id));
 
     let embed = if let Some((name, _)) = selectors.get_mut().remove(&role.id) {
+        selectors.write()?;
         CreateEmbed::new()
             .color(BOT_SUCCESS_COLOR)
             .title(format!("Selector '{name}' removed!"))
