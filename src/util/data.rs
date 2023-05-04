@@ -31,7 +31,7 @@ where
     /// Returns `true` if the format is compressed
     #[must_use]
     fn is_compressed(&self) -> bool {
-        self.get_compression() == Compression::none()
+        self.get_compression() != Compression::none()
     }
     /// Attempts to compress the given byte slice using the format's compression
     /// value
@@ -105,9 +105,9 @@ where
 
     fn get_compression(&self) -> Compression {
         match self {
-            Self::Plain => Compression::none(),
-            Self::Standard => Compression::default(),
-            Self::Dense => Compression::best(),
+            Self::Plain => Compression::new(0),
+            Self::Standard => Compression::new(6),
+            Self::Dense => Compression::new(9),
         }
     }
 }
