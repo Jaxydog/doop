@@ -115,7 +115,7 @@ impl Logger {
     pub fn new() -> Self {
         let args = get_arguments();
         let quiet = args.disable_log_output;
-        let path = args.disable_log_storage.then(|| {
+        let path = (!args.disable_log_storage).then(|| {
             let file = Local::now().format("%y%m%d_%H%M%S_%6f").to_string();
             let dir = PathBuf::from(Self::LOG_DIR);
 
@@ -130,7 +130,7 @@ impl Logger {
         let log = Log::new(kind, text);
 
         if !self.quiet {
-            println!("{}", log.get_entry(false));
+            println!("{}", log.get_entry(true));
         }
         if let Some(path) = self.path.as_deref() {
             // Having this call every time sucks, but it's better to be sure that the
@@ -143,7 +143,7 @@ impl Logger {
 
             let mut file = File::options().append(true).create(true).open(path)?;
 
-            file.write_all(log.get_entry(true).as_bytes())?;
+            file.write_all(log.get_entry(false).as_bytes())?;
         }
 
         Ok(())
