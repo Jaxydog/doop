@@ -143,7 +143,7 @@ impl Logger {
 
             let mut file = File::options().append(true).create(true).open(path)?;
 
-            file.write_all(log.get_entry(false).as_bytes())?;
+            file.write_fmt(format_args!("{}\n", log.get_entry(false)))?;
         }
 
         Ok(())
