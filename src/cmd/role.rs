@@ -6,8 +6,7 @@ use serenity::all::{
     UserId,
 };
 use serenity::builder::{
-    CreateButton, CreateEmbed, CreateInteractionResponse, CreateInteractionResponseFollowup,
-    CreateMessage,
+    CreateButton, CreateEmbed, CreateInteractionResponseFollowup, CreateMessage,
 };
 use serenity::prelude::CacheHttp;
 
@@ -246,6 +245,8 @@ pub async fn handle_components(
     component: &mut ComponentInteraction,
     custom_id: CustomId,
 ) -> Result<()> {
+    component.defer_ephemeral(cache_http).await?;
+
     if custom_id.name.as_str() == "toggle" {
         return toggle(cache_http, component, custom_id).await;
     }
@@ -273,14 +274,18 @@ async fn toggle(
         RoleId::new(role_id)
     };
 
+    let mut embed = CreateEmbed::new().color(BOT_SUCCESS_COLOR);
+
     if member.roles.contains(&role_id) {
         member.remove_role(cache_http, role_id).await?;
+        embed = embed.title("Removed role!");
     } else {
         member.add_role(cache_http, role_id).await?;
+        embed = embed.title("Added role!");
     }
 
-    let response = CreateInteractionResponse::Acknowledge;
+    let response = CreateInteractionResponseFollowup::new().embed(embed);
 
-    component.create_response(cache_http, response).await?;
+    component.create_followup(cache_http, response).await?;
     Ok(())
 }
