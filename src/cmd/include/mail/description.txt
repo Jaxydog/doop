@@ -1,3 +1,2 @@
-ModMail is a system that allows members to easily interact with this server's moderators!
-
-Clicking the button below will create a private channel for you to discuss whatever you need.
+ModMail allows members to easily interact with this server's moderators!
+Clicking the button below will create a personal, private channel.
