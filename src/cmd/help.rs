@@ -5,9 +5,6 @@ use serenity::prelude::CacheHttp;
 use crate::command;
 use crate::util::{Result, BOT_BRAND_COLOR};
 
-const HEADER: &str = include_str!("include/help/header.txt");
-const FOOTER: &str = include_str!("include/help/footer.txt");
-
 command!("help": {
     description: "Displays a list of the bot's commands",
     permissions: USE_APPLICATION_COMMANDS,
@@ -23,7 +20,7 @@ pub async fn handle_commands(
 
     // Simply including these as a string in the binary is a lot easier and faster
     // than reading it every time the command is run.
-    let mut description = HEADER.to_string();
+    let mut description = include_str!("include/help/header.txt").to_string();
 
     // No reason to print these if we aren't in a guild or if there aren't any
     // commands.
@@ -56,7 +53,7 @@ pub async fn handle_commands(
     // allocating just to append but I doubt it'll be an issue. If I'm having
     // performance issues because i'm allocating this specific string that's just
     // impressive.
-    description += &format!("\n\n{FOOTER}");
+    description += &format!("\n\n{}", include_str!("include/help/footer.txt"));
 
     let bot = cache_http.http().get_current_user().await?;
     let embed = CreateEmbed::new()
