@@ -1,0 +1,5 @@
+ModMail is a system that allows users of a server to create private channels with the server's moderators.
+
+These channels will be automatically closed and archived after a period of inactivity, but all messages may be reviewed at any time by administrators.
+
+If you any concerns, you may view Doop's [privacy policy](https://github.com/Jaxydog/doop/blob/master/docs/privacy-policy.md), [data usage documentation](https://github.com/Jaxydog/doop/blob/master/docs/data-usage.md), or contact <@206260650010345483> directly!
