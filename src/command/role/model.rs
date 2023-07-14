@@ -11,7 +11,7 @@ use super::This;
 use crate::extend::{IteratorExt, ReactionTypeExt};
 use crate::storage::format::{MessagePack, Zip};
 use crate::storage::{Info, Storable};
-use crate::traits::ComponentBuilder;
+use crate::traits::SyncComponentBuilder;
 use crate::utility::{DataId, Result};
 
 /// Stores the user's added role selectors
@@ -61,7 +61,7 @@ impl Storable for Selectors {
     }
 }
 
-impl ComponentBuilder for Selectors {
+impl SyncComponentBuilder for Selectors {
     type Arguments = bool;
 
     fn build_components(&self, disabled: Self::Arguments) -> Result<Vec<Component>> {

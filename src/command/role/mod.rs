@@ -8,7 +8,7 @@ use super::CommandOptionResolver;
 use crate::event::{CommandCtx, ComponentCtx, EventHandler, EventResult};
 use crate::extend::ReactionTypeExt;
 use crate::storage::Storable;
-use crate::traits::ComponentBuilder;
+use crate::traits::SyncComponentBuilder;
 use crate::utility::{BRANDING_COLOR, FAILURE_COLOR, SUCCESS_COLOR};
 
 /// Defines data structures used in the command implementation.

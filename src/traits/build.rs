@@ -6,7 +6,7 @@ use twilight_model::channel::message::{Component, Embed};
 use crate::utility::{Modal, Result};
 
 /// Implements a method for building embeds.
-pub trait EmbedBuilder {
+pub trait SyncEmbedBuilder {
     /// The arguments passed into the builder method.
     type Arguments;
 
@@ -30,7 +30,7 @@ pub trait AsyncEmbedBuilder: Sync {
 }
 
 /// Implements a method for building modals.
-pub trait ModalBuilder {
+pub trait SyncModalBuilder {
     /// The arguments passed into the builder method.
     type Arguments;
 
@@ -54,7 +54,7 @@ pub trait AsyncModalBuilder: Sync {
 }
 
 /// Implements a method for building components.
-pub trait ComponentBuilder {
+pub trait SyncComponentBuilder {
     /// The arguments passed into the builder method.
     type Arguments;
 
@@ -78,7 +78,7 @@ pub trait AsyncComponentBuilder: Sync {
 }
 
 /// Implements methods for multiple building components.
-pub trait MultiComponentBuilder {
+pub trait SyncMultiComponentBuilder {
     /// The arguments passed into the button builder method.
     type ButtonArgs;
     /// The arguments passed into the input builder method.
