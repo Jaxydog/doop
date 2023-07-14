@@ -1,0 +1,46 @@
+[package]
+    name = "doop"
+    description = "Open-source Discord guild moderation bot"
+    authors = ["Jaxydog"]
+    categories = ["command-line-utilities"]
+    keywords = ["bot", "discord", "moderation"]
+
+    version = "0.1.0"
+    edition = "2021"
+    resolver = "2"
+    publish = false
+
+    readme = "docs/README.md"
+    license = "ISC"
+    repository = "https://github.com/Jaxydog/doop"
+
+[profile.dev]
+    opt-level = 1
+    incremental = true
+
+[profile.release]
+    opt-level = 3
+    incremental = false
+
+[dependencies]
+    anyhow = "1.0"
+    async-trait = "0.1"
+    clap = { version = "4.3", features = ["derive"] }
+    dotenvy = "0.15"
+    flate2 = "1.0"
+    futures-util = { version = "0.3", default-features = false }
+    rand = { version = "0.8", features = ["nightly"] }
+    rmp-serde = "1.1"
+    serde = { version = "1.0", features = ["derive", "rc"] }
+    serde_json = { version = "1.0", features = ["preserve_order"] }
+    serde_repr = "0.1"
+    strum = { version = "0.25", features = ["derive"] }
+    time = { version = "0.3", features = ["local-offset", "macros", "serde-well-known"] }
+    tokio = { version = "1.29", features = ["full"] }
+    toml = { version = "0.7", features = ["preserve_order"] }
+    twilight-cache-inmemory = { version = "0.15", features = ["permission-calculator"] }
+    twilight-gateway = { version = "0.15", features = ["rustls-native-roots"] }
+    twilight-http = "0.15"
+    twilight-mention = "0.15"
+    twilight-model = "0.15"
+    twilight-util = { version = "0.15", features = ["full"] }
