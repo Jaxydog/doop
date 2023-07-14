@@ -3,26 +3,25 @@ use time::ext::NumericalDuration;
 use time::{OffsetDateTime, UtcOffset};
 use twilight_model::channel::message::ReactionType;
 use twilight_model::gateway::payload::incoming::InteractionCreate;
-use twilight_model::guild::Guild;
 use twilight_model::id::Id;
 use twilight_util::builder::embed::ImageSource;
 
-use crate::traits::UserLike;
+use crate::traits::{GuildLike, UserLike};
 use crate::utility::{Result, BRANDING_COLOR, CDN_BASE, DISCORD_EPOCH};
 
 /// Provides additional methods for guilds.
 pub trait GuildExt {
     /// Returns the guild's icon image source.
-    fn icon(&self) -> Result<ImageSource>;
+    fn image(&self) -> Result<ImageSource>;
 }
 
-impl GuildExt for Guild {
-    fn icon(&self) -> Result<ImageSource> {
-        let Some(hash) = self.icon else {
+impl<G: GuildLike> GuildExt for G {
+    fn image(&self) -> Result<ImageSource> {
+        let Some(hash) = self.icon() else {
             return Err(anyhow!("missing icon hash"));
         };
 
-        let url = format!("{CDN_BASE}/icons/{}/{hash}.png", self.id);
+        let url = format!("{CDN_BASE}/icons/{}/{hash}.png", self.id());
 
         Ok(ImageSource::url(url)?)
     }
