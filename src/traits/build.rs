@@ -1,4 +1,3 @@
-use anyhow::anyhow;
 use twilight_cache_inmemory::InMemoryCache;
 use twilight_http::Client;
 use twilight_model::channel::message::{Component, Embed};
@@ -53,23 +52,48 @@ pub trait AsyncModalBuilder: Sync {
     ) -> Result<Vec<Modal>>;
 }
 
-/// Implements a method for building components.
-pub trait SyncComponentBuilder {
+/// Implements a method for building button components.
+pub trait SyncButtonBuilder {
     /// The arguments passed into the builder method.
     type Arguments;
 
-    /// Builds components using the provided arguments.
-    fn build_components(&self, arguments: Self::Arguments) -> Result<Vec<Component>>;
+    /// Builds button components using the provided arguments.
+    fn build_buttons(&self, disabled: bool, arguments: Self::Arguments) -> Result<Vec<Component>>;
 }
 
-/// Implements a method for building components.
+/// Implements a method for building button components.
 #[async_trait::async_trait]
-pub trait AsyncComponentBuilder: Sync {
+pub trait AsyncButtonBuilder {
     /// The arguments passed into the builder method.
-    type Arguments: Send + Sync;
+    type Arguments;
 
-    /// Builds components using the provided arguments.
-    async fn build_components(
+    /// Builds button components using the provided arguments.
+    async fn build_buttons(
+        &self,
+        http: &Client,
+        cache: &InMemoryCache,
+        disabled: bool,
+        arguments: Self::Arguments,
+    ) -> Result<Vec<Component>>;
+}
+
+/// Implements a method for building input components.
+pub trait SyncInputBuilder {
+    /// The arguments passed into the builder method.
+    type Arguments;
+
+    /// Builds input components using the provided arguments.
+    fn build_inputs(&self, arguments: Self::Arguments) -> Result<Vec<Component>>;
+}
+
+/// Implements a method for building input components.
+#[async_trait::async_trait]
+pub trait AsyncInputBuilder {
+    /// The arguments passed into the builder method.
+    type Arguments;
+
+    /// Builds input components using the provided arguments.
+    async fn build_inputs(
         &self,
         http: &Client,
         cache: &InMemoryCache,
@@ -77,64 +101,26 @@ pub trait AsyncComponentBuilder: Sync {
     ) -> Result<Vec<Component>>;
 }
 
-/// Implements methods for multiple building components.
-pub trait SyncMultiComponentBuilder {
-    /// The arguments passed into the button builder method.
-    type ButtonArgs;
-    /// The arguments passed into the input builder method.
-    type InputArgs;
-    /// The arguments passed into the select builder method.
-    type SelectArgs;
+/// Implements a method for building selector components.
+pub trait SyncSelectorBuilder {
+    /// The arguments passed into the builder method.
+    type Arguments;
 
-    /// Builds button components using the provided arguments.
-    fn build_button_components(&self, _: Self::ButtonArgs) -> Result<Vec<Component>> {
-        Err(anyhow!("unsupported builder method"))
-    }
-    /// Builds input components using the provided arguments.
-    fn build_input_components(&self, _: Self::InputArgs) -> Result<Vec<Component>> {
-        Err(anyhow!("unsupported builder method"))
-    }
-    /// Builds select components using the provided arguments.
-    fn build_select_components(&self, _: Self::SelectArgs) -> Result<Vec<Component>> {
-        Err(anyhow!("unsupported builder method"))
-    }
+    /// Builds selector components using the provided arguments.
+    fn build_selectors(&self, arguments: Self::Arguments) -> Result<Vec<Component>>;
 }
 
-/// Implements a method for building components.
+/// Implements a method for building selector components.
 #[async_trait::async_trait]
-pub trait AsyncMultiComponentBuilder: Sync {
-    /// The arguments passed into the button builder method.
-    type ButtonArgs: Send + Sync;
-    /// The arguments passed into the input builder method.
-    type InputArgs: Send + Sync;
-    /// The arguments passed into the select builder method.
-    type SelectArgs: Send + Sync;
+pub trait AsyncSelectorBuilder {
+    /// The arguments passed into the builder method.
+    type Arguments;
 
-    /// Builds button components using the provided arguments.
-    async fn build_button_components(
+    /// Builds selector components using the provided arguments.
+    async fn build_selectors(
         &self,
-        _http: &Client,
-        _cache: &InMemoryCache,
-        _: Self::ButtonArgs,
-    ) -> Result<Vec<Component>> {
-        Err(anyhow!("unsupported builder method"))
-    }
-    /// Builds input components using the provided arguments.
-    async fn build_input_components(
-        &self,
-        _http: &Client,
-        _cache: &InMemoryCache,
-        _: Self::InputArgs,
-    ) -> Result<Vec<Component>> {
-        Err(anyhow!("unsupported builder method"))
-    }
-    /// Builds select components using the provided arguments.
-    async fn build_select_components(
-        &self,
-        _http: &Client,
-        _cache: &InMemoryCache,
-        _: Self::SelectArgs,
-    ) -> Result<Vec<Component>> {
-        Err(anyhow!("unsupported builder method"))
-    }
+        http: &Client,
+        cache: &InMemoryCache,
+        arguments: Self::Arguments,
+    ) -> Result<Vec<Component>>;
 }

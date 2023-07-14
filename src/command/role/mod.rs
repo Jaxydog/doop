@@ -8,7 +8,7 @@ use super::CommandOptionResolver;
 use crate::event::{CommandCtx, ComponentCtx, EventHandler, EventResult};
 use crate::extend::ReactionTypeExt;
 use crate::storage::Storable;
-use crate::traits::SyncComponentBuilder;
+use crate::traits::SyncButtonBuilder;
 use crate::utility::{BRANDING_COLOR, FAILURE_COLOR, SUCCESS_COLOR};
 
 /// Defines data structures used in the command implementation.
@@ -270,7 +270,7 @@ async fn list<'cmd>(ctx: &CommandCtx<'cmd>, _: CommandOptionResolver<'cmd>) -> E
         return EventResult::Ok(());
     };
 
-    let components = selectors.get().build_components(true)?;
+    let components = selectors.get().build_buttons(true, ())?;
     let title = crate::localize!(ctx.locale() => "text.{}.list", This::NAME);
     let embed = EmbedBuilder::new()
         .color(BRANDING_COLOR.into())
@@ -303,7 +303,7 @@ async fn send<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) ->
     let selectors = Selectors::saved((guild_id, user_id))
         .read_or_default()
         .await;
-    let components = selectors.get().build_components(false)?;
+    let components = selectors.get().build_buttons(false, ())?;
 
     if components.is_empty() {
         let title = crate::localize!(ctx.locale() => "text.{}.empty", This::NAME);

@@ -11,7 +11,7 @@ use super::This;
 use crate::extend::{IteratorExt, ReactionTypeExt};
 use crate::storage::format::{MessagePack, Zip};
 use crate::storage::{Info, Storable};
-use crate::traits::SyncComponentBuilder;
+use crate::traits::SyncButtonBuilder;
 use crate::utility::{DataId, Result};
 
 /// Stores the user's added role selectors
@@ -61,10 +61,10 @@ impl Storable for Selectors {
     }
 }
 
-impl SyncComponentBuilder for Selectors {
-    type Arguments = bool;
+impl SyncButtonBuilder for Selectors {
+    type Arguments = ();
 
-    fn build_components(&self, disabled: Self::Arguments) -> Result<Vec<Component>> {
+    fn build_buttons(&self, disabled: bool, arguments: Self::Arguments) -> Result<Vec<Component>> {
         let base_id = DataId::new_empty(This::NAME, Some("toggle"))?;
         let f = |entry| Self::entry_to_button(&base_id, disabled, entry);
         let buttons = self.iter().take(25).try_filter_map(f);
