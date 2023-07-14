@@ -43,14 +43,27 @@ impl Anchor {
     }
 }
 
+impl From<Message> for Anchor {
+    fn from(value: Message) -> Self {
+        let Message { channel_id, guild_id, id, .. } = value;
+
+        Self { guild_id, channel_id, message_id: id }
+    }
+}
+
+impl From<&Message> for Anchor {
+    fn from(value: &Message) -> Self {
+        let &Message { channel_id, guild_id, id, .. } = value;
+
+        Self { guild_id, channel_id, message_id: id }
+    }
+}
+
 impl Display for Anchor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let Self { guild_id, channel_id: c, message_id: m } = self;
+        let g = guild_id.map_or_else(|| "@me".to_string(), |g| g.to_string());
 
-        if let Some(g) = guild_id {
-            write!(f, "https://discord.com/channels/{g}/{c}/{m}")
-        } else {
-            write!(f, "https://discord.com/channels/@me/{c}/{m}")
-        }
+        write!(f, "https://discord.com/channels/{g}/{c}/{m}")
     }
 }
