@@ -1,34 +1,40 @@
-use twilight_model::guild::Guild;
+use std::convert::Infallible;
 
+use twilight_model::guild::Guild;
+use twilight_util::builder::embed::EmbedAuthorBuilder;
+
+use crate::extend::GuildExt;
 use crate::utility::Result;
 
 /// A simple, fallible conversion from the provided guild reference.
-pub trait TryFromGuild<G: AsRef<Guild>>: Sized {
+pub trait TryFromGuild: Sized {
     /// The error type that may result from the conversion.
     type Error;
 
     /// Converts the provided referenced guild into the value.
-    fn try_from_guild(guild: G) -> Result<Self, Self::Error>;
+    fn try_from_guild(guild: &Guild) -> Result<Self, Self::Error>;
 }
 
 /// A simple conversion from the provided guild reference.
-pub trait FromGuild<G: AsRef<Guild>>: Sized {
+pub trait FromGuild: Sized {
     /// Converts the provided referenced guild into the value.
-    fn from_guild(guild: G) -> Self;
+    fn from_guild(guild: &Guild) -> Self;
 }
 
-impl<G: AsRef<Guild>, T: TryFrom<G>> TryFromGuild<G> for T {
-    type Error = <T as TryFrom<G>>::Error;
+impl<T: FromGuild> TryFromGuild for T {
+    type Error = Infallible;
 
     #[inline]
-    fn try_from_guild(guild: G) -> Result<Self, Self::Error> {
-        Self::try_from(guild)
+    fn try_from_guild(guild: &Guild) -> Result<Self, Self::Error> {
+        Ok(Self::from_guild(guild))
     }
 }
 
-impl<G: AsRef<Guild>, T: From<G>> FromGuild<G> for T {
+impl TryFromGuild for EmbedAuthorBuilder {
+    type Error = anyhow::Error;
+
     #[inline]
-    fn from_guild(guild: G) -> Self {
-        Self::from(guild)
+    fn try_from_guild(guild: &Guild) -> Result<Self, Self::Error> {
+        Ok(Self::new(&guild.name).icon_url(guild.icon()?))
     }
 }
