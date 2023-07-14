@@ -1,3 +1,5 @@
+use std::convert::Infallible;
+
 use twilight_model::id::marker::UserMarker;
 use twilight_model::id::Id;
 use twilight_model::user::{CurrentUser, DiscriminatorDisplay, PremiumType, User, UserFlags};
@@ -9,8 +11,11 @@ use crate::utility::Result;
 
 /// Defines a value that can be created from a user.
 pub trait TryFromUser: Sized {
+    /// The error type that may result from the conversion.
+    type Error;
+
     /// Creates a value from the provided user.
-    fn try_from_user(user: &impl UserLike) -> Result<Self>;
+    fn try_from_user(user: &impl UserLike) -> Result<Self, Self::Error>;
 }
 
 /// Defines a value that can be created from a user.
@@ -20,13 +25,19 @@ pub trait FromUser {
 }
 
 impl<T: FromUser + Sized> TryFromUser for T {
-    fn try_from_user(user: &impl UserLike) -> Result<Self> {
+    type Error = Infallible;
+
+    #[inline]
+    fn try_from_user(user: &impl UserLike) -> Result<Self, Self::Error> {
         Ok(Self::from_user(user))
     }
 }
 
 impl TryFromUser for EmbedAuthorBuilder {
-    fn try_from_user(user: &impl UserLike) -> Result<Self> {
+    type Error = anyhow::Error;
+
+    #[inline]
+    fn try_from_user(user: &impl UserLike) -> Result<Self, Self::Error> {
         Ok(Self::new(user.name()).icon_url(user.face()?))
     }
 }
