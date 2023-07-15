@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 use std::ops::{Deref, DerefMut};
 
 use serde::{Deserialize, Serialize};
-use twilight_model::channel::message::component::{ActionRow, Button, ButtonStyle};
-use twilight_model::channel::message::{Component, ReactionType};
+use twilight_model::channel::message::component::{Button, ButtonStyle};
+use twilight_model::channel::message::ReactionType;
 use twilight_model::id::marker::{GuildMarker, RoleMarker, UserMarker};
 use twilight_model::id::Id;
 
@@ -11,32 +11,14 @@ use super::This;
 use crate::extend::{IteratorExt, ReactionTypeExt};
 use crate::storage::format::{MessagePack, Zip};
 use crate::storage::{Info, Storable};
-use crate::traits::SyncButtonBuilder;
-use crate::utility::{DataId, Result};
+use crate::traits::BuildButtons;
+use crate::utility::{ButtonBuilder, DataId, Result};
 
 /// Stores the user's added role selectors
 #[repr(transparent)]
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Selectors(BTreeMap<Id<RoleMarker>, (Box<str>, Box<str>)>);
-
-impl Selectors {
-    /// Converts a map entry into a button.
-    pub fn entry_to_button(
-        base_id: &DataId,
-        disabled: bool,
-        (id, (name, icon)): (&Id<RoleMarker>, &(Box<str>, Box<str>)),
-    ) -> Result<Button> {
-        Ok::<_, anyhow::Error>(Button {
-            custom_id: Some(base_id.clone().join(id.to_string())?.to_string()),
-            disabled,
-            emoji: Some(ReactionType::parse(icon.to_string())?),
-            label: Some(name.to_string()),
-            style: ButtonStyle::Secondary,
-            url: None,
-        })
-    }
-}
 
 impl Deref for Selectors {
     type Target = BTreeMap<Id<RoleMarker>, (Box<str>, Box<str>)>;
@@ -61,31 +43,19 @@ impl Storable for Selectors {
     }
 }
 
-impl SyncButtonBuilder for Selectors {
-    type Arguments = ();
-
-    fn build_buttons(&self, disabled: bool, _: Self::Arguments) -> Result<Vec<Component>> {
+impl BuildButtons for Selectors {
+    fn build_buttons(&self, disabled: bool, _: ()) -> Result<Vec<Button>> {
         let base_id = DataId::new_empty(This::NAME, Some("toggle"))?;
-        let f = |entry| Self::entry_to_button(&base_id, disabled, entry);
-        let buttons = self.iter().take(25).try_filter_map(f);
+        let buttons = self.iter().take(25).try_filter_map(|(id, (name, icon))| {
+            let button = ButtonBuilder::new(ButtonStyle::Secondary)
+                .custom_id(base_id.clone().join(id.to_string())?)
+                .disabled(disabled)
+                .emoji(ReactionType::parse(&(**icon))?)
+                .label(&(**name));
 
-        let capacity = self.len() / 5 + usize::from(self.len() % 5 != 0);
-        let mut list = Vec::with_capacity(capacity);
-        let mut components = Vec::with_capacity(5);
+            Ok::<_, anyhow::Error>(button.build())
+        });
 
-        for button in buttons {
-            if components.len() < 5 {
-                components.push(Component::Button(button));
-            } else {
-                list.push(Component::ActionRow(ActionRow { components }));
-                components = Vec::with_capacity(5);
-            }
-        }
-
-        if !components.is_empty() {
-            list.push(Component::ActionRow(ActionRow { components }));
-        }
-
-        Ok(list)
+        Ok(buttons.collect())
     }
 }

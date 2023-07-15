@@ -2,8 +2,7 @@
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
 #![warn(clippy::nursery, clippy::pedantic, clippy::todo, missing_docs)]
 #![allow(clippy::module_name_repetitions, clippy::missing_errors_doc)]
-#![feature(control_flow_enum, iter_array_chunks, try_blocks, try_trait_v2)]
-#![feature(try_trait_v2_residual)]
+#![feature(control_flow_enum, try_blocks, try_trait_v2, try_trait_v2_residual)]
 
 /// Contains command definitions and implementations.
 pub mod command;
