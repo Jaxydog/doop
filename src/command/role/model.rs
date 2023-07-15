@@ -64,7 +64,7 @@ impl Storable for Selectors {
 impl SyncButtonBuilder for Selectors {
     type Arguments = ();
 
-    fn build_buttons(&self, disabled: bool, arguments: Self::Arguments) -> Result<Vec<Component>> {
+    fn build_buttons(&self, disabled: bool, _: Self::Arguments) -> Result<Vec<Component>> {
         let base_id = DataId::new_empty(This::NAME, Some("toggle"))?;
         let f = |entry| Self::entry_to_button(&base_id, disabled, entry);
         let buttons = self.iter().take(25).try_filter_map(f);

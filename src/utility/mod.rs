@@ -3,6 +3,7 @@ use time::macros::datetime;
 use time::OffsetDateTime;
 
 pub use self::anchor::*;
+pub use self::build::*;
 pub use self::color::*;
 pub use self::etime::*;
 pub use self::id::*;
@@ -15,6 +16,8 @@ pub const CDN_BASE: &str = "https://cdn.discordapp.com";
 
 /// Defines a structure that represents a resolvable message location.
 mod anchor;
+/// Defines various Discord API model builder structures.
+mod build;
 /// Defines a structure that represents an RGB color.
 mod color;
 /// Provides functions for fetching various client secrets.
