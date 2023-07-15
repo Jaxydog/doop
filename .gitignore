@@ -5,4 +5,4 @@
 .env
 
 # ignore any temporary files
-*/tmp.*
+tmp.*
