@@ -33,13 +33,21 @@ impl Anchor {
         http.update_message(self.channel_id, self.message_id)
     }
 
-    /// Resolves and returns the represented message.
+    /// Deletes the represented message.
     pub async fn delete(&self, http: &Client) -> Result {
         let Self { channel_id, message_id, .. } = *self;
 
         http.delete_message(channel_id, message_id).await?;
 
         Ok(())
+    }
+
+    /// Deletes the represented message if it exists.
+    ///
+    /// This is less error-prone than just calling `delete`.
+    #[inline]
+    pub async fn delete_if_exists(&self, http: &Client) -> Result {
+        if self.fetch(http).await.is_ok() { self.delete(http).await } else { Ok(()) }
     }
 }
 
