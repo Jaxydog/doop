@@ -60,8 +60,9 @@ impl Localizer {
 
     /// Returns the localization assigned to the key in the given locale.
     #[must_use]
-    pub fn get(&self, locale: &str, key: impl AsRef<str> + Clone) -> Cow<str> {
-        let text = self.0.get(locale).and_then(|m| m.get(key.clone()));
+    pub fn get(&self, locale: impl Into<String>, key: impl AsRef<str> + Clone) -> Cow<str> {
+        let locale = locale.into();
+        let text = self.0.get(locale.as_str()).and_then(|m| m.get(key.clone()));
 
         text.unwrap_or_else(|| key.as_ref().to_owned().into())
     }
@@ -70,8 +71,12 @@ impl Localizer {
     /// locale, defaulting to the default translation locale.
     #[inline]
     #[must_use]
-    pub fn get_or_default(&self, locale: Option<&str>, key: impl AsRef<str> + Clone) -> Cow<str> {
-        self.get(locale.unwrap_or(Self::DEFAULT), key)
+    pub fn get_or_default(
+        &self,
+        locale: Option<impl Into<String>>,
+        key: impl AsRef<str> + Clone,
+    ) -> Cow<str> {
+        self.get(locale.map_or(Self::DEFAULT.into(), Into::into), key)
     }
 
     /// Returns a map of loaded translations assigned to the provided key.
@@ -105,7 +110,7 @@ macro_rules! localize {
         $crate::locale::localizer().get_or_default($locale, format!($($args)+).as_str())
     };
     ($($args:tt)+) => {
-        $crate::locale::localizer().get_or_default(None, format!($($args)+).as_str())
+        $crate::locale::localizer().get_or_default(None::<&str>, format!($($args)+).as_str())
     };
 }
 
