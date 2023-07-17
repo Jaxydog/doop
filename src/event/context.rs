@@ -80,7 +80,7 @@ impl<'ctx, T> Ctx<'ctx, T> {
 }
 
 /// A value that contains a cache and HTTP client.
-pub trait CacheHttp {
+pub trait CacheHttp: Send + Sync {
     /// The value's associated HTTP client reference.
     fn http(&self) -> &Client;
     /// The value's associated cache reference.
@@ -107,7 +107,7 @@ impl<'ch> CacheHttp for (&'ch Client, &'ch InMemoryCache) {
     }
 }
 
-impl<'ctx, T> CacheHttp for Ctx<'ctx, T> {
+impl<'ctx, T: Send + Sync> CacheHttp for Ctx<'ctx, T> {
     fn cache(&self) -> &InMemoryCache {
         self.cache
     }
