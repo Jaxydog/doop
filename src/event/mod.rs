@@ -147,7 +147,7 @@ async fn autofill(http: &Client, cache: &InMemoryCache, interaction: &Interactio
     let Some(handler) = handler(&data.name) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", data.name));
     };
-    let ctx = Ctx { http, cache, interaction, data: &(**data) };
+    let ctx = Ctx::new(http, cache, interaction, &(**data));
 
     crate::respond!(ctx, {
         KIND = ApplicationCommandAutocompleteResult,
@@ -166,7 +166,7 @@ async fn command(http: &Client, cache: &InMemoryCache, interaction: &Interaction
     let Some(handler) = handler(&data.name) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", data.name));
     };
-    let ctx = Ctx { http, cache, interaction, data: &(**data) };
+    let ctx = Ctx::new(http, cache, interaction, &(**data));
 
     handler.command(&ctx).await
 }
@@ -182,7 +182,7 @@ async fn component(http: &Client, cache: &InMemoryCache, interaction: &Interacti
     let Some(handler) = handler(id.base()) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", id.base()));
     };
-    let ctx = Ctx { http, cache, interaction, data: (data, id) };
+    let ctx = Ctx::new(http, cache, interaction, (data, id));
 
     handler.component(&ctx).await
 }
@@ -198,7 +198,7 @@ async fn modal(http: &Client, cache: &InMemoryCache, interaction: &Interaction) 
     let Some(handler) = handler(id.base()) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", id.base()));
     };
-    let ctx = Ctx { http, cache, interaction, data: (data, id) };
+    let ctx = Ctx::new(http, cache, interaction, (data, id));
 
     handler.modal(&ctx).await
 }

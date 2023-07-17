@@ -5,7 +5,7 @@ use twilight_util::builder::embed::EmbedBuilder;
 
 pub use self::model::*;
 use super::CommandOptionResolver;
-use crate::event::{CommandCtx, ComponentCtx, EventHandler, EventResult};
+use crate::event::{CacheHttp, CommandCtx, ComponentCtx, EventHandler, EventResult};
 use crate::extend::ReactionTypeExt;
 use crate::storage::Storable;
 use crate::traits::{button_rows, BuildButtons};
@@ -116,7 +116,7 @@ impl EventHandler for This {
             return EventResult::Err(anyhow!("expected a non-zero role identifier"));
         };
 
-        let member = ctx.http.guild_member(guild_id, user_id).await?;
+        let member = ctx.http().guild_member(guild_id, user_id).await?;
         let mut roles = member.model().await?.roles;
 
         let title = if roles.iter().any(|id| id == &role_id) {
@@ -129,7 +129,7 @@ impl EventHandler for This {
             crate::localize!(ctx.locale() => "text.{}.toggle_on", Self::NAME)
         };
 
-        ctx.http
+        ctx.http()
             .update_guild_member(guild_id, user_id)
             .roles(&roles)
             .await?;
@@ -162,10 +162,10 @@ async fn add<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) -> 
 
     ReactionType::parse(icon.to_string())?;
 
-    let name = if let Some(role) = ctx.cache.role(role_id) {
+    let name = if let Some(role) = ctx.cache().role(role_id) {
         role.name.clone()
     } else {
-        let roles = ctx.http.roles(guild_id).await?.model().await?;
+        let roles = ctx.http().roles(guild_id).await?.model().await?;
         let Some(role) = roles.into_iter().find(|r| r.id == role_id) else {
             return EventResult::Err(anyhow!("invalid role identifier '{role_id}'"));
         };
@@ -321,7 +321,7 @@ async fn send<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) ->
     let text = cor.get_string("text")?;
     let embed = EmbedBuilder::new().color(BRANDING_COLOR.into()).title(text);
 
-    ctx.http
+    ctx.http()
         .create_message(channel_id)
         .embeds(&[embed.build()])?
         .components(&components)?

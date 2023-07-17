@@ -1,7 +1,7 @@
 use twilight_model::application::command::Command;
 use twilight_util::builder::embed::{EmbedAuthorBuilder, EmbedBuilder};
 
-use crate::event::{CommandCtx, EventHandler, EventResult};
+use crate::event::{CacheHttp, CommandCtx, EventHandler, EventResult};
 use crate::traits::TryFromUser;
 use crate::utility::BRANDING_COLOR;
 
@@ -92,10 +92,10 @@ impl EventHandler for This {
         };
         text += format!("\n\n{footer}").as_str();
 
-        let user = if let Some(user) = ctx.cache.current_user() {
+        let user = if let Some(user) = ctx.cache().current_user() {
             user
         } else {
-            ctx.http.current_user().await?.model().await?
+            ctx.http().current_user().await?.model().await?
         };
 
         let embed = EmbedBuilder::new()

@@ -21,9 +21,9 @@ pub type ModalCtx<'ctx> = Ctx<'ctx, (&'ctx ModalInteractionData, DataId)>;
 #[derive(Clone, Copy, Debug)]
 pub struct Ctx<'ctx, T> {
     /// The bot's HTTP client.
-    pub http: &'ctx Client,
+    http: &'ctx Client,
     /// The bot's in-memory cache.
-    pub cache: &'ctx InMemoryCache,
+    cache: &'ctx InMemoryCache,
     /// The bot's event interaction.
     pub interaction: &'ctx Interaction,
     /// The bot's interaction data.
@@ -31,6 +31,16 @@ pub struct Ctx<'ctx, T> {
 }
 
 impl<'ctx, T> Ctx<'ctx, T> {
+    /// Creates new context data.
+    pub const fn new(
+        http: &'ctx Client,
+        cache: &'ctx InMemoryCache,
+        interaction: &'ctx Interaction,
+        data: T,
+    ) -> Self {
+        Self { http, cache, interaction, data }
+    }
+
     /// Returns the context's interaction token.
     #[inline]
     pub const fn token(&self) -> &String {
@@ -66,5 +76,43 @@ impl<'ctx, T> Ctx<'ctx, T> {
     #[must_use]
     pub fn created_at_in(&self, offset: impl Into<UtcOffset>) -> OffsetDateTime {
         self.interaction.id.created_at_in(offset)
+    }
+}
+
+/// A value that contains a cache and HTTP client.
+pub trait CacheHttp {
+    /// The value's associated HTTP client reference.
+    fn http(&self) -> &Client;
+    /// The value's associated cache reference.
+    fn cache(&self) -> &InMemoryCache;
+}
+
+impl<'ch> CacheHttp for (&'ch InMemoryCache, &'ch Client) {
+    fn cache(&self) -> &InMemoryCache {
+        self.0
+    }
+
+    fn http(&self) -> &Client {
+        self.1
+    }
+}
+
+impl<'ch> CacheHttp for (&'ch Client, &'ch InMemoryCache) {
+    fn cache(&self) -> &InMemoryCache {
+        self.1
+    }
+
+    fn http(&self) -> &Client {
+        self.0
+    }
+}
+
+impl<'ctx, T> CacheHttp for Ctx<'ctx, T> {
+    fn cache(&self) -> &InMemoryCache {
+        self.cache
+    }
+
+    fn http(&self) -> &Client {
+        self.http
     }
 }
