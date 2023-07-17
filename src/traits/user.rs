@@ -38,7 +38,12 @@ impl TryFromUser for EmbedAuthorBuilder {
 
     #[inline]
     fn try_from_user(user: &impl UserLike) -> Result<Self, Self::Error> {
-        Ok(Self::new(user.name()).icon_url(user.face()?))
+        Ok(Self::new(if user.discriminator().get() == 0 {
+            format!("@{}", user.name())
+        } else {
+            format!("{}#{}", user.name(), user.discriminator())
+        })
+        .icon_url(user.face()?))
     }
 }
 
