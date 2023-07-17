@@ -22,6 +22,7 @@ pub struct Anchor {
 
 impl Anchor {
     /// Resolves and returns the represented message.
+    #[inline]
     pub async fn fetch(&self, http: &Client) -> Result<Message> {
         let Self { channel_id, message_id, .. } = *self;
 
@@ -29,6 +30,7 @@ impl Anchor {
     }
 
     /// Returns a message update interface.
+    #[inline]
     pub const fn update<'um>(&self, http: &'um Client) -> UpdateMessage<'um> {
         http.update_message(self.channel_id, self.message_id)
     }
