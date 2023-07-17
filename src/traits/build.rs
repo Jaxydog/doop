@@ -143,3 +143,14 @@ pub fn button_rows(buttons: impl IntoIterator<Item = impl Into<Button>>) -> Vec<
 
     components
 }
+
+/// Builds text inputs using the provided arguments and automatically puts them
+/// into action rows.
+#[inline]
+pub fn text_input_rows(inputs: impl IntoIterator<Item = impl Into<TextInput>>) -> Vec<Component> {
+    inputs
+        .into_iter()
+        .map(Into::into)
+        .map(|i| Component::from(ActionRowBuilder::new([i])))
+        .collect()
+}
