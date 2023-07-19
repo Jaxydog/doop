@@ -57,15 +57,11 @@ impl EmbeddedTime {
 }
 
 impl From<PrimitiveDateTime> for EmbeddedTime {
-    fn from(value: PrimitiveDateTime) -> Self {
-        value.assume_offset(UtcOffset::UTC).into()
-    }
+    fn from(value: PrimitiveDateTime) -> Self { value.assume_offset(UtcOffset::UTC).into() }
 }
 
 impl From<OffsetDateTime> for EmbeddedTime {
-    fn from(time: OffsetDateTime) -> Self {
-        Self { time, flag: None }
-    }
+    fn from(time: OffsetDateTime) -> Self { Self { time, flag: None } }
 }
 
 impl Display for EmbeddedTime {

@@ -20,23 +20,17 @@ impl ActionRowBuilder {
     /// Build into an action row.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> ActionRow {
-        self.0
-    }
+    pub fn build(self) -> ActionRow { self.0 }
 }
 
 impl From<ActionRowBuilder> for ActionRow {
     #[inline]
-    fn from(value: ActionRowBuilder) -> Self {
-        value.build()
-    }
+    fn from(value: ActionRowBuilder) -> Self { value.build() }
 }
 
 impl From<ActionRowBuilder> for Component {
     #[inline]
-    fn from(value: ActionRowBuilder) -> Self {
-        Self::ActionRow(value.build())
-    }
+    fn from(value: ActionRowBuilder) -> Self { Self::ActionRow(value.build()) }
 }
 
 /// Create a button with a builder.
@@ -96,23 +90,17 @@ impl ButtonBuilder {
     /// Build into a button.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> Button {
-        self.0
-    }
+    pub fn build(self) -> Button { self.0 }
 }
 
 impl From<ButtonBuilder> for Button {
     #[inline]
-    fn from(value: ButtonBuilder) -> Self {
-        value.build()
-    }
+    fn from(value: ButtonBuilder) -> Self { value.build() }
 }
 
 impl From<ButtonBuilder> for Component {
     #[inline]
-    fn from(value: ButtonBuilder) -> Self {
-        Self::Button(value.build())
-    }
+    fn from(value: ButtonBuilder) -> Self { Self::Button(value.build()) }
 }
 
 /// Create a text input with a builder.
@@ -178,21 +166,15 @@ impl TextInputBuilder {
     /// Build into a text input.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> TextInput {
-        self.0
-    }
+    pub fn build(self) -> TextInput { self.0 }
 }
 
 impl From<TextInputBuilder> for TextInput {
     #[inline]
-    fn from(value: TextInputBuilder) -> Self {
-        value.build()
-    }
+    fn from(value: TextInputBuilder) -> Self { value.build() }
 }
 
 impl From<TextInputBuilder> for Component {
     #[inline]
-    fn from(value: TextInputBuilder) -> Self {
-        Self::TextInput(value.build())
-    }
+    fn from(value: TextInputBuilder) -> Self { Self::TextInput(value.build()) }
 }

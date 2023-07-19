@@ -14,7 +14,6 @@ remove_nested_parens = true
 reorder_impl_items = true
 reorder_imports = true
 reorder_modules = true
-report_todo = "Always"
 single_line_if_else_max_width = 80
 struct_lit_width = 80
 struct_variant_width = 60

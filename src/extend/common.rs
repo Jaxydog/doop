@@ -6,9 +6,7 @@ pub trait CharExt {
 
 impl CharExt for char {
     #[inline]
-    fn repeat(&self, n: usize) -> String {
-        self.encode_utf8(&mut [0; 4]).repeat(n)
-    }
+    fn repeat(&self, n: usize) -> String { self.encode_utf8(&mut [0; 4]).repeat(n) }
 }
 
 /// Provides additional methods for [`str`]s

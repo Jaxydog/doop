@@ -49,23 +49,17 @@ impl DataId {
     /// Returns the custom identifier's base identifier.
     #[inline]
     #[must_use]
-    pub const fn base(&self) -> &str {
-        &self.base
-    }
+    pub const fn base(&self) -> &str { &self.base }
 
     /// Returns the custom identifier's path identifier.
     #[inline]
     #[must_use]
-    pub fn path(&self) -> Option<&str> {
-        self.path.as_deref()
-    }
+    pub fn path(&self) -> Option<&str> { self.path.as_deref() }
 
     /// Returns the custom identifier's data content.
     #[inline]
     #[must_use]
-    pub fn data(&self) -> &[Box<str>] {
-        &self.data
-    }
+    pub fn data(&self) -> &[Box<str>] { &self.data }
 
     /// Attempts to insert the provided data into the custom identifier.
     pub fn with(&mut self, data: impl Into<String>) -> Result {
@@ -110,15 +104,11 @@ impl TryFrom<&str> for DataId {
 impl TryFrom<String> for DataId {
     type Error = anyhow::Error;
 
-    fn try_from(value: String) -> Result<Self, Self::Error> {
-        Self::try_from(value.as_str())
-    }
+    fn try_from(value: String) -> Result<Self, Self::Error> { Self::try_from(value.as_str()) }
 }
 
 impl From<DataId> for String {
-    fn from(value: DataId) -> Self {
-        value.to_string()
-    }
+    fn from(value: DataId) -> Self { value.to_string() }
 }
 
 impl Display for DataId {

@@ -17,30 +17,22 @@ impl Color {
     /// Creates a new RGB color value.
     #[inline]
     #[must_use]
-    pub const fn new(r: u8, g: u8, b: u8) -> Self {
-        Self(r, g, b)
-    }
+    pub const fn new(r: u8, g: u8, b: u8) -> Self { Self(r, g, b) }
 
     /// Returns the color's R component.
     #[inline]
     #[must_use]
-    pub const fn r(&self) -> &u8 {
-        &self.0
-    }
+    pub const fn r(&self) -> &u8 { &self.0 }
 
     /// Returns the color's G component.
     #[inline]
     #[must_use]
-    pub const fn g(&self) -> &u8 {
-        &self.0
-    }
+    pub const fn g(&self) -> &u8 { &self.0 }
 
     /// Returns the color's B component.
     #[inline]
     #[must_use]
-    pub const fn b(&self) -> &u8 {
-        &self.0
-    }
+    pub const fn b(&self) -> &u8 { &self.0 }
 }
 
 impl From<u32> for Color {
@@ -54,15 +46,11 @@ impl From<u32> for Color {
 }
 
 impl From<(u8, u8, u8)> for Color {
-    fn from((r, g, b): (u8, u8, u8)) -> Self {
-        Self::new(r, g, b)
-    }
+    fn from((r, g, b): (u8, u8, u8)) -> Self { Self::new(r, g, b) }
 }
 
 impl From<[u8; 3]> for Color {
-    fn from([r, g, b]: [u8; 3]) -> Self {
-        Self::new(r, g, b)
-    }
+    fn from([r, g, b]: [u8; 3]) -> Self { Self::new(r, g, b) }
 }
 
 impl From<Color> for u32 {
@@ -76,15 +64,11 @@ impl From<Color> for u32 {
 }
 
 impl From<Color> for (u8, u8, u8) {
-    fn from(Color(r, g, b): Color) -> Self {
-        (r, g, b)
-    }
+    fn from(Color(r, g, b): Color) -> Self { (r, g, b) }
 }
 
 impl From<Color> for [u8; 3] {
-    fn from(Color(r, g, b): Color) -> Self {
-        [r, g, b]
-    }
+    fn from(Color(r, g, b): Color) -> Self { [r, g, b] }
 }
 
 impl Display for Color {
