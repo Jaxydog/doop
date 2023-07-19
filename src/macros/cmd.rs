@@ -257,7 +257,6 @@ macro_rules! option {
     {
         TYPE = SubCommand,
         NAME = $name:literal,
-        $( REQUIRED = $required:literal, )?
         $( OPTIONS = [ $( $option:expr ),* $(,)? ], )?
     } => {
         {
@@ -266,22 +265,19 @@ macro_rules! option {
             ::twilight_util::builder::command::SubCommandBuilder::new($name, description)
                 .name_localizations($crate::locale_map!("subcommand.{}.{}.name", Self::NAME, $name))
                 .description_localizations($crate::locale_map!("subcommand.{}.{}.description", Self::NAME, $name))
-                $(.required($required))?
                 $($(.option($option))*)?
         }
     };
     {
         TYPE = SubCommandGroup,
         NAME = $name:literal,
-        $( REQUIRED = $required:literal, )?
         $( COMMANDS = [ $( $command:expr ),* $(,)? ], )?
     } => {
         {
             let description = $crate::localize!("group.{}.{}.description", Self::NAME, $name);
             let mut builder = ::twilight_util::builder::command::SubCommandGroupBuilder::new($name, description)
                 .name_localizations($crate::locale_map!("group.{}.{}.name", Self::NAME, $name))
-                .description_localizations($crate::locale_map!("group.{}.{}.description", Self::NAME, $name))
-                $(.required($required))?;
+                .description_localizations($crate::locale_map!("group.{}.{}.description", Self::NAME, $name));
 
             let commands: &[::twilight_util::builder::command::SubCommandBuilder] = &[$($($command),*)?];
 
