@@ -1,0 +1,30 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
+    - name: Install clippy
+      run: rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
+    - name: Run clippy
+      run: cargo clippy --verbose
+    - name: Install rustfmt
+      run: rustup component add rustfmt --toolchain nightly-x86_64-unknown-linux-gnu
+    - name: Run fmt
+      run: cargo fmt --all -- --check
