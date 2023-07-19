@@ -3,7 +3,7 @@
 macro_rules! respond {
     ($ctx:expr, { $($args:tt)* }) => {
         $crate::respond! {
-            @build($ctx.client(), $ctx.interaction.id, &$ctx.interaction.token) { $($args)* }
+            @build($ctx.client(), $ctx.event.id, &$ctx.event.token) { $($args)* }
         }
     };
     ($http:expr, $int:expr, { $($args:tt)* }) => {
@@ -52,7 +52,7 @@ macro_rules! respond {
 macro_rules! followup {
     ($ctx:expr, { $($args:tt)* }) => {
         $crate::followup! {
-            @build($ctx.client(), &$ctx.interaction.token) { $($args)* }
+            @build($ctx.client(), &$ctx.event.token) { $($args)* }
         }
     };
     ($http:expr, $int:expr, { $($args:tt)* }) => {

@@ -23,7 +23,6 @@ pub const INTENTS: Intents = Intents::DIRECT_MESSAGES
     .union(Intents::MESSAGE_CONTENT);
 
 /// Defines the bot process' state.
-#[non_exhaustive]
 #[derive(Debug)]
 pub struct State {
     /// The bot's HTTP client.
@@ -45,20 +44,17 @@ impl State {
         Ok(Self { http, cache, shards })
     }
 
-    /// Returns the bot's API configuration.
+    /// Returns the bot's API sharding configuration.
     pub(crate) fn new_config(token: String) -> Result<Config> {
-        let activity = MinimalActivity {
-            kind: ActivityType::Watching,
-            name: if cfg!(debug_assertions) { "for API events" } else { "for /help!" }.to_string(),
-            url: None,
-        }
-        .into();
-        let presence = UpdatePresencePayload::new(vec![activity], false, None, Status::Idle);
+        let status = if cfg!(debug_assertions) { Status::Idle } else { Status::Online };
+        let name = if cfg!(debug_assertions) { "for API events" } else { "for /help!" }.to_string();
+        let activity = MinimalActivity { kind: ActivityType::Watching, name, url: None }.into();
+        let presence = UpdatePresencePayload::new(vec![activity], false, None, status)?;
 
-        Ok(Config::builder(token, INTENTS).presence(presence?).build())
+        Ok(Config::builder(token, INTENTS).presence(presence).build())
     }
 
-    /// Returns a list of automatically-generated bot API shards.
+    /// Returns a list of automatically generated bot API shards.
     pub(crate) async fn new_shards(http: &Client, token: String) -> Result<Box<[Shard]>> {
         let config = Self::new_config(token)?;
         let builder = |_, b: ConfigBuilder| b.build();
@@ -66,8 +62,8 @@ impl State {
         Ok(create_recommended(http, config, builder).await?.collect())
     }
 
-    /// Runs the bot state instsance
-    pub async fn run(mut self) -> Result<()> {
+    /// Runs the bot's process.
+    pub async fn run(mut self) -> Result {
         let mut stream = ShardEventStream::new(self.shards.iter_mut());
         let mut tasks = JoinSet::new();
 
@@ -86,7 +82,7 @@ impl State {
 
             self.cache.update(&event);
 
-            tasks.spawn(crate::event::handle(
+            tasks.spawn(crate::event::handle_event(
                 Arc::clone(&self.http),
                 Arc::clone(&self.cache),
                 event,

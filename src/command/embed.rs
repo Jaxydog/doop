@@ -3,7 +3,7 @@ use twilight_util::builder::embed::{
 };
 
 use super::CommandOptionResolver;
-use crate::event::{CommandCtx, EventHandler, EventResult};
+use crate::event::{CommandContext, EventHandler, EventResult};
 use crate::extend::{StrExt, UserExt};
 use crate::utility::BRANDING_COLOR;
 
@@ -106,17 +106,17 @@ crate::command! {
 
 #[async_trait::async_trait]
 impl EventHandler for This {
-    async fn command(&self, ctx: &CommandCtx<'_>) -> EventResult {
+    async fn command(&self, ctx: &CommandContext) -> EventResult {
         let resolver = CommandOptionResolver::new(ctx.data);
         let mut embed = EmbedBuilder::new();
 
-        if let Ok(name) = resolver.get_string("author_name") {
+        if let Ok(name) = resolver.get_str("author_name") {
             let mut author = EmbedAuthorBuilder::new(name);
 
-            if let Ok(icon) = resolver.get_string("author_icon") {
+            if let Ok(icon) = resolver.get_str("author_icon") {
                 author = author.icon_url(ImageSource::url(icon)?);
             }
-            if let Ok(link) = resolver.get_string("author_link") {
+            if let Ok(link) = resolver.get_str("author_link") {
                 author = author.url(link);
             }
 
@@ -127,7 +127,7 @@ impl EventHandler for This {
         if let Ok(color) = resolver.get_i64("color").copied() {
             let color = if color > 0 {
                 color as u32
-            } else if let Some(ref user) = ctx.interaction.user {
+            } else if let Some(ref user) = ctx.event.user {
                 user.color()
             } else {
                 BRANDING_COLOR.into()
@@ -138,30 +138,30 @@ impl EventHandler for This {
             embed = embed.color(BRANDING_COLOR.into());
         }
 
-        if let Ok(description) = resolver.get_string("description") {
+        if let Ok(description) = resolver.get_str("description") {
             embed = embed.description(description.flatten_escapes().trim());
         }
 
-        if let Ok(text) = resolver.get_string("footer_text") {
+        if let Ok(text) = resolver.get_str("footer_text") {
             let mut footer = EmbedFooterBuilder::new(text);
 
-            if let Ok(icon) = resolver.get_string("footer_icon") {
+            if let Ok(icon) = resolver.get_str("footer_icon") {
                 footer = footer.icon_url(ImageSource::url(icon)?);
             }
 
             embed = embed.footer(footer);
         }
 
-        if let Ok(link) = resolver.get_string("image_link") {
+        if let Ok(link) = resolver.get_str("image_link") {
             embed = embed.image(ImageSource::url(link)?);
         }
 
-        if let Ok(link) = resolver.get_string("thumbnail_link") {
+        if let Ok(link) = resolver.get_str("thumbnail_link") {
             embed = embed.thumbnail(ImageSource::url(link)?);
         }
 
-        if let Ok(text) = resolver.get_string("title_text") {
-            if let Ok(link) = resolver.get_string("title_link") {
+        if let Ok(text) = resolver.get_str("title_text") {
+            if let Ok(link) = resolver.get_str("title_link") {
                 embed = embed.url(link);
             }
 

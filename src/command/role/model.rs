@@ -14,7 +14,7 @@ use crate::storage::{Info, Storable};
 use crate::traits::BuildButtons;
 use crate::utility::{ButtonBuilder, DataId, Result};
 
-/// Stores the user's added role selectors
+/// Stores the user's added role selectors.
 #[repr(transparent)]
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -23,15 +23,11 @@ pub struct Selectors(BTreeMap<Id<RoleMarker>, (Box<str>, Box<str>)>);
 impl Deref for Selectors {
     type Target = BTreeMap<Id<RoleMarker>, (Box<str>, Box<str>)>;
 
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
+    fn deref(&self) -> &Self::Target { &self.0 }
 }
 
 impl DerefMut for Selectors {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
+    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.0 }
 }
 
 impl Storable for Selectors {

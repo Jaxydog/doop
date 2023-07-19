@@ -1,7 +1,7 @@
-use std::convert::Infallible;
-use std::ops::{ControlFlow, Deref, DerefMut, FromResidual, Residual, Try};
+use std::convert::{identity, Infallible};
+use std::ops::{ControlFlow, FromResidual, Residual, Try};
 
-/// Extension of a result, possibly being fatal.
+/// Extends a standard [`Result`], including a [`EventResult::Fatal`] variant.
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub enum EventResult<T = (), E = anyhow::Error> {
     /// Contains the success value.
@@ -13,29 +13,22 @@ pub enum EventResult<T = (), E = anyhow::Error> {
 }
 
 impl<T, E> EventResult<T, E> {
-    /// Returns whether the variant is [`EventResult::Ok`].
+    /// Returns whether the variant is [`EventResult::Ok`]
     #[inline]
-    pub const fn is_ok(&self) -> bool {
-        matches!(self, &Self::Ok(_))
-    }
+    pub const fn is_ok(&self) -> bool { matches!(self, &Self::Ok(_)) }
 
-    /// Returns whether the variant is [`EventResult::Err`].
+    /// Returns whether the variant is [`EventResult::Err`]
     #[inline]
-    pub const fn is_err(&self) -> bool {
-        matches!(self, &Self::Err(_))
-    }
+    pub const fn is_err(&self) -> bool { matches!(self, &Self::Err(_)) }
 
-    /// Returns whether the variant is [`EventResult::Fatal`].
+    /// Returns whether the variant is [`EventResult::Fatal`]
     #[inline]
-    pub const fn is_fatal(&self) -> bool {
-        matches!(self, &Self::Fatal(_))
-    }
+    pub const fn is_fatal(&self) -> bool { matches!(self, &Self::Fatal(_)) }
 
     /// Returns whether the variant is [`EventResult::Ok`] and matches the
     /// provided predicate.
     #[inline]
     #[must_use]
-    #[allow(clippy::wrong_self_convention)]
     pub fn is_ok_and(self, f: impl FnOnce(T) -> bool) -> bool {
         match self {
             Self::Ok(v) => f(v),
@@ -47,7 +40,6 @@ impl<T, E> EventResult<T, E> {
     /// provided predicate.
     #[inline]
     #[must_use]
-    #[allow(clippy::wrong_self_convention)]
     pub fn is_err_and(self, f: impl FnOnce(E) -> bool) -> bool {
         match self {
             Self::Err(v) => f(v),
@@ -59,7 +51,6 @@ impl<T, E> EventResult<T, E> {
     /// provided predicate.
     #[inline]
     #[must_use]
-    #[allow(clippy::wrong_self_convention)]
     pub fn is_fatal_and(self, f: impl FnOnce(E) -> bool) -> bool {
         match self {
             Self::Fatal(v) => f(v),
@@ -67,9 +58,8 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Converts from [`EventResult<T, E>`] to [`Option<T>`].
+    /// Converts from [`EventResult<T, E>`] into [`Option<T>`].
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn ok(self) -> Option<T> {
         match self {
             Self::Ok(v) => Some(v),
@@ -77,9 +67,8 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Converts from [`EventResult<T, E>`] to [`Option<E>`].
+    /// Converts from [`EventResult<T, E>`] into [`Option<E>`].
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn err(self) -> Option<E> {
         match self {
             Self::Err(v) => Some(v),
@@ -87,9 +76,8 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Converts from [`EventResult<T, E>`] to [`Option<E>`].
+    /// Converts from [`EventResult<T, E>`] into [`Option<E>`].
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn fatal(self) -> Option<E> {
         match self {
             Self::Fatal(v) => Some(v),
@@ -97,52 +85,52 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Converts from [`&EventResult<T, E>`](<EventResult>) to [`EventResult<&T,
-    /// &E>`].
+    /// Converts from [`&EventResult<T, E>`](<EventResult>) into
+    /// [`EventResult<&T, &E>`].
     #[inline]
     pub const fn as_ref(&self) -> EventResult<&T, &E> {
-        match *self {
+        match self {
             Self::Ok(ref v) => EventResult::Ok(v),
             Self::Err(ref v) => EventResult::Err(v),
             Self::Fatal(ref v) => EventResult::Fatal(v),
         }
     }
 
-    /// Converts from [`&mut EventResult<T, E>`](<EventResult>) to
+    /// Converts from [`&mut EventResult<T, E>`](<EventResult>) into
     /// [`EventResult<&mut T, &mut E>`].
     #[inline]
     pub fn as_mut(&mut self) -> EventResult<&mut T, &mut E> {
-        match *self {
+        match self {
             Self::Ok(ref mut v) => EventResult::Ok(v),
             Self::Err(ref mut v) => EventResult::Err(v),
             Self::Fatal(ref mut v) => EventResult::Fatal(v),
         }
     }
 
-    /// Converts from `&EventResult<T, E>` to `EventResult<&<T as
-    /// Deref>::Target, &E>`.
+    /// Converts from [`EventResult<T, E>`] into
+    /// [`EventResult<&<T as Deref>::Target, &E>`].
     #[inline]
     pub fn as_deref(&self) -> EventResult<&T::Target, &E>
     where
-        T: Deref,
+        T: std::ops::Deref,
     {
-        self.as_ref().map(Deref::deref)
+        self.as_ref().map(std::ops::Deref::deref)
     }
 
-    /// Converts from `&mut EventResult<T, E>` to `EventResult<&mut <T as
-    /// DerefMut>::Target, &mut E>`.
+    /// Converts from [`EventResult<T, E>`] into
+    /// [`EventResult<&mut <T as Deref>::Target, &mut E>`].
     #[inline]
     pub fn as_deref_mut(&mut self) -> EventResult<&mut T::Target, &mut E>
     where
-        T: DerefMut,
+        T: std::ops::DerefMut,
     {
-        self.as_mut().map(DerefMut::deref_mut)
+        self.as_mut().map(std::ops::DerefMut::deref_mut)
     }
 
-    /// Maps a [`EventResult<T, E>`] to [`EventResult<U, E>`] using the
-    /// provided function.
+    /// Converts from [`EventResult<T, E>`] into [`EventResult<U, E>`] using the
+    /// provided closure.
     #[inline]
-    pub fn map<U, F: FnOnce(T) -> U>(self, f: F) -> EventResult<U, E> {
+    pub fn map<U>(self, f: impl FnOnce(T) -> U) -> EventResult<U, E> {
         match self {
             Self::Ok(v) => EventResult::Ok(f(v)),
             Self::Err(v) => EventResult::Err(v),
@@ -150,27 +138,28 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Maps a [`EventResult<T, E>`] to `U` using the provided function and
-    /// default.
+    /// Converts from [`EventResult<T, E>`] into `U` using the provided closure
+    /// and default value.
     #[inline]
-    pub fn map_or<U, F: FnOnce(T) -> U>(self, default: U, f: F) -> U {
+    pub fn map_or<U>(self, default: U, f: impl FnOnce(T) -> U) -> U {
         match self {
             Self::Ok(v) => f(v),
             _ => default,
         }
     }
 
-    /// Maps a [`EventResult<T, E>`] to `U` using the provided functions.
+    /// Converts from [`EventResult<T, E>`] into `U` using the provided closure
+    /// and default value.
     #[inline]
-    pub fn map_or_else<U, D: FnOnce(E) -> U, F: FnOnce(T) -> U>(self, d: D, f: F) -> U {
+    pub fn map_or_else<U>(self, d: impl FnOnce(E) -> U, f: impl FnOnce(T) -> U) -> U {
         match self {
             Self::Ok(v) => f(v),
             Self::Err(v) | Self::Fatal(v) => d(v),
         }
     }
 
-    /// Maps a [`EventResult<T, E>`] to [`EventResult<T, U>`] using the
-    /// provided function.
+    /// Converts from [`EventResult<T, E>`] into [`EventResult<T, U>`] using the
+    /// provided closure.
     #[inline]
     pub fn map_err<U, F: FnOnce(E) -> U>(self, f: F) -> EventResult<T, U> {
         match self {
@@ -180,10 +169,9 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Returns `result` if the result is [`EventResult::Ok`], otherwise
+    /// Returns the given result if this is [`EventResult::Ok`], otherwise
     /// returns the inner error.
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn and<U>(self, result: EventResult<U, E>) -> EventResult<U, E> {
         match self {
             Self::Ok(_) => result,
@@ -192,8 +180,8 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Returns the value provided by `f` if the result is [`EventResult::Ok`],
-    /// otherwise returns the inner error.
+    /// Returns the result returned by the provided closure if this is
+    /// [`EventResult::Ok`], otherwise returns the inner error.
     #[inline]
     pub fn and_then<U>(self, f: impl FnOnce(T) -> EventResult<U, E>) -> EventResult<U, E> {
         match self {
@@ -203,10 +191,9 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Returns `result` if the result is not [`EventResult::Ok`], otherwise
-    /// returns the inner value.
+    /// Returns the given result if this is not [`EventResult::Ok`], otherwise
+    /// returns the inner error.
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn or<U>(self, result: EventResult<T, U>) -> EventResult<T, U> {
         match self {
             Self::Ok(v) => EventResult::Ok(v),
@@ -214,10 +201,9 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Returns the value provided by `f` if the result is not
-    /// [`EventResult::Ok`], otherwise returns the inner value.
+    /// Returns the result returned by the provided closure if this is not
+    /// [`EventResult::Ok`], otherwise returns the inner error.
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn or_else<U>(self, f: impl FnOnce(E) -> EventResult<T, U>) -> EventResult<T, U> {
         match self {
             Self::Ok(v) => EventResult::Ok(v),
@@ -227,7 +213,6 @@ impl<T, E> EventResult<T, E> {
 
     /// Returns the contained [`EventResult::Ok`] value or the provided default.
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn unwrap_or(self, default: T) -> T {
         match self {
             Self::Ok(v) => v,
@@ -235,10 +220,9 @@ impl<T, E> EventResult<T, E> {
         }
     }
 
-    /// Returns the contained [`EventResult::Ok`] value or the value provided
-    /// by `f`.
+    /// Returns the contained [`EventResult::Ok`] value or the value returned by
+    /// the provided closure.
     #[inline]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn unwrap_or_else(self, f: impl FnOnce(E) -> T) -> T {
         match self {
             Self::Ok(v) => v,
@@ -248,17 +232,19 @@ impl<T, E> EventResult<T, E> {
 }
 
 impl<T, E> EventResult<&T, E> {
-    /// Maps a [`EventResult<&T, E>`] to a [`EventResult<T, E>`] by cloning
-    /// the inner value.
+    /// Converts from [`EventResult<&T, E>`] into [`EventResult<T, E>`] by
+    /// cloning the inner value.
+    #[inline]
     pub fn cloned(self) -> EventResult<T, E>
     where
         T: Clone,
     {
-        self.map(std::clone::Clone::clone)
+        self.map(Clone::clone)
     }
 
-    /// Maps a [`EventResult<&T, E>`] to a [`EventResult<T, E>`] by copying
-    /// the inner value.
+    /// Converts from [`EventResult<&T, E>`] into [`EventResult<T, E>`] by
+    /// copying the inner value.
+    #[inline]
     pub fn copied(self) -> EventResult<T, E>
     where
         T: Copy,
@@ -268,8 +254,9 @@ impl<T, E> EventResult<&T, E> {
 }
 
 impl<T, E> EventResult<&mut T, E> {
-    /// Maps a [`EventResult<&T, E>`] to a [`EventResult<T, E>`] by cloning
-    /// the inner value.
+    /// Converts from [`EventResult<&mut T, E>`] into [`EventResult<T, E>`] by
+    /// cloning the inner value.
+    #[inline]
     pub fn cloned(self) -> EventResult<T, E>
     where
         T: Clone,
@@ -277,8 +264,9 @@ impl<T, E> EventResult<&mut T, E> {
         self.map(|t| t.clone())
     }
 
-    /// Maps a [`EventResult<&T, E>`] to a [`EventResult<T, E>`] by copying
-    /// the inner value.
+    /// Converts from [`EventResult<&mut T, E>`] into [`EventResult<T, E>`] by
+    /// copying the inner value.
+    #[inline]
     pub fn copied(self) -> EventResult<T, E>
     where
         T: Copy,
@@ -288,9 +276,8 @@ impl<T, E> EventResult<&mut T, E> {
 }
 
 impl<T, E> EventResult<Option<T>, E> {
-    /// Transposes a [`EventResult`] of an [`Option`] into an [`Option`] of a
+    /// Transposes an [`EventResult`] of an [`Option`] into an [`Option`] of an
     /// [`EventResult`].
-    #[allow(clippy::missing_const_for_fn)]
     pub fn transpose(self) -> Option<EventResult<T, E>> {
         match self {
             Self::Ok(Some(v)) => Some(EventResult::Ok(v)),
@@ -302,14 +289,13 @@ impl<T, E> EventResult<Option<T>, E> {
 }
 
 impl<T, E> EventResult<EventResult<T, E>, E> {
-    /// Flattens the handle result.
+    /// Flattens the nested [`EventResult`].
     #[inline]
-    pub fn flatten(self) -> EventResult<T, E> {
-        self.and_then(std::convert::identity)
-    }
+    pub fn flatten(self) -> EventResult<T, E> { self.and_then(identity) }
 }
 
 impl<T, E> From<EventResult<T, E>> for Result<T, E> {
+    #[inline]
     fn from(value: EventResult<T, E>) -> Self {
         match value {
             EventResult::Ok(v) => Ok(v),
@@ -319,10 +305,28 @@ impl<T, E> From<EventResult<T, E>> for Result<T, E> {
 }
 
 impl<T, E> From<Result<T, E>> for EventResult<T, E> {
+    #[inline]
     fn from(value: Result<T, E>) -> Self {
         match value {
             Ok(v) => Self::Ok(v),
             Err(v) => Self::Err(v),
+        }
+    }
+}
+
+impl<T, E> Try for EventResult<T, E> {
+    type Output = T;
+    type Residual = EventResult<Infallible, E>;
+
+    #[inline]
+    fn from_output(output: Self::Output) -> Self { Self::Ok(output) }
+
+    #[inline]
+    fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {
+        match self {
+            Self::Ok(v) => ControlFlow::Continue(v),
+            Self::Err(v) => ControlFlow::Break(EventResult::Err(v)),
+            Self::Fatal(v) => ControlFlow::Break(EventResult::Fatal(v)),
         }
     }
 }
@@ -332,6 +336,7 @@ impl<T, E> Residual<T> for EventResult<Infallible, E> {
 }
 
 impl<T, E, F: From<E>> FromResidual<Result<Infallible, E>> for EventResult<T, F> {
+    #[inline]
     fn from_residual(residual: Result<Infallible, E>) -> Self {
         match residual {
             Ok(_) => unreachable!(),
@@ -348,25 +353,6 @@ impl<T, E, F: From<E>> FromResidual<EventResult<Infallible, E>> for EventResult<
             EventResult::Ok(_) => unreachable!(),
             EventResult::Err(v) => Self::Err(From::from(v)),
             EventResult::Fatal(v) => Self::Fatal(From::from(v)),
-        }
-    }
-}
-
-impl<T, E> Try for EventResult<T, E> {
-    type Output = T;
-    type Residual = EventResult<Infallible, E>;
-
-    #[inline]
-    fn from_output(output: Self::Output) -> Self {
-        Self::Ok(output)
-    }
-
-    #[inline]
-    fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {
-        match self {
-            Self::Ok(v) => ControlFlow::Continue(v),
-            Self::Err(v) => ControlFlow::Break(EventResult::Err(v)),
-            Self::Fatal(v) => ControlFlow::Break(EventResult::Fatal(v)),
         }
     }
 }

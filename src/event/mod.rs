@@ -14,7 +14,7 @@ use twilight_util::builder::embed::{EmbedAuthorBuilder, EmbedBuilder};
 
 pub use self::context::*;
 pub use self::result::*;
-use crate::command::CommandState;
+use crate::command::DoopCommand;
 use crate::extend::{InteractionCreateExt, IteratorExt};
 use crate::traits::TryFromUser;
 use crate::utility::{DataId, Result, FAILURE_COLOR};
@@ -25,50 +25,51 @@ mod context;
 /// Defines a custom event-specific result type.
 mod result;
 
-/// Implements an API event handler for bot commands.
+/// An API event handler.
 #[allow(unused_variables)]
 #[async_trait::async_trait]
-pub trait EventHandler: CommandState + Send + Sync {
-    /// Supplies an application command interaction's autofill.
-    async fn autofill(&self, ctx: &CommandCtx<'_>) -> EventResult<Vec<CommandOptionChoice>> {
+pub trait EventHandler: DoopCommand {
+    /// Handles an autocomplete interaction event.
+    async fn autocomplete(&self, ctx: &CommandContext) -> EventResult<Vec<CommandOptionChoice>> {
         EventResult::Err(anyhow!("unsupported interaction type"))
     }
-    /// Handles an application command interaction.
-    async fn command(&self, ctx: &CommandCtx<'_>) -> EventResult {
+    /// Handles a command interaction event.
+    async fn command(&self, ctx: &CommandContext) -> EventResult {
         EventResult::Err(anyhow!("unsupported interaction type"))
     }
-    /// Handles a message component interaction.
-    async fn component(&self, ctx: &ComponentCtx<'_>) -> EventResult {
+    /// Handles a component interaction event.
+    async fn component(&self, ctx: &ComponentContext) -> EventResult {
         EventResult::Err(anyhow!("unsupported interaction type"))
     }
-    /// Handles a modal submission interaction.
-    async fn modal(&self, ctx: &ModalCtx<'_>) -> EventResult {
+    /// Handles a modal interaction event.
+    async fn modal(&self, ctx: &ModalContext) -> EventResult {
         EventResult::Err(anyhow!("unsupported interaction type"))
     }
 }
 
 crate::global! {{
     /// Returns the bot's list of event handlers.
-    [HANDLERS] fn handlers() -> Box<[&'static dyn EventHandler]> { || crate::heap!(box [
-        &crate::command::embed::This,
-        &crate::command::help::This,
-        &crate::command::ping::This,
-        &crate::command::role::This,
-    ])}
+    [HANDLERS] fn handlers() -> Box<[Box<dyn EventHandler>]> { || crate::heap!(box [
+        Box::new(crate::command::embed::This),
+        Box::new(crate::command::help::This),
+        Box::new(crate::command::ping::This),
+        Box::new(crate::command::role::This),
+    ]) }
 }}
 
 /// Returns an event handler with the provided name.
 #[inline]
 #[must_use]
 pub fn handler(name: &str) -> Option<&'static dyn EventHandler> {
-    handlers().iter().find(|h| h.name() == name).copied()
+    handlers().iter().find(|h| h.name() == name).map(|h| &(**h))
 }
 
 /// Builds and returns the bot's list of commands.
 #[inline]
 #[must_use]
 pub fn commands(guild_id: Option<Id<GuildMarker>>) -> Box<[Command]> {
-    let commands = handlers().iter().try_filter_map(|handler| {
+    #[allow(clippy::borrowed_box)]
+    let build = |handler: &Box<dyn EventHandler>| {
         let result = handler.build(guild_id);
 
         if let Err(ref error) = result {
@@ -76,13 +77,13 @@ pub fn commands(guild_id: Option<Id<GuildMarker>>) -> Box<[Command]> {
         }
 
         result
-    });
+    };
 
-    commands.collect()
+    handlers().iter().try_filter_map(build).collect()
 }
 
-/// Handles bot shard API events.
-pub async fn handle(http: Arc<Client>, cache: Arc<InMemoryCache>, event: Event) -> Result {
+/// Handles all bot shard API events.
+pub async fn handle_event(http: Arc<Client>, cache: Arc<InMemoryCache>, event: Event) -> Result {
     let result = match event {
         Event::Ready(event) => ready(&http, *event).await,
         Event::InteractionCreate(event) => interaction(&http, &cache, *event).await,
@@ -96,7 +97,7 @@ pub async fn handle(http: Arc<Client>, cache: Arc<InMemoryCache>, event: Event) 
     }
 }
 
-/// Handles the bot's ready events.
+/// Handles all bot shard API ready events.
 async fn ready(http: &Client, event: Ready) -> EventResult {
     info!("connected to the discord api")?;
 
@@ -112,7 +113,7 @@ async fn ready(http: &Client, event: Ready) -> EventResult {
     EventResult::Ok(())
 }
 
-/// Handles the bot's interaction create events.
+/// Handles all bot shard API interaction create events.
 async fn interaction(
     http: &Client,
     cache: &InMemoryCache,
@@ -121,10 +122,10 @@ async fn interaction(
     info!("received interaction: {}", event.label())?;
 
     let result = match event.kind {
-        InteractionType::ApplicationCommandAutocomplete => autofill(http, cache, &event.0).await,
-        InteractionType::ApplicationCommand => command(http, cache, &event.0).await,
-        InteractionType::MessageComponent => component(http, cache, &event.0).await,
-        InteractionType::ModalSubmit => modal(http, cache, &event.0).await,
+        InteractionType::ApplicationCommandAutocomplete => autocomplete(http, cache, &event).await,
+        InteractionType::ApplicationCommand => command(http, cache, &event).await,
+        InteractionType::MessageComponent => component(http, cache, &event).await,
+        InteractionType::ModalSubmit => modal(http, cache, &event).await,
         _ => EventResult::Ok(()),
     };
 
@@ -140,18 +141,22 @@ async fn interaction(
 }
 
 /// Handles the bot's autofill interaction shard events.
-async fn autofill(http: &Client, cache: &InMemoryCache, interaction: &Interaction) -> EventResult {
+async fn autocomplete(
+    http: &Client,
+    cache: &InMemoryCache,
+    interaction: &Interaction,
+) -> EventResult {
     let Some(InteractionData::ApplicationCommand(data)) = &interaction.data else {
         return EventResult::Err(anyhow!("missing component data"));
     };
     let Some(handler) = handler(&data.name) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", data.name));
     };
-    let ctx = Ctx::new(http, cache, interaction, &(**data));
+    let ctx = Context::new(&(**data), interaction, http, cache);
 
     crate::respond!(ctx, {
         KIND = ApplicationCommandAutocompleteResult,
-        CHOICES = handler.autofill(&ctx).await?,
+        CHOICES = handler.autocomplete(&ctx).await?,
     })
     .await?;
 
@@ -166,7 +171,7 @@ async fn command(http: &Client, cache: &InMemoryCache, interaction: &Interaction
     let Some(handler) = handler(&data.name) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", data.name));
     };
-    let ctx = Ctx::new(http, cache, interaction, &(**data));
+    let ctx = Context::new(&(**data), interaction, http, cache);
 
     handler.command(&ctx).await
 }
@@ -182,7 +187,7 @@ async fn component(http: &Client, cache: &InMemoryCache, interaction: &Interacti
     let Some(handler) = handler(id.base()) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", id.base()));
     };
-    let ctx = Ctx::new(http, cache, interaction, (data, id));
+    let ctx = Context::new((data, id), interaction, http, cache);
 
     handler.component(&ctx).await
 }
@@ -198,7 +203,7 @@ async fn modal(http: &Client, cache: &InMemoryCache, interaction: &Interaction) 
     let Some(handler) = handler(id.base()) else {
         return EventResult::Err(anyhow!("missing handler for '{}'", id.base()));
     };
-    let ctx = Ctx::new(http, cache, interaction, (data, id));
+    let ctx = Context::new((data, id), interaction, http, cache);
 
     handler.modal(&ctx).await
 }

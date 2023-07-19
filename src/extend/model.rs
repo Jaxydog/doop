@@ -55,9 +55,7 @@ pub trait InteractionCreateExt {
 
 impl InteractionCreateExt for InteractionCreate {
     #[inline]
-    fn label(&self) -> String {
-        format!("<{:?}::{}>", self.kind, self.id)
-    }
+    fn label(&self) -> String { format!("<{:?}::{}>", self.kind, self.id) }
 }
 
 /// Provides additional methods for reaction types.
@@ -105,15 +103,11 @@ impl ReactionTypeExt<&str> for ReactionType {
 }
 
 impl ReactionTypeExt<String> for ReactionType {
-    fn parse(value: String) -> Result<Self> {
-        Self::parse(value.as_str())
-    }
+    fn parse(value: String) -> Result<Self> { Self::parse(value.as_str()) }
 }
 
 impl ReactionTypeExt<char> for ReactionType {
-    fn parse(value: char) -> Result<Self> {
-        Ok(Self::Unicode { name: value.to_string() })
-    }
+    fn parse(value: char) -> Result<Self> { Ok(Self::Unicode { name: value.to_string() }) }
 }
 
 /// Provides additional methods for users

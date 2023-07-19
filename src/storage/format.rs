@@ -44,21 +44,15 @@ pub struct Zip<F: Format, const C: u8 = 6>(F);
 impl<F: Format, const C: u8> Zip<F, C> {
     /// Creates a new [`Zip`] format containing the provided inner format value.
     #[inline]
-    pub const fn new(format: F) -> Self {
-        Self(format)
-    }
+    pub const fn new(format: F) -> Self { Self(format) }
 
     /// Returns a reference to the [`Zip`]'s inner format value.
     #[inline]
-    pub const fn wrapped(&self) -> &F {
-        &self.0
-    }
+    pub const fn wrapped(&self) -> &F { &self.0 }
 
     /// Returns the [`Zip`]'s compression level.
     #[inline]
-    pub const fn compression(&self) -> Compression {
-        Compression::new(C as u32)
-    }
+    pub const fn compression(&self) -> Compression { Compression::new(C as u32) }
 }
 
 impl<F: Format, const C: u8> Format for Zip<F, C> {

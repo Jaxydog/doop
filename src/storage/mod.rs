@@ -41,27 +41,19 @@ where
 
     /// Creates a new [`Info`] identifier with a default format.
     #[inline]
-    pub fn new(path: impl AsRef<Path>) -> Self {
-        Self::new_in(path, F::default())
-    }
+    pub fn new(path: impl AsRef<Path>) -> Self { Self::new_in(path, F::default()) }
 
     /// Returns a reference to the inner file path.
     #[inline]
-    pub const fn path(&self) -> &Path {
-        &self.path
-    }
+    pub const fn path(&self) -> &Path { &self.path }
 
     /// Returns a reference to the inner format.
     #[inline]
-    pub const fn format(&self) -> &F {
-        &self.format
-    }
+    pub const fn format(&self) -> &F { &self.format }
 
     /// Reads the saved value from the file system.
     #[inline]
-    pub async fn read(self) -> Result<Stored<T, F>> {
-        Stored::read(self).await
-    }
+    pub async fn read(self) -> Result<Stored<T, F>> { Stored::read(self).await }
 
     /// Reads the saved value from the file system, providing a default value
     /// when an error occurs.
@@ -96,16 +88,12 @@ where
     /// Writes the inner value into the file system, unwrapping and returning
     /// the contained [`Info`] information.
     #[inline]
-    pub async fn write(self, value: T) -> Result<Self> {
-        Stored::new(self, value).write().await
-    }
+    pub async fn write(self, value: T) -> Result<Self> { Stored::new(self, value).write().await }
 
     /// Removes the inner value from the file system, unwrapping and returning
     /// the contained [`Info`] information and the associated value.
     #[inline]
-    pub async fn remove(self) -> Result<(Self, T)> {
-        self.read().await?.remove().await
-    }
+    pub async fn remove(self) -> Result<(Self, T)> { self.read().await?.remove().await }
 }
 
 /// Represents a value that persists between processes and its associated
@@ -129,16 +117,12 @@ where
 {
     /// Creates a new [`Stored`] value associated to the given [`Info`].
     #[inline]
-    pub const fn new(info: Info<T, F>, value: T) -> Self {
-        Self { info, value }
-    }
+    pub const fn new(info: Info<T, F>, value: T) -> Self { Self { info, value } }
 
     /// Creates a new [`Stored`] value assigned to the [`Info`] identifier
     /// constructed from the provided arguments.
     #[inline]
-    pub fn new_from(path: impl AsRef<Path>, value: T) -> Self {
-        Self::new(Info::new(path), value)
-    }
+    pub fn new_from(path: impl AsRef<Path>, value: T) -> Self { Self::new(Info::new(path), value) }
 
     /// Creates a new [`Stored`] value assigned to the [`Info`] identifier
     /// constructed from the provided arguments.
@@ -149,27 +133,19 @@ where
 
     /// Returns a reference to the associated [`Info`] information.
     #[inline]
-    pub const fn info(&self) -> &Info<T, F> {
-        &self.info
-    }
+    pub const fn info(&self) -> &Info<T, F> { &self.info }
 
     /// Returns a reference to the inner value.
     #[inline]
-    pub const fn get(&self) -> &T {
-        &self.value
-    }
+    pub const fn get(&self) -> &T { &self.value }
 
     /// Returns a mutable reference to the inner value.
     #[inline]
-    pub fn get_mut(&mut self) -> &mut T {
-        &mut self.value
-    }
+    pub fn get_mut(&mut self) -> &mut T { &mut self.value }
 
     /// Returns a the inner value, dropping the container.
     #[inline]
-    pub fn get_owned(self) -> T {
-        self.value
-    }
+    pub fn get_owned(self) -> T { self.value }
 
     /// Reads the saved value from the file system.
     pub async fn read(info: Info<T, F>) -> Result<Self> {

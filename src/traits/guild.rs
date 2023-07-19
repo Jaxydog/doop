@@ -88,293 +88,229 @@ pub trait GuildLike {
 }
 
 impl GuildLike for Guild {
-    fn afk_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.afk_channel_id
-    }
+    #[inline]
+    fn afk_channel_id(&self) -> Option<Id<ChannelMarker>> { self.afk_channel_id }
 
-    fn afk_timeout(&self) -> AfkTimeout {
-        self.afk_timeout
-    }
+    #[inline]
+    fn afk_timeout(&self) -> AfkTimeout { self.afk_timeout }
 
-    fn application_id(&self) -> Option<Id<ApplicationMarker>> {
-        self.application_id
-    }
+    #[inline]
+    fn application_id(&self) -> Option<Id<ApplicationMarker>> { self.application_id }
 
-    fn banner(&self) -> Option<&ImageHash> {
-        self.banner.as_ref()
-    }
+    #[inline]
+    fn banner(&self) -> Option<&ImageHash> { self.banner.as_ref() }
 
+    #[inline]
     fn default_message_notifications(&self) -> DefaultMessageNotificationLevel {
         self.default_message_notifications
     }
 
-    fn description(&self) -> Option<&str> {
-        self.description.as_deref()
-    }
+    #[inline]
+    fn description(&self) -> Option<&str> { self.description.as_deref() }
 
-    fn discovery_splash(&self) -> Option<&ImageHash> {
-        self.discovery_splash.as_ref()
-    }
+    #[inline]
+    fn discovery_splash(&self) -> Option<&ImageHash> { self.discovery_splash.as_ref() }
 
-    fn explicit_content_filter(&self) -> ExplicitContentFilter {
-        self.explicit_content_filter
-    }
+    #[inline]
+    fn explicit_content_filter(&self) -> ExplicitContentFilter { self.explicit_content_filter }
 
-    fn icon(&self) -> Option<&ImageHash> {
-        self.icon.as_ref()
-    }
+    #[inline]
+    fn icon(&self) -> Option<&ImageHash> { self.icon.as_ref() }
 
-    fn id(&self) -> Id<GuildMarker> {
-        self.id
-    }
+    #[inline]
+    fn id(&self) -> Id<GuildMarker> { self.id }
 
-    fn joined_at(&self) -> Option<Timestamp> {
-        self.joined_at
-    }
+    #[inline]
+    fn joined_at(&self) -> Option<Timestamp> { self.joined_at }
 
-    fn large(&self) -> bool {
-        self.large
-    }
+    #[inline]
+    fn large(&self) -> bool { self.large }
 
-    fn max_members(&self) -> Option<u64> {
-        self.max_members
-    }
+    #[inline]
+    fn max_members(&self) -> Option<u64> { self.max_members }
 
-    fn max_presences(&self) -> Option<u64> {
-        self.max_presences
-    }
+    #[inline]
+    fn max_presences(&self) -> Option<u64> { self.max_presences }
 
-    fn max_video_channel_users(&self) -> Option<u64> {
-        self.max_video_channel_users
-    }
+    #[inline]
+    fn max_video_channel_users(&self) -> Option<u64> { self.max_video_channel_users }
 
-    fn member_count(&self) -> Option<u64> {
-        self.member_count
-    }
+    #[inline]
+    fn member_count(&self) -> Option<u64> { self.member_count }
 
-    fn mfa_level(&self) -> MfaLevel {
-        self.mfa_level
-    }
+    #[inline]
+    fn mfa_level(&self) -> MfaLevel { self.mfa_level }
 
-    fn name(&self) -> &str {
-        &self.name
-    }
+    #[inline]
+    fn name(&self) -> &str { &self.name }
 
-    fn nsfw_level(&self) -> NSFWLevel {
-        self.nsfw_level
-    }
+    #[inline]
+    fn nsfw_level(&self) -> NSFWLevel { self.nsfw_level }
 
-    fn owner_id(&self) -> Id<UserMarker> {
-        self.owner_id
-    }
+    #[inline]
+    fn owner_id(&self) -> Id<UserMarker> { self.owner_id }
 
-    fn owner(&self) -> Option<bool> {
-        self.owner
-    }
+    #[inline]
+    fn owner(&self) -> Option<bool> { self.owner }
 
-    fn permissions(&self) -> Option<Permissions> {
-        self.permissions
-    }
+    #[inline]
+    fn permissions(&self) -> Option<Permissions> { self.permissions }
 
-    fn preferred_locale(&self) -> &str {
-        &self.preferred_locale
-    }
+    #[inline]
+    fn preferred_locale(&self) -> &str { &self.preferred_locale }
 
-    fn premium_progress_bar_enabled(&self) -> bool {
-        self.premium_progress_bar_enabled
-    }
+    #[inline]
+    fn premium_progress_bar_enabled(&self) -> bool { self.premium_progress_bar_enabled }
 
-    fn premium_subscription_count(&self) -> Option<u64> {
-        self.premium_subscription_count
-    }
+    #[inline]
+    fn premium_subscription_count(&self) -> Option<u64> { self.premium_subscription_count }
 
-    fn premium_tier(&self) -> PremiumTier {
-        self.premium_tier
-    }
+    #[inline]
+    fn premium_tier(&self) -> PremiumTier { self.premium_tier }
 
+    #[inline]
     fn public_updates_channel_id(&self) -> Option<Id<ChannelMarker>> {
         self.public_updates_channel_id
     }
 
-    fn rules_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.rules_channel_id
-    }
+    #[inline]
+    fn rules_channel_id(&self) -> Option<Id<ChannelMarker>> { self.rules_channel_id }
 
-    fn splash(&self) -> Option<&ImageHash> {
-        self.splash.as_ref()
-    }
+    #[inline]
+    fn splash(&self) -> Option<&ImageHash> { self.splash.as_ref() }
 
-    fn system_channel_flags(&self) -> SystemChannelFlags {
-        self.system_channel_flags
-    }
+    #[inline]
+    fn system_channel_flags(&self) -> SystemChannelFlags { self.system_channel_flags }
 
-    fn system_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.system_channel_id
-    }
+    #[inline]
+    fn system_channel_id(&self) -> Option<Id<ChannelMarker>> { self.system_channel_id }
 
-    fn unavailable(&self) -> bool {
-        self.unavailable
-    }
+    #[inline]
+    fn unavailable(&self) -> bool { self.unavailable }
 
-    fn vanity_url_code(&self) -> Option<&str> {
-        self.vanity_url_code.as_deref()
-    }
+    #[inline]
+    fn vanity_url_code(&self) -> Option<&str> { self.vanity_url_code.as_deref() }
 
-    fn verification_level(&self) -> VerificationLevel {
-        self.verification_level
-    }
+    #[inline]
+    fn verification_level(&self) -> VerificationLevel { self.verification_level }
 
-    fn widget_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.widget_channel_id
-    }
+    #[inline]
+    fn widget_channel_id(&self) -> Option<Id<ChannelMarker>> { self.widget_channel_id }
 
-    fn widget_enabled(&self) -> Option<bool> {
-        self.widget_enabled
-    }
+    #[inline]
+    fn widget_enabled(&self) -> Option<bool> { self.widget_enabled }
 }
 
 impl GuildLike for CachedGuild {
-    fn afk_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.afk_channel_id()
-    }
+    #[inline]
+    fn afk_channel_id(&self) -> Option<Id<ChannelMarker>> { self.afk_channel_id() }
 
-    fn afk_timeout(&self) -> AfkTimeout {
-        self.afk_timeout()
-    }
+    #[inline]
+    fn afk_timeout(&self) -> AfkTimeout { self.afk_timeout() }
 
-    fn application_id(&self) -> Option<Id<ApplicationMarker>> {
-        self.application_id()
-    }
+    #[inline]
+    fn application_id(&self) -> Option<Id<ApplicationMarker>> { self.application_id() }
 
-    fn banner(&self) -> Option<&ImageHash> {
-        self.banner()
-    }
+    #[inline]
+    fn banner(&self) -> Option<&ImageHash> { self.banner() }
 
+    #[inline]
     fn default_message_notifications(&self) -> DefaultMessageNotificationLevel {
         self.default_message_notifications()
     }
 
-    fn description(&self) -> Option<&str> {
-        self.description()
-    }
+    #[inline]
+    fn description(&self) -> Option<&str> { self.description() }
 
-    fn discovery_splash(&self) -> Option<&ImageHash> {
-        self.discovery_splash()
-    }
+    #[inline]
+    fn discovery_splash(&self) -> Option<&ImageHash> { self.discovery_splash() }
 
-    fn explicit_content_filter(&self) -> ExplicitContentFilter {
-        self.explicit_content_filter()
-    }
+    #[inline]
+    fn explicit_content_filter(&self) -> ExplicitContentFilter { self.explicit_content_filter() }
 
-    fn icon(&self) -> Option<&ImageHash> {
-        self.icon()
-    }
+    #[inline]
+    fn icon(&self) -> Option<&ImageHash> { self.icon() }
 
-    fn id(&self) -> Id<GuildMarker> {
-        self.id()
-    }
+    #[inline]
+    fn id(&self) -> Id<GuildMarker> { self.id() }
 
-    fn joined_at(&self) -> Option<Timestamp> {
-        self.joined_at()
-    }
+    #[inline]
+    fn joined_at(&self) -> Option<Timestamp> { self.joined_at() }
 
-    fn large(&self) -> bool {
-        self.large()
-    }
+    #[inline]
+    fn large(&self) -> bool { self.large() }
 
-    fn max_members(&self) -> Option<u64> {
-        self.max_members()
-    }
+    #[inline]
+    fn max_members(&self) -> Option<u64> { self.max_members() }
 
-    fn max_presences(&self) -> Option<u64> {
-        self.max_presences()
-    }
+    #[inline]
+    fn max_presences(&self) -> Option<u64> { self.max_presences() }
 
-    fn max_video_channel_users(&self) -> Option<u64> {
-        self.max_video_channel_users()
-    }
+    #[inline]
+    fn max_video_channel_users(&self) -> Option<u64> { self.max_video_channel_users() }
 
-    fn member_count(&self) -> Option<u64> {
-        self.member_count()
-    }
+    #[inline]
+    fn member_count(&self) -> Option<u64> { self.member_count() }
 
-    fn mfa_level(&self) -> MfaLevel {
-        self.mfa_level()
-    }
+    #[inline]
+    fn mfa_level(&self) -> MfaLevel { self.mfa_level() }
 
-    fn name(&self) -> &str {
-        self.name()
-    }
+    #[inline]
+    fn name(&self) -> &str { self.name() }
 
-    fn nsfw_level(&self) -> NSFWLevel {
-        self.nsfw_level()
-    }
+    #[inline]
+    fn nsfw_level(&self) -> NSFWLevel { self.nsfw_level() }
 
-    fn owner_id(&self) -> Id<UserMarker> {
-        self.owner_id()
-    }
+    #[inline]
+    fn owner_id(&self) -> Id<UserMarker> { self.owner_id() }
 
-    fn owner(&self) -> Option<bool> {
-        self.owner()
-    }
+    #[inline]
+    fn owner(&self) -> Option<bool> { self.owner() }
 
-    fn permissions(&self) -> Option<Permissions> {
-        self.permissions()
-    }
+    #[inline]
+    fn permissions(&self) -> Option<Permissions> { self.permissions() }
 
-    fn preferred_locale(&self) -> &str {
-        self.preferred_locale()
-    }
+    #[inline]
+    fn preferred_locale(&self) -> &str { self.preferred_locale() }
 
-    fn premium_progress_bar_enabled(&self) -> bool {
-        self.premium_progress_bar_enabled()
-    }
+    #[inline]
+    fn premium_progress_bar_enabled(&self) -> bool { self.premium_progress_bar_enabled() }
 
-    fn premium_subscription_count(&self) -> Option<u64> {
-        self.premium_subscription_count()
-    }
+    #[inline]
+    fn premium_subscription_count(&self) -> Option<u64> { self.premium_subscription_count() }
 
-    fn premium_tier(&self) -> PremiumTier {
-        self.premium_tier()
-    }
+    #[inline]
+    fn premium_tier(&self) -> PremiumTier { self.premium_tier() }
 
+    #[inline]
     fn public_updates_channel_id(&self) -> Option<Id<ChannelMarker>> {
         self.public_updates_channel_id()
     }
 
-    fn rules_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.rules_channel_id()
-    }
+    #[inline]
+    fn rules_channel_id(&self) -> Option<Id<ChannelMarker>> { self.rules_channel_id() }
 
-    fn splash(&self) -> Option<&ImageHash> {
-        self.splash()
-    }
+    #[inline]
+    fn splash(&self) -> Option<&ImageHash> { self.splash() }
 
-    fn system_channel_flags(&self) -> SystemChannelFlags {
-        self.system_channel_flags()
-    }
+    #[inline]
+    fn system_channel_flags(&self) -> SystemChannelFlags { self.system_channel_flags() }
 
-    fn system_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.system_channel_id()
-    }
+    #[inline]
+    fn system_channel_id(&self) -> Option<Id<ChannelMarker>> { self.system_channel_id() }
 
-    fn unavailable(&self) -> bool {
-        self.unavailable()
-    }
+    #[inline]
+    fn unavailable(&self) -> bool { self.unavailable() }
 
-    fn vanity_url_code(&self) -> Option<&str> {
-        self.vanity_url_code()
-    }
+    #[inline]
+    fn vanity_url_code(&self) -> Option<&str> { self.vanity_url_code() }
 
-    fn verification_level(&self) -> VerificationLevel {
-        self.verification_level()
-    }
+    #[inline]
+    fn verification_level(&self) -> VerificationLevel { self.verification_level() }
 
-    fn widget_channel_id(&self) -> Option<Id<ChannelMarker>> {
-        self.widget_channel_id()
-    }
+    #[inline]
+    fn widget_channel_id(&self) -> Option<Id<ChannelMarker>> { self.widget_channel_id() }
 
-    fn widget_enabled(&self) -> Option<bool> {
-        self.widget_enabled()
-    }
+    #[inline]
+    fn widget_enabled(&self) -> Option<bool> { self.widget_enabled() }
 }

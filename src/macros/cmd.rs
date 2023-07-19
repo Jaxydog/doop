@@ -27,7 +27,7 @@ macro_rules! command {
             const NAME: &'static str = $name;
         }
 
-        impl $crate::command::CommandState for This {
+        impl $crate::command::DoopCommand for This {
             fn name(&self) -> &'static str {
                 $name
             }

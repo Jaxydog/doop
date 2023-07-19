@@ -96,16 +96,14 @@ impl Logger {
 }
 
 impl Default for Logger {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }
 
 /// Outputs a debug log.
 ///
 /// # Examples
 /// ```
-/// debug!("this is a debug log!")?;
+/// debug!("this is a debug log!")?; 
 /// ```
 #[macro_export]
 macro_rules! debug {
@@ -121,7 +119,7 @@ macro_rules! debug {
 ///
 /// # Examples
 /// ```
-/// info!("this is an info log!")?;
+/// info!("this is an info log!")?; 
 /// ```
 #[macro_export]
 macro_rules! info {
@@ -134,7 +132,7 @@ macro_rules! info {
 ///
 /// # Examples
 /// ```
-/// warn!("this is a warning log!")?;
+/// warn!("this is a warning log!")?; 
 /// ```
 #[macro_export]
 macro_rules! warn {
@@ -147,7 +145,7 @@ macro_rules! warn {
 ///
 /// # Examples
 /// ```
-/// error!("this is an error log!")?;
+/// error!("this is an error log!")?; 
 /// ```
 #[macro_export]
 macro_rules! error {

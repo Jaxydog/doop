@@ -1,7 +1,7 @@
 use twilight_model::application::command::Command;
 use twilight_util::builder::embed::{EmbedAuthorBuilder, EmbedBuilder};
 
-use crate::event::{CacheHttp, CommandCtx, EventHandler, EventResult};
+use crate::event::{CachedHttp, CommandContext, EventHandler, EventResult};
 use crate::traits::TryFromUser;
 use crate::utility::BRANDING_COLOR;
 
@@ -13,51 +13,9 @@ crate::command! {
     REQUIRES = [USE_SLASH_COMMANDS],
 }
 
-/// Returns a stringified list of command entries
-#[inline]
-#[must_use]
-pub fn stringify_all(locale: Option<&str>, commands: &[Command]) -> Box<str> {
-    let string = commands.iter().fold(String::new(), |s, c| {
-        s + format!("\n\n{}", stringify(locale, c)).as_str()
-    });
-
-    string.trim().into()
-}
-
-/// Returns a stringified command entry
-#[must_use]
-pub fn stringify(locale: Option<&str>, command: &Command) -> Box<str> {
-    let Command { name, id, .. } = command;
-    let localized_name = crate::localize!(locale => "command.{name}.name");
-    let description = crate::localize!(locale => "command.{name}.description");
-    let mut flags = vec![];
-
-    let entry = id.map_or_else(
-        || format!("`/{localized_name}` - {description}"),
-        |id| format!("</{name}:{id}> - {description}"),
-    );
-
-    if command.dm_permission.unwrap_or(false) {
-        flags.push(crate::localize!(locale => "text.{}.dms", This::NAME));
-    }
-    if command.options.iter().any(|o| o.options.is_some()) {
-        flags.push(crate::localize!(locale => "text.{}.subcommands", This::NAME));
-    }
-    if command.nsfw.unwrap_or(false) {
-        flags.push(crate::localize!(locale => "text.{}.nsfw", This::NAME));
-    }
-
-    if flags.is_empty() {
-        entry
-    } else {
-        format!("{entry}\n> *{}*", flags.join(", "))
-    }
-    .into_boxed_str()
-}
-
 #[async_trait::async_trait]
 impl EventHandler for This {
-    async fn command(&self, ctx: &CommandCtx<'_>) -> EventResult {
+    async fn command(&self, ctx: &CommandContext) -> EventResult {
         crate::respond!(ctx, {
             KIND = DeferredChannelMessageWithSource,
             FLAGS = [EPHEMERAL],
@@ -66,7 +24,7 @@ impl EventHandler for This {
 
         let mut text = crate::localize!(ctx.locale() => "text.{}.header", Self::NAME).into_owned();
 
-        if let Some(guild_id) = ctx.interaction.guild_id {
+        if let Some(guild_id) = ctx.event.guild_id {
             let commands = ctx.client().guild_commands(guild_id).await?.model().await?;
 
             if !commands.is_empty() {
@@ -112,4 +70,46 @@ impl EventHandler for This {
 
         EventResult::Ok(())
     }
+}
+
+/// Returns a stringified list of command entries.
+#[inline]
+#[must_use]
+pub fn stringify_all(locale: Option<&str>, commands: &[Command]) -> Box<str> {
+    let string = commands.iter().fold(String::new(), |s, c| {
+        s + format!("\n\n{}", stringify(locale, c)).as_str()
+    });
+
+    string.trim().into()
+}
+
+/// Returns a stringified command entry.
+#[must_use]
+pub fn stringify(locale: Option<&str>, command: &Command) -> Box<str> {
+    let Command { name, id, .. } = command;
+    let localized_name = crate::localize!(locale => "command.{name}.name");
+    let description = crate::localize!(locale => "command.{name}.description");
+    let mut flags = vec![];
+
+    let entry = id.map_or_else(
+        || format!("`/{localized_name}` - {description}"),
+        |id| format!("</{name}:{id}> - {description}"),
+    );
+
+    if command.dm_permission.unwrap_or(false) {
+        flags.push(crate::localize!(locale => "text.{}.dms", This::NAME));
+    }
+    if command.options.iter().any(|o| o.options.is_some()) {
+        flags.push(crate::localize!(locale => "text.{}.subcommands", This::NAME));
+    }
+    if command.nsfw.unwrap_or(false) {
+        flags.push(crate::localize!(locale => "text.{}.nsfw", This::NAME));
+    }
+
+    if flags.is_empty() {
+        entry
+    } else {
+        format!("{entry}\n> *{}*", flags.join(", "))
+    }
+    .into_boxed_str()
 }

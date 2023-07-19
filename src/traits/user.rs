@@ -69,154 +69,94 @@ pub trait UserLike {
 
 impl UserLike for User {
     #[inline]
-    fn accent_color(&self) -> Option<&u32> {
-        self.accent_color.as_ref()
-    }
+    fn accent_color(&self) -> Option<&u32> { self.accent_color.as_ref() }
 
     #[inline]
-    fn avatar(&self) -> Option<&ImageHash> {
-        self.avatar.as_ref()
-    }
+    fn avatar(&self) -> Option<&ImageHash> { self.avatar.as_ref() }
 
     #[inline]
-    fn banner(&self) -> Option<&ImageHash> {
-        self.banner.as_ref()
-    }
+    fn banner(&self) -> Option<&ImageHash> { self.banner.as_ref() }
 
     #[inline]
-    fn bot(&self) -> &bool {
-        &self.bot
-    }
+    fn bot(&self) -> &bool { &self.bot }
 
     #[inline]
-    fn discriminator(&self) -> DiscriminatorDisplay {
-        self.discriminator()
-    }
+    fn discriminator(&self) -> DiscriminatorDisplay { self.discriminator() }
 
     #[inline]
-    fn id(&self) -> &Id<UserMarker> {
-        &self.id
-    }
+    fn id(&self) -> &Id<UserMarker> { &self.id }
 
     #[inline]
-    fn email(&self) -> Option<&String> {
-        self.email.as_ref()
-    }
+    fn email(&self) -> Option<&String> { self.email.as_ref() }
 
     #[inline]
-    fn flags(&self) -> Option<&UserFlags> {
-        self.flags.as_ref()
-    }
+    fn flags(&self) -> Option<&UserFlags> { self.flags.as_ref() }
 
     #[inline]
-    fn locale(&self) -> Option<&String> {
-        self.locale.as_ref()
-    }
+    fn locale(&self) -> Option<&String> { self.locale.as_ref() }
 
     #[inline]
-    fn mfa_enabled(&self) -> Option<&bool> {
-        self.mfa_enabled.as_ref()
-    }
+    fn mfa_enabled(&self) -> Option<&bool> { self.mfa_enabled.as_ref() }
 
     #[inline]
-    fn name(&self) -> &String {
-        &self.name
-    }
+    fn name(&self) -> &String { &self.name }
 
     #[inline]
-    fn premium_type(&self) -> Option<&PremiumType> {
-        self.premium_type.as_ref()
-    }
+    fn premium_type(&self) -> Option<&PremiumType> { self.premium_type.as_ref() }
 
     #[inline]
-    fn public_flags(&self) -> Option<&UserFlags> {
-        self.public_flags.as_ref()
-    }
+    fn public_flags(&self) -> Option<&UserFlags> { self.public_flags.as_ref() }
 
     #[inline]
-    fn system(&self) -> Option<&bool> {
-        self.system.as_ref()
-    }
+    fn system(&self) -> Option<&bool> { self.system.as_ref() }
 
     #[inline]
-    fn verified(&self) -> Option<&bool> {
-        self.verified.as_ref()
-    }
+    fn verified(&self) -> Option<&bool> { self.verified.as_ref() }
 }
 
 impl UserLike for CurrentUser {
     #[inline]
-    fn accent_color(&self) -> Option<&u32> {
-        self.accent_color.as_ref()
-    }
+    fn accent_color(&self) -> Option<&u32> { self.accent_color.as_ref() }
 
     #[inline]
-    fn avatar(&self) -> Option<&ImageHash> {
-        self.avatar.as_ref()
-    }
+    fn avatar(&self) -> Option<&ImageHash> { self.avatar.as_ref() }
 
     #[inline]
-    fn banner(&self) -> Option<&ImageHash> {
-        self.banner.as_ref()
-    }
+    fn banner(&self) -> Option<&ImageHash> { self.banner.as_ref() }
 
     #[inline]
-    fn bot(&self) -> &bool {
-        &self.bot
-    }
+    fn bot(&self) -> &bool { &self.bot }
 
     #[inline]
-    fn discriminator(&self) -> DiscriminatorDisplay {
-        self.discriminator()
-    }
+    fn discriminator(&self) -> DiscriminatorDisplay { self.discriminator() }
 
     #[inline]
-    fn id(&self) -> &Id<UserMarker> {
-        &self.id
-    }
+    fn id(&self) -> &Id<UserMarker> { &self.id }
 
     #[inline]
-    fn email(&self) -> Option<&String> {
-        self.email.as_ref()
-    }
+    fn email(&self) -> Option<&String> { self.email.as_ref() }
 
     #[inline]
-    fn flags(&self) -> Option<&UserFlags> {
-        self.flags.as_ref()
-    }
+    fn flags(&self) -> Option<&UserFlags> { self.flags.as_ref() }
 
     #[inline]
-    fn locale(&self) -> Option<&String> {
-        self.locale.as_ref()
-    }
+    fn locale(&self) -> Option<&String> { self.locale.as_ref() }
 
     #[inline]
-    fn mfa_enabled(&self) -> Option<&bool> {
-        Some(&self.mfa_enabled)
-    }
+    fn mfa_enabled(&self) -> Option<&bool> { Some(&self.mfa_enabled) }
 
     #[inline]
-    fn name(&self) -> &String {
-        &self.name
-    }
+    fn name(&self) -> &String { &self.name }
 
     #[inline]
-    fn premium_type(&self) -> Option<&PremiumType> {
-        self.premium_type.as_ref()
-    }
+    fn premium_type(&self) -> Option<&PremiumType> { self.premium_type.as_ref() }
 
     #[inline]
-    fn public_flags(&self) -> Option<&UserFlags> {
-        self.public_flags.as_ref()
-    }
+    fn public_flags(&self) -> Option<&UserFlags> { self.public_flags.as_ref() }
 
     #[inline]
-    fn system(&self) -> Option<&bool> {
-        None
-    }
+    fn system(&self) -> Option<&bool> { None }
 
     #[inline]
-    fn verified(&self) -> Option<&bool> {
-        self.verified.as_ref()
-    }
+    fn verified(&self) -> Option<&bool> { self.verified.as_ref() }
 }

@@ -1,7 +1,7 @@
 use twilight_model::channel::message::component::{Button, SelectMenu, TextInput};
 use twilight_model::channel::message::{Component, Embed};
 
-use crate::event::CacheHttp;
+use crate::event::CachedHttp;
 use crate::utility::{ActionRowBuilder, Modal, Result};
 
 /// A value that can build embeds using the provided arguments.
@@ -22,7 +22,7 @@ where
     R: Into<Embed> + Send,
 {
     /// Builds embeds using the provided arguments.
-    async fn build_embeds(&self, client: &impl CacheHttp, _: A) -> Result<Vec<R>>;
+    async fn build_embeds(&self, client: &impl CachedHttp, _: A) -> Result<Vec<R>>;
 }
 
 /// A value that can build modals using the provided arguments.
@@ -43,7 +43,7 @@ where
     R: Into<Modal> + Send,
 {
     /// Builds modals using the provided arguments.
-    async fn build_modals(&self, client: &impl CacheHttp, _: A) -> Result<Vec<R>>;
+    async fn build_modals(&self, client: &impl CachedHttp, _: A) -> Result<Vec<R>>;
 }
 
 /// A value that can build buttons using the provided arguments.
@@ -64,7 +64,8 @@ where
     R: Into<Button> + Send,
 {
     /// Builds buttons using the provided arguments.
-    async fn build_buttons(&self, client: &impl CacheHttp, disabled: bool, _: A) -> Result<Vec<R>>;
+    async fn build_buttons(&self, client: &impl CachedHttp, disabled: bool, _: A)
+    -> Result<Vec<R>>;
 }
 
 /// A value that can build an text input using the provided arguments.
@@ -85,7 +86,7 @@ where
     R: Into<TextInput> + Send,
 {
     /// Builds text inputs using the provided arguments.
-    async fn build_text_inputs(&self, client: &impl CacheHttp, _: A) -> Result<Vec<R>>;
+    async fn build_text_inputs(&self, client: &impl CachedHttp, _: A) -> Result<Vec<R>>;
 }
 
 /// A value that can build select menus using the provided arguments.
@@ -106,7 +107,7 @@ where
     R: Into<SelectMenu> + Send,
 {
     /// Builds select menus using the provided arguments.
-    async fn build_select_menus(&self, client: &impl CacheHttp, _: A) -> Result<Vec<R>>;
+    async fn build_select_menus(&self, client: &impl CachedHttp, _: A) -> Result<Vec<R>>;
 }
 
 /// Builds buttons using the provided arguments and automatically puts them

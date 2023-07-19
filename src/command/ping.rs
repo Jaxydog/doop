@@ -1,6 +1,6 @@
 use twilight_util::builder::embed::EmbedBuilder;
 
-use crate::event::{CommandCtx, EventHandler, EventResult};
+use crate::event::{CommandContext, EventHandler, EventResult};
 use crate::extend::IdExt;
 use crate::utility::BRANDING_COLOR;
 
@@ -14,7 +14,7 @@ crate::command! {
 
 #[async_trait::async_trait]
 impl EventHandler for This {
-    async fn command(&self, ctx: &CommandCtx<'_>) -> EventResult {
+    async fn command(&self, ctx: &CommandContext) -> EventResult {
         let title = crate::localize!(ctx.locale() => "text.{}.wait", Self::NAME);
         let embed = EmbedBuilder::new()
             .color(BRANDING_COLOR.into())

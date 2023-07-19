@@ -46,9 +46,7 @@ pub struct TryFilterMap<I, F> {
 impl<I, F> TryFilterMap<I, F> {
     /// Creates a new try filter map.
     #[inline]
-    const fn new(iter: I, f: F) -> Self {
-        Self { iter, f }
-    }
+    const fn new(iter: I, f: F) -> Self { Self { iter, f } }
 
     /// Runs a try-fold method combining two fold functions.
     pub(self) fn try_fold<'a, Item, T, E, Acc, Return: std::ops::Try<Output = Acc>>(
@@ -89,14 +87,10 @@ where
     type Item = T;
 
     #[inline]
-    fn next(&mut self) -> Option<Self::Item> {
-        self.iter.try_find_map(&mut self.f)
-    }
+    fn next(&mut self) -> Option<Self::Item> { self.iter.try_find_map(&mut self.f) }
 
     #[inline]
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        (0, self.iter.size_hint().1)
-    }
+    fn size_hint(&self) -> (usize, Option<usize>) { (0, self.iter.size_hint().1) }
 
     #[inline]
     fn try_fold<Acc, Fold, R>(&mut self, init: Acc, f: Fold) -> R

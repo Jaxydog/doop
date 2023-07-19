@@ -5,7 +5,7 @@ use twilight_util::builder::embed::EmbedBuilder;
 
 pub use self::model::*;
 use super::CommandOptionResolver;
-use crate::event::{CacheHttp, CommandCtx, ComponentCtx, EventHandler, EventResult};
+use crate::event::{CachedHttp, CommandContext, ComponentContext, EventHandler, EventResult};
 use crate::extend::ReactionTypeExt;
 use crate::storage::Storable;
 use crate::traits::{button_rows, BuildButtons};
@@ -68,7 +68,7 @@ crate::command! {
 
 #[async_trait::async_trait]
 impl EventHandler for This {
-    async fn command(&self, ctx: &CommandCtx<'_>) -> EventResult {
+    async fn command(&self, ctx: &CommandContext) -> EventResult {
         crate::respond!(ctx, {
             KIND = DeferredChannelMessageWithSource,
             FLAGS = [EPHEMERAL],
@@ -93,17 +93,17 @@ impl EventHandler for This {
         EventResult::Err(anyhow!("unknown or missing subcommand"))
     }
 
-    async fn component(&self, ctx: &ComponentCtx<'_>) -> EventResult {
+    async fn component(&self, ctx: &ComponentContext) -> EventResult {
         crate::respond!(ctx, {
             KIND = DeferredChannelMessageWithSource,
             FLAGS = [EPHEMERAL],
         })
         .await?;
 
-        let Some(guild_id) = ctx.interaction.guild_id else {
+        let Some(guild_id) = ctx.event.guild_id else {
             return EventResult::Err(anyhow!("command must be used in a guild"));
         };
-        let Some(member) = ctx.interaction.member.as_ref() else {
+        let Some(member) = ctx.event.member.as_ref() else {
             return EventResult::Err(anyhow!("command must be used by a member"));
         };
         let Some(user_id) = member.user.as_ref().map(|u| u.id) else {
@@ -146,11 +146,11 @@ impl EventHandler for This {
     }
 }
 
-async fn add<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) -> EventResult {
+async fn add<'cmd>(ctx: &CommandContext<'_>, cor: CommandOptionResolver<'cmd>) -> EventResult {
     let Some(guild_id) = ctx.data.guild_id else {
         return EventResult::Err(anyhow!("command must be used in a guild"));
     };
-    let Some(member) = ctx.interaction.member.as_ref() else {
+    let Some(member) = ctx.event.member.as_ref() else {
         return EventResult::Err(anyhow!("command must be used by a member"));
     };
     let Some(user_id) = member.user.as_ref().map(|u| u.id) else {
@@ -158,7 +158,7 @@ async fn add<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) -> 
     };
 
     let role_id = *cor.get_role_id("role")?;
-    let icon: Box<str> = cor.get_string("icon")?.trim().into();
+    let icon: Box<str> = cor.get_str("icon")?.trim().into();
 
     ReactionType::parse(icon.to_string())?;
 
@@ -204,11 +204,11 @@ async fn add<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) -> 
     EventResult::Ok(())
 }
 
-async fn remove<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) -> EventResult {
+async fn remove<'cmd>(ctx: &CommandContext<'_>, cor: CommandOptionResolver<'cmd>) -> EventResult {
     let Some(guild_id) = ctx.data.guild_id else {
         return EventResult::Err(anyhow!("command must be used in a guild"));
     };
-    let Some(member) = ctx.interaction.member.as_ref() else {
+    let Some(member) = ctx.event.member.as_ref() else {
         return EventResult::Err(anyhow!("command must be used by a member"));
     };
     let Some(user_id) = member.user.as_ref().map(|u| u.id) else {
@@ -247,11 +247,11 @@ async fn remove<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) 
     EventResult::Ok(())
 }
 
-async fn list<'cmd>(ctx: &CommandCtx<'cmd>, _: CommandOptionResolver<'cmd>) -> EventResult {
+async fn list<'cmd>(ctx: &CommandContext<'_>, _: CommandOptionResolver<'cmd>) -> EventResult {
     let Some(guild_id) = ctx.data.guild_id else {
         return EventResult::Err(anyhow!("command must be used in a guild"));
     };
-    let Some(member) = ctx.interaction.member.as_ref() else {
+    let Some(member) = ctx.event.member.as_ref() else {
         return EventResult::Err(anyhow!("command must be used by a member"));
     };
     let Some(user_id) = member.user.as_ref().map(|u| u.id) else {
@@ -286,14 +286,14 @@ async fn list<'cmd>(ctx: &CommandCtx<'cmd>, _: CommandOptionResolver<'cmd>) -> E
     EventResult::Ok(())
 }
 
-async fn send<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) -> EventResult {
+async fn send<'cmd>(ctx: &CommandContext<'_>, cor: CommandOptionResolver<'cmd>) -> EventResult {
     let Some(guild_id) = ctx.data.guild_id else {
         return EventResult::Err(anyhow!("command must be used in a guild"));
     };
-    let Some(channel_id) = ctx.interaction.channel.as_ref().map(|c| c.id) else {
+    let Some(channel_id) = ctx.event.channel.as_ref().map(|c| c.id) else {
         return EventResult::Err(anyhow!("command must be used in a channel"));
     };
-    let Some(member) = ctx.interaction.member.as_ref() else {
+    let Some(member) = ctx.event.member.as_ref() else {
         return EventResult::Err(anyhow!("command must be used by a member"));
     };
     let Some(user_id) = member.user.as_ref().map(|u| u.id) else {
@@ -318,7 +318,7 @@ async fn send<'cmd>(ctx: &CommandCtx<'cmd>, cor: CommandOptionResolver<'cmd>) ->
         return EventResult::Ok(());
     }
 
-    let text = cor.get_string("text")?;
+    let text = cor.get_str("text")?;
     let embed = EmbedBuilder::new().color(BRANDING_COLOR.into()).title(text);
 
     ctx.http()

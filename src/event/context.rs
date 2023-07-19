@@ -11,108 +11,93 @@ use crate::extend::IdExt;
 use crate::utility::DataId;
 
 /// A context containing command data.
-pub type CommandCtx<'ctx> = Ctx<'ctx, &'ctx CommandData>;
+pub type CommandContext<'ctx> = Context<'ctx, &'ctx CommandData>;
 /// A context containing component data.
-pub type ComponentCtx<'ctx> = Ctx<'ctx, (&'ctx MessageComponentInteractionData, DataId)>;
+pub type ComponentContext<'ctx> = Context<'ctx, (&'ctx MessageComponentInteractionData, DataId)>;
 /// A context containing modal data.
-pub type ModalCtx<'ctx> = Ctx<'ctx, (&'ctx ModalInteractionData, DataId)>;
+pub type ModalContext<'ctx> = Context<'ctx, (&'ctx ModalInteractionData, DataId)>;
 
 /// An interaction event context.
 #[derive(Clone, Copy, Debug)]
-pub struct Ctx<'ctx, T> {
-    /// The bot's HTTP client.
-    http: &'ctx Client,
-    /// The bot's in-memory cache.
-    cache: &'ctx InMemoryCache,
-    /// The bot's event interaction.
-    pub interaction: &'ctx Interaction,
-    /// The bot's interaction data.
+pub struct Context<'ctx, T: Send + Sync> {
+    /// The context's data.
     pub data: T,
+    /// The context's interaction event.
+    pub event: &'ctx Interaction,
+    /// A reference to the bot's HTTP client.
+    http: &'ctx Client,
+    /// A reference to the bot's in-memory cache.
+    cache: &'ctx InMemoryCache,
 }
 
-impl<'ctx, T> Ctx<'ctx, T> {
-    /// Creates new context data.
+impl<'ctx, T: Send + Sync> Context<'ctx, T> {
+    /// Creates a new event context.
+    #[inline]
     pub const fn new(
+        data: T,
+        event: &'ctx Interaction,
         http: &'ctx Client,
         cache: &'ctx InMemoryCache,
-        interaction: &'ctx Interaction,
-        data: T,
     ) -> Self {
-        Self { http, cache, interaction, data }
+        Self { data, event, http, cache }
     }
 
     /// Returns the context's interaction token.
     #[inline]
-    pub const fn token(&self) -> &String {
-        &self.interaction.token
-    }
+    pub const fn token(&self) -> &String { &self.event.token }
 
     /// Returns the context's interaction client.
     #[inline]
     pub const fn client(&self) -> InteractionClient {
-        self.http.interaction(self.interaction.application_id)
+        self.http.interaction(self.event.application_id)
     }
 
-    /// Returns the context's user locale.
+    /// Returns the context's interaction's users's preferred locale.
     #[inline]
-    #[must_use]
     pub fn locale(&self) -> Option<&str> {
-        self.interaction
-            .user
-            .as_ref()
-            .and_then(|u| u.locale.as_deref())
+        self.event.user.as_ref().and_then(|u| u.locale.as_deref())
     }
 
-    /// Returns the context interaction identifier's creation date.
+    /// Returns the context's interaction identifier's creation date.
     #[inline]
-    #[must_use]
-    pub fn created_at(&self) -> OffsetDateTime {
-        self.interaction.id.created_at()
-    }
+    pub fn created_at(&self) -> OffsetDateTime { self.event.id.created_at() }
 
-    /// Returns the context interaction identifier's creation date in the given
-    /// UTC offset.
+    /// Returns the context's interaction identifier's creation date in the
+    /// given UTC offset.
     #[inline]
-    #[must_use]
     pub fn created_at_in(&self, offset: impl Into<UtcOffset>) -> OffsetDateTime {
-        self.interaction.id.created_at_in(offset)
+        self.event.id.created_at_in(offset)
     }
 }
 
-/// A value that contains a cache and HTTP client.
-pub trait CacheHttp: Send + Sync {
+/// A cached HTTP value.
+pub trait CachedHttp {
     /// The value's associated HTTP client reference.
     fn http(&self) -> &Client;
-    /// The value's associated cache reference.
+    /// The value's associated in-memory cache reference.
     fn cache(&self) -> &InMemoryCache;
 }
 
-impl<'ch> CacheHttp for (&'ch InMemoryCache, &'ch Client) {
-    fn cache(&self) -> &InMemoryCache {
-        self.0
-    }
+impl CachedHttp for (&Client, &InMemoryCache) {
+    #[inline]
+    fn http(&self) -> &Client { self.0 }
 
-    fn http(&self) -> &Client {
-        self.1
-    }
+    #[inline]
+    fn cache(&self) -> &InMemoryCache { self.1 }
 }
 
-impl<'ch> CacheHttp for (&'ch Client, &'ch InMemoryCache) {
-    fn cache(&self) -> &InMemoryCache {
-        self.1
-    }
+impl CachedHttp for (&InMemoryCache, &Client) {
+    #[inline]
+    fn http(&self) -> &Client { self.1 }
 
-    fn http(&self) -> &Client {
-        self.0
-    }
+    #[inline]
+    fn cache(&self) -> &InMemoryCache { self.0 }
 }
 
-impl<'ctx, T: Send + Sync> CacheHttp for Ctx<'ctx, T> {
-    fn cache(&self) -> &InMemoryCache {
-        self.cache
-    }
+impl<T: Send + Sync> CachedHttp for Context<'_, T> {
+    #[inline]
+    fn http(&self) -> &Client { self.http }
 
-    fn http(&self) -> &Client {
-        self.http
-    }
+    #[inline]
+    fn cache(&self) -> &InMemoryCache { self.cache }
 }
