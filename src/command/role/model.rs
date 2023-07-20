@@ -34,7 +34,7 @@ impl Storable for Selectors {
     type Arguments = (Id<GuildMarker>, Id<UserMarker>);
     type Format = Zip<MessagePack>;
 
-    fn saved((guild_id, user_id): Self::Arguments) -> Info<Self, Self::Format> {
+    fn info((guild_id, user_id): Self::Arguments) -> Info<Self, Self::Format> {
         Info::new(format!("{}/{guild_id}/{user_id}", This::NAME))
     }
 }

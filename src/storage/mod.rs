@@ -225,12 +225,12 @@ pub trait Storable: Sized + Send + Sync + Serialize + for<'de> Deserialize<'de> 
 
     /// Returns the implementing type's associated [`Info`] information for the
     /// provided arguments.
-    fn saved(arguments: Self::Arguments) -> Info<Self, Self::Format>;
+    fn info(arguments: Self::Arguments) -> Info<Self, Self::Format>;
 
     /// Reads the saved value from the file system.
     #[inline]
     async fn read(arguments: Self::Arguments) -> Result<Stored<Self, Self::Format>> {
-        Self::saved(arguments).read().await
+        Self::info(arguments).read().await
     }
 
     /// Reads the saved value from the file system, providing a default value
@@ -240,7 +240,7 @@ pub trait Storable: Sized + Send + Sync + Serialize + for<'de> Deserialize<'de> 
     where
         Self: Clone,
     {
-        Self::saved(arguments).read_or(value).await
+        Self::info(arguments).read_or(value).await
     }
 
     /// Reads the saved value from the file system, providing a default value
@@ -253,7 +253,7 @@ pub trait Storable: Sized + Send + Sync + Serialize + for<'de> Deserialize<'de> 
     where
         Self: Clone,
     {
-        Self::saved(arguments).read_or_else(f).await
+        Self::info(arguments).read_or_else(f).await
     }
 
     /// Reads the saved value from the file system, providing a default value
@@ -263,20 +263,20 @@ pub trait Storable: Sized + Send + Sync + Serialize + for<'de> Deserialize<'de> 
     where
         Self: Clone + Default,
     {
-        Self::saved(arguments).read_or_default().await
+        Self::info(arguments).read_or_default().await
     }
 
     /// Writes the value into the file system, returning the value's [`Info`]
     /// information.
     #[inline]
     async fn write(self, arguments: Self::Arguments) -> Result<Info<Self, Self::Format>> {
-        Self::saved(arguments).write(self).await
+        Self::info(arguments).write(self).await
     }
 
     /// Removes the value from the file system, returning the value's [`Info`]
     /// information and the stored value.
     #[inline]
     async fn remove(arguments: Self::Arguments) -> Result<(Info<Self, Self::Format>, Self)> {
-        Self::saved(arguments).remove().await
+        Self::info(arguments).remove().await
     }
 }

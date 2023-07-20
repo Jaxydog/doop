@@ -174,9 +174,7 @@ async fn add<'cmd>(ctx: &CommandContext<'_>, cor: CommandOptionResolver<'cmd>) -
     }
     .into_boxed_str();
 
-    let mut selectors = Selectors::saved((guild_id, user_id))
-        .read_or_default()
-        .await;
+    let mut selectors = Selectors::info((guild_id, user_id)).read_or_default().await;
 
     if selectors.get().len() >= 25 {
         let title = crate::localize!(ctx.locale() => "text.{}.max", This::NAME);
@@ -216,9 +214,7 @@ async fn remove<'cmd>(ctx: &CommandContext<'_>, cor: CommandOptionResolver<'cmd>
     };
 
     let role_id = *cor.get_role_id("role")?;
-    let mut selectors = Selectors::saved((guild_id, user_id))
-        .read_or_default()
-        .await;
+    let mut selectors = Selectors::info((guild_id, user_id)).read_or_default().await;
 
     let (title, color) = if selectors.get_mut().remove_entry(&role_id).is_some() {
         let title = crate::localize!(ctx.locale() => "text.{}.removed", This::NAME);
@@ -257,7 +253,7 @@ async fn list<'cmd>(ctx: &CommandContext<'_>, _: CommandOptionResolver<'cmd>) ->
     let Some(user_id) = member.user.as_ref().map(|u| u.id) else {
         return EventResult::Err(anyhow!("command must be used by a user"));
     };
-    let Ok(selectors) = Selectors::saved((guild_id, user_id)).read().await else {
+    let Ok(selectors) = Selectors::info((guild_id, user_id)).read().await else {
         let title = crate::localize!(ctx.locale() => "text.{}.missing", This::NAME);
         let embed = EmbedBuilder::new().color(FAILURE_COLOR.into()).title(title);
 
@@ -300,9 +296,7 @@ async fn send<'cmd>(ctx: &CommandContext<'_>, cor: CommandOptionResolver<'cmd>) 
         return EventResult::Err(anyhow!("command must be used by a user"));
     };
 
-    let selectors = Selectors::saved((guild_id, user_id))
-        .read_or_default()
-        .await;
+    let selectors = Selectors::info((guild_id, user_id)).read_or_default().await;
     let components = button_rows(selectors.get().build_buttons(false, ())?);
 
     if components.is_empty() {
