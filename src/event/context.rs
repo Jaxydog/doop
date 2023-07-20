@@ -71,7 +71,7 @@ impl<'ctx, T: Send + Sync> Context<'ctx, T> {
 }
 
 /// A cached HTTP value.
-pub trait CachedHttp {
+pub trait CachedHttp: Send + Sync {
     /// The value's associated HTTP client reference.
     fn http(&self) -> &Client;
     /// The value's associated in-memory cache reference.
