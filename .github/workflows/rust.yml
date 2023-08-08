@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    rust-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
