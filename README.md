@@ -8,7 +8,7 @@ Doop is an open-source Discord bot whose primary purpose is to assist administra
 
 ## Why doop?
 
-Doop is the cumulation of a good amount of time [creating](https://github.com/Jaxydog/Spanky) [various](https://github.com/Jaxydog/MrManager) [Discord](https://github.com/Jaxydog/spanky-rs) [bots](https://github.com/Jaxydog/mr-manager) and an even longer time of disliking bots like Mee6. Doop will always be free and completely open-source, while providing many features that I personally find useful.
+Doop is the culmination of a good amount of time [creating](https://github.com/Jaxydog/Spanky) [various](https://github.com/Jaxydog/MrManager) [Discord](https://github.com/Jaxydog/spanky-rs) [bots](https://github.com/Jaxydog/mr-manager) and an even longer time of disliking bots like Mee6. Doop will always be free and completely open-source, while providing many features that I personally find useful.
 
 If you want to suggest a feature, feel free to contact me via Discord or [create an issue](https://github.com/Jaxydog/doop/issues).
 
