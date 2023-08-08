@@ -1,0 +1,24 @@
+[package]
+    name = "doop-framework"
+    description = ""
+    categories = ["api-bindings"]
+    keywords = ["bot", "discord", "doop", "interactions", "slash-commands"]
+
+    version = "0.1.0"
+    edition = "2021"
+    publish = false
+
+    authors = ["Jaxydog"]
+    license = "ISC"
+    readme = "README.md"
+    repository = "https://github.com/Jaxydog/doop/"
+
+[dependencies]
+    anyhow = "1.0"
+    doop-localizer = { version = "0.1", path = "../doop-localizer" }
+    doop-logger = { version = "0.1", path = "../doop-logger" }
+    doop-storage = { version = "0.1", path = "../doop-storage", default-features = false, features = [] }
+    serde = "1.0"
+    thiserror = "1.0"
+    twilight-model = "0.15"
+    twilight-util = { version = "0.15", features = ["builder"] }

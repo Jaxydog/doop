@@ -1,0 +1,9 @@
+/data
+/logs
+/target
+
+.env
+
+# ignore temporary files
+*.old.*
+*.old/

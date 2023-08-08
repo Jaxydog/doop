@@ -1,0 +1,19 @@
+[package]
+    name = "doop-logger"
+    description = "Implements a terminal and file logger for the Doop Discord bot."
+    categories = ["command-line-utilities"]
+    keywords = ["bot", "discord", "doop", "logging"]
+
+    version = "0.1.0"
+    edition = "2021"
+    publish = false
+
+    authors = ["Jaxydog"]
+    license = "ISC"
+    readme = "README.md"
+    repository = "https://github.com/Jaxydog/doop/"
+
+[dependencies]
+    doop-macros = { version = "0.1", path = "../doop-macros" }
+    thiserror = "1.0"
+    time = { version = "0.3", features = ["formatting", "local-offset", "macros"] }

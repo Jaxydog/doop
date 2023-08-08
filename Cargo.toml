@@ -1,0 +1,46 @@
+[package]
+    name = "doop"
+    description = "An open-source Discord server moderation bot."
+    categories = ["command-line-utilities"]
+    keywords = ["bot", "discord", "doop", "guild", "moderation"]
+
+    version = "0.1.0"
+    edition = "2021"
+    publish = false
+
+    authors = ["Jaxydog"]
+    license = "ISC"
+    readme = "../README.md"
+    repository = "https://github.com/Jaxydog/doop/"
+
+[workspace]
+    members = ["crates/doop-localizer", "crates/doop-logger", "crates/doop-macros", "crates/doop-storage"]
+
+[profile.dev]
+    opt-level = 1
+    incremental = true
+
+[profile.release]
+    opt-level = 3
+    incremental = true
+
+[dependencies]
+    anyhow = "1.0"
+    async-trait = "0.1"
+    clap = { version = "4.3", features = ["derive"] }
+    doop-localizer = { version = "0.1", path = "crates/doop-localizer" }
+    doop-logger = { version = "0.1", path = "crates/doop-logger" }
+    doop-macros = { version = "0.1", path = "crates/doop-macros" }
+    doop-storage = { version = "0.1", path = "crates/doop-storage", features = ["encryption"] }
+    dotenvy = "0.15"
+    futures-util = { version = "0.3", default-features = false }
+    rand = { version = "0.8", features = ["nightly"] }
+    serde = { version = "1.0", features = ["derive", "rc"] }
+    time = { version = "0.3", features = ["formatting", "local-offset", "macros"] }
+    tokio = { version = "1.29", features = ["full"] }
+    twilight-cache-inmemory = "0.15"
+    twilight-gateway = { version = "0.15", features = ["rustls-native-roots"] }
+    twilight-http = "0.15"
+    twilight-model = "0.15"
+    twilight-util = { version = "0.15", features = ["builder"] }
+    uuid = { version = "1.4", features = ["fast-rng", "serde", "v4"] }
