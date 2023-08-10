@@ -1,5 +1,5 @@
 use twilight_model::channel::message::component::{
-    ActionRow, Button, ButtonStyle, TextInput, TextInputStyle,
+    ActionRow, Button, ButtonStyle, SelectMenu, SelectMenuOption, TextInput, TextInputStyle,
 };
 use twilight_model::channel::message::{Component, ReactionType};
 
@@ -41,6 +41,7 @@ pub struct ButtonBuilder(Button);
 
 impl ButtonBuilder {
     /// Creates a new button builder.
+    #[inline]
     pub fn new(style: impl Into<ButtonStyle>) -> Self {
         Self(Button {
             custom_id: None,
@@ -103,6 +104,128 @@ impl From<ButtonBuilder> for Component {
     fn from(value: ButtonBuilder) -> Self { Self::Button(value.build()) }
 }
 
+/// Create a select menu with a builder.
+#[must_use = "must be built into a select menu"]
+#[repr(transparent)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SelectMenuBuilder(SelectMenu);
+
+impl SelectMenuBuilder {
+    /// Creates a new select menu builder.
+    #[inline]
+    pub fn new(custom_id: impl Into<String>) -> Self {
+        Self(SelectMenu {
+            custom_id: custom_id.into(),
+            disabled: false,
+            max_values: None,
+            min_values: None,
+            options: vec![],
+            placeholder: None,
+        })
+    }
+
+    /// Sets whether the menu is disabled.
+    pub fn disabled(mut self, disabled: impl Into<bool>) -> Self {
+        self.0.disabled = disabled.into();
+
+        self
+    }
+
+    /// Add maximum values.
+    pub fn max_values(mut self, max_values: impl Into<u8>) -> Self {
+        self.0.max_values = Some(max_values.into());
+
+        self
+    }
+
+    /// Add minimum values.
+    pub fn min_values(mut self, min_values: impl Into<u8>) -> Self {
+        self.0.min_values = Some(min_values.into());
+
+        self
+    }
+
+    /// Add an option.
+    pub fn option(mut self, option: impl Into<SelectMenuOption>) -> Self {
+        self.0.options.push(option.into());
+
+        self
+    }
+
+    /// Add a placeholder.
+    pub fn placeholder(mut self, placeholder: impl Into<String>) -> Self {
+        self.0.placeholder = Some(placeholder.into());
+
+        self
+    }
+
+    /// Build into a select menu.
+    #[inline]
+    #[must_use = "should be used as part of a component"]
+    pub fn build(self) -> SelectMenu { self.0 }
+}
+
+impl From<SelectMenuBuilder> for SelectMenu {
+    #[inline]
+    fn from(value: SelectMenuBuilder) -> Self { value.build() }
+}
+
+impl From<SelectMenuBuilder> for Component {
+    #[inline]
+    fn from(value: SelectMenuBuilder) -> Self { Self::SelectMenu(value.build()) }
+}
+
+/// Create a select menu option with a builder.
+#[must_use = "must be built into a select menu option"]
+#[repr(transparent)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SelectMenuOptionBuilder(SelectMenuOption);
+
+impl SelectMenuOptionBuilder {
+    /// Creates a new select menu option builder.
+    #[inline]
+    pub fn new(label: impl Into<String>, value: impl Into<String>) -> Self {
+        Self(SelectMenuOption {
+            default: false,
+            description: None,
+            emoji: None,
+            label: label.into(),
+            value: value.into(),
+        })
+    }
+
+    /// Sets whether the menu is the default.
+    pub fn default(mut self, default: impl Into<bool>) -> Self {
+        self.0.default = default.into();
+
+        self
+    }
+
+    /// Add a description.
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.0.description = Some(description.into());
+
+        self
+    }
+
+    /// Add an emoji.
+    pub fn emoji(mut self, emoji: impl Into<ReactionType>) -> Self {
+        self.0.emoji = Some(emoji.into());
+
+        self
+    }
+
+    /// Build into a select menu option.
+    #[inline]
+    #[must_use = "should be used as part of a select menu"]
+    pub fn build(self) -> SelectMenuOption { self.0 }
+}
+
+impl From<SelectMenuOptionBuilder> for SelectMenuOption {
+    #[inline]
+    fn from(value: SelectMenuOptionBuilder) -> Self { value.build() }
+}
+
 /// Create a text input with a builder.
 #[must_use = "must be built into a text input"]
 #[repr(transparent)]
@@ -111,6 +234,7 @@ pub struct TextInputBuilder(TextInput);
 
 impl TextInputBuilder {
     /// Creates a new text input builder.
+    #[inline]
     pub fn new(
         custom_id: impl Into<String>,
         label: impl Into<String>,

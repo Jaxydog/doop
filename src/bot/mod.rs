@@ -390,7 +390,7 @@ async fn error_notify_devs(api: Api<'_>, event: &Interaction, error: &anyhow::Er
     let title = localize!("text.error.title_{index}");
     let mut embed = EmbedBuilder::new()
         .color(FAILURE)
-        .description(format!("ID: `{}`\n\n```json\n{error}\n```", event.label()))
+        .description(format!("**ID:** `{}`\n\n```json\n{error}\n```", event.label()))
         .title(title);
 
     if let Some(user) = event.author() {

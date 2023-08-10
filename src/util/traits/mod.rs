@@ -12,7 +12,11 @@ use twilight_model::user::{CurrentUser, CurrentUserGuild, User};
 use twilight_util::builder::embed::image_source::ImageSourceUrlError;
 use twilight_util::builder::embed::ImageSource;
 
+pub use self::builder::*;
 use super::{CDN_URL, TWEMOJI_URL};
+
+/// Builder traits.
+mod builder;
 
 /// Provides a method that returns the implementing type's creation date.
 pub trait CreatedAt {
