@@ -16,7 +16,7 @@ use crate::bot::interact::{
 };
 use crate::util::builder::ButtonBuilder;
 use crate::util::ext::ReactionTypeExt;
-use crate::util::traits::Localized;
+use crate::util::traits::{BuildButton, BuildButtons, Localized};
 use crate::util::{button_rows, Result, BRANDING, FAILURE, SUCCESS};
 
 crate::command! {
@@ -83,13 +83,11 @@ pub struct Selector {
     pub name: Box<str>,
 }
 
-impl Selector {
-    /// Creates a button from the selector.
-    ///
-    /// # Errors
-    ///
-    /// This function will return an error if the button could not be created.
-    pub fn button(&self, disabled: bool) -> Result<Button> {
+impl BuildButton for Selector {
+    type Arguments = bool;
+    type Error = anyhow::Error;
+
+    fn build_button(&self, disabled: Self::Arguments) -> Result<Button, Self::Error> {
         let data = CustomData::new(Impl::NAME, "toggle").with(self.id.to_string());
 
         Ok(ButtonBuilder::new(ButtonStyle::Secondary)
@@ -108,16 +106,13 @@ impl Selector {
 #[storage(format = Compress<MsgPack>, at = "role/{}/{}", Id<GuildMarker>, Id<UserMarker>)]
 pub struct Selectors(Vec<Selector>);
 
-impl Selectors {
-    /// Creates a button from the selectors.
-    ///
-    /// # Errors
-    ///
-    /// This function will return an error if the buttons could not be created.
-    #[inline]
-    pub fn buttons(&self, disabled: bool) -> Result<Vec<Button>> {
+impl BuildButtons for Selectors {
+    type Arguments = bool;
+    type Error = anyhow::Error;
+
+    fn build_buttons(&self, disabled: Self::Arguments) -> Result<Vec<Button>, Self::Error> {
         self.iter().try_fold(Vec::with_capacity(self.len()), |mut list, selector| {
-            list.extend_from_slice(&[selector.button(disabled)?]);
+            list.extend_from_slice(&[selector.build_button(disabled)?]);
 
             Ok(list)
         })
@@ -375,7 +370,7 @@ async fn list<'c>(ctx: CommandCtx<'c>, _resolver: CommandOptionResolver<'c>) -> 
         return Ok(());
     };
 
-    let buttons = button_rows(selectors.data().buttons(true)?);
+    let buttons = button_rows(selectors.data().build_buttons(true)?);
     let title = localize!(try locale => "text.{}.list", Impl::NAME);
     let embed = EmbedBuilder::new().color(BRANDING).title(title);
 
@@ -421,7 +416,7 @@ async fn send<'c>(ctx: CommandCtx<'c>, resolver: CommandOptionResolver<'c>) -> R
         return Ok(());
     };
 
-    let buttons = button_rows(selectors.data().buttons(false)?);
+    let buttons = button_rows(selectors.data().build_buttons(false)?);
     let embed = EmbedBuilder::new().color(BRANDING).title(text);
 
     ctx.api
