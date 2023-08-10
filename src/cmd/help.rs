@@ -1,7 +1,7 @@
 use doop_localizer::{localize, Locale};
 use twilight_model::application::command::Command;
 use twilight_model::channel::message::embed::EmbedAuthor;
-use twilight_util::builder::embed::EmbedBuilder;
+use twilight_util::builder::embed::{EmbedBuilder, EmbedFooterBuilder};
 
 use crate::bot::interact::{CommandCtx, InteractionEventHandler};
 use crate::util::ext::EmbedAuthorExt;
@@ -49,7 +49,6 @@ impl InteractionEventHandler for Impl {
         } else {
             stringify_all(locale, &commands)
         };
-        text += &format!("\n\n{footer}");
 
         let author = if let Some(user) = ctx.api.cache().current_user() {
             EmbedAuthor::new_from(&user)
@@ -63,7 +62,8 @@ impl InteractionEventHandler for Impl {
             .author(author)
             .color(BRANDING)
             .description(text)
-            .title(title);
+            .title(title)
+            .footer(EmbedFooterBuilder::new(footer));
 
         crate::followup!(as ctx => {
             let embeds = &[embed.build()];

@@ -136,7 +136,7 @@
     "command.help.description": "Displays a list of the bot's commands",
     "command.help.name": "help",
     "text.help.allow_dms": "Usable in DMs",
-    "text.help.footer": "Doop is an open-source Discord bot whose primary purpose is to assist administrators with guild management, while also throwing in some fun features such as polls.\n\nIf you have any questions about the project, you may [view the source](https://github.com/Jaxydog/doop), or you could always just ask me directly <@206260650010345483> <3",
+    "text.help.footer": "Doop is an open-source Discord bot whose primary purpose is to assist administrators with guild management. If you have any questions, you may view Doop's source or just ask <3",
     "text.help.global_header": "Global commands",
     "text.help.guild_header": "Guild commands",
     "text.help.has_subcommands": "Includes sub-commands",
