@@ -1,10 +1,12 @@
+use doop_localizer::localize;
 use twilight_util::builder::embed::{
     EmbedAuthorBuilder, EmbedBuilder, EmbedFooterBuilder, ImageSource,
 };
 
 use crate::bot::interact::{CommandCtx, CommandOptionResolver, InteractionEventHandler};
 use crate::util::ext::{StrExt, UserExt};
-use crate::util::{Result, BRANDING};
+use crate::util::traits::Localized;
+use crate::util::{Result, BRANDING, FAILURE};
 
 crate::command! {
     let name = "embed";
@@ -108,6 +110,20 @@ impl InteractionEventHandler for Impl {
     async fn handle_command(&self, ctx: CommandCtx<'_>) -> Result {
         let resolver = CommandOptionResolver::new(ctx.data);
         let mut embed = EmbedBuilder::new();
+        let mut empty = true;
+
+        if resolver.get_bool("ephemeral").copied().unwrap_or(false) {
+            crate::respond!(as ctx => {
+                let kind = DeferredChannelMessageWithSource;
+                let flags = EPHEMERAL;
+            })
+            .await
+        } else {
+            crate::respond!(as ctx => {
+                let kind = DeferredChannelMessageWithSource;
+            })
+            .await
+        }?;
 
         if let Ok(name) = resolver.get_str("author_name") {
             let mut author = EmbedAuthorBuilder::new(name);
@@ -120,6 +136,7 @@ impl InteractionEventHandler for Impl {
             }
 
             embed = embed.author(author);
+            empty = false;
         }
 
         #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
@@ -139,6 +156,7 @@ impl InteractionEventHandler for Impl {
 
         if let Ok(description) = resolver.get_str("description") {
             embed = embed.description(description.collapse().trim());
+            empty = false;
         }
 
         if let Ok(text) = resolver.get_str("footer_text") {
@@ -149,14 +167,17 @@ impl InteractionEventHandler for Impl {
             }
 
             embed = embed.footer(footer);
+            empty = false;
         }
 
         if let Ok(link) = resolver.get_str("image_link") {
             embed = embed.image(ImageSource::url(link)?);
+            empty = false;
         }
 
         if let Ok(link) = resolver.get_str("thumbnail_link") {
             embed = embed.thumbnail(ImageSource::url(link)?);
+            empty = false;
         }
 
         if let Ok(text) = resolver.get_str("title_text") {
@@ -165,22 +186,45 @@ impl InteractionEventHandler for Impl {
             }
 
             embed = embed.title(text);
+            empty = false;
         }
 
-        if resolver.get_bool("ephemeral").copied().unwrap_or(false) {
-            crate::respond!(as ctx => {
-                let kind = ChannelMessageWithSource;
-                let embeds = [embed.validate()?.build()];
+        if empty {
+            let locale = ctx.event.author().locale();
+            let title = localize!(try locale => "text.{}.empty", Self::NAME);
+            let embed = EmbedBuilder::new().color(FAILURE).title(title);
+
+            crate::followup!(as ctx => {
+                let embeds = &[embed.build()];
                 let flags = EPHEMERAL;
             })
-            .await
-        } else {
-            crate::respond!(as ctx => {
-                let kind = ChannelMessageWithSource;
-                let embeds = [embed.validate()?.build()];
-            })
-            .await
-        }?;
+            .await?;
+
+            return Ok(());
+        }
+
+        let embed = match embed.validate() {
+            Ok(embed) => embed,
+            Err(error) => {
+                let locale = ctx.event.author().locale();
+                let title = localize!(try locale => "text.{}.invalid", Self::NAME);
+                let reason = format!("> {error}");
+                let embed = EmbedBuilder::new().color(FAILURE).title(title).description(reason);
+
+                crate::followup!(as ctx => {
+                    let embeds = &[embed.build()];
+                    let flags = EPHEMERAL;
+                })
+                .await?;
+
+                return Ok(());
+            }
+        };
+
+        crate::followup!(as ctx => {
+            let embeds = &[embed.validate()?.build()];
+        })
+        .await?;
 
         Ok(())
     }

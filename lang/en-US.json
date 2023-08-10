@@ -89,6 +89,8 @@
 
     "command.embed.description": "Creates and sends an embedded message",
     "command.embed.name": "embed",
+    "text.embed.empty": "The embed must not be empty!",
+    "text.embed.invalid": "The embed is invalid!",
     "option.embed.author_icon.description": "The embed's author icon URL",
     "option.embed.author_icon.name": "author_icon",
     "option.embed.author_link.description": "The embed's author URL",
