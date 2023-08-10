@@ -109,11 +109,11 @@ impl<'b> Api<'b> {
 
     /// Returns a reference to the HTTP client of this [`Api`].
     #[must_use]
-    pub fn http(&self) -> &Client { self.http }
+    pub const fn http(&self) -> &'b Arc<Client> { self.http }
 
     /// Returns a reference to the cache of this [`Api`].
     #[must_use]
-    pub fn cache(&self) -> &InMemoryCache { self.cache }
+    pub const fn cache(&self) -> &'b Arc<InMemoryCache> { self.cache }
 }
 
 impl<'b> From<(&'b Arc<Client>, &'b Arc<InMemoryCache>)> for Api<'b> {
@@ -181,12 +181,12 @@ impl CustomData {
     /// # Errors
     ///
     /// This function will return an error if the identifier is too long.
-    pub fn validate(&self) -> Result {
+    pub fn validate(self) -> Result<Self> {
         if self.to_string().len() > Self::MAX_LEN {
             bail!("maximum identifier length exceeded (> {} bytes)", Self::MAX_LEN);
         }
 
-        Ok(())
+        Ok(self)
     }
 
     /// Generates a new storage key for this [`CustomData`].
@@ -196,6 +196,14 @@ impl CustomData {
     /// Inserts the given data into this [`CustomData`].
     #[inline]
     pub fn insert(&mut self, data: impl AsRef<str>) { self.data.push(data.as_ref().into()); }
+
+    /// Inserts the given data into this [`CustomData`].
+    #[inline]
+    #[must_use]
+    pub fn with(mut self, data: impl AsRef<str>) -> Self {
+        self.insert(data);
+        self
+    }
 
     /// Returns a reference to the handler name of this [`CustomData`].
     #[inline]

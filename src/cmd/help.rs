@@ -4,7 +4,8 @@ use twilight_model::channel::message::embed::EmbedAuthor;
 use twilight_util::builder::embed::EmbedBuilder;
 
 use crate::bot::interact::{CommandCtx, InteractionEventHandler};
-use crate::util::ext::{EmbedAuthorExt, LocalizedExt};
+use crate::util::ext::EmbedAuthorExt;
+use crate::util::traits::Localized;
 use crate::util::{Result, BRANDING};
 
 crate::command! {
@@ -51,11 +52,11 @@ impl InteractionEventHandler for Impl {
         text += &format!("\n\n{footer}");
 
         let author = if let Some(user) = ctx.api.cache().current_user() {
-            EmbedAuthor::create(&user)
+            EmbedAuthor::new_from(&user)
         } else {
             let user = ctx.api.http().current_user().await?.model().await?;
 
-            EmbedAuthor::create(&user)
+            EmbedAuthor::new_from(&user)
         }?;
         let title = localize!(try locale => "text.{}.title", Self::NAME);
         let embed = EmbedBuilder::new()

@@ -36,7 +36,7 @@
     futures-util = { version = "0.3", default-features = false }
     rand = { version = "0.8", features = ["nightly"] }
     serde = { version = "1.0", features = ["derive", "rc"] }
-    time = { version = "0.3", features = ["formatting", "local-offset", "macros"] }
+    time = { version = "0.3", features = ["formatting", "local-offset", "macros", "serde"] }
     tokio = { version = "1.29", features = ["full"] }
     twilight-cache-inmemory = "0.15"
     twilight-gateway = { version = "0.15", features = ["rustls-native-roots"] }

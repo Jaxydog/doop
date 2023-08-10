@@ -25,7 +25,8 @@ use twilight_util::builder::embed::EmbedBuilder;
 
 use self::interact::{CustomData, InteractionEventHandler};
 use crate::bot::interact::{Api, Ctx};
-use crate::util::ext::{EmbedAuthorExt, InteractionExt, LocalizedExt};
+use crate::util::ext::{EmbedAuthorExt, InteractionExt};
+use crate::util::traits::Localized;
 use crate::util::{Result, FAILURE};
 
 /// Provides traits and types for working with interaction events.
@@ -393,7 +394,7 @@ async fn error_notify_devs(api: Api<'_>, event: &Interaction, error: &anyhow::Er
         .title(title);
 
     if let Some(user) = event.author() {
-        embed = embed.author(EmbedAuthor::create(user)?);
+        embed = embed.author(EmbedAuthor::new_from(user)?);
     }
 
     api.http()

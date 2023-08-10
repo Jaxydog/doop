@@ -1,25 +1,18 @@
+use std::borrow::Cow;
+
 use anyhow::{anyhow, bail};
-use doop_localizer::{localizer, Locale};
-use time::ext::NumericalDuration;
-use time::macros::datetime;
-use time::OffsetDateTime;
 use twilight_cache_inmemory::model::CachedGuild;
 use twilight_model::application::interaction::Interaction;
 use twilight_model::channel::message::embed::EmbedAuthor;
 use twilight_model::channel::message::ReactionType;
 use twilight_model::gateway::payload::incoming::InteractionCreate;
-use twilight_model::guild::{Guild, Member, PartialMember};
+use twilight_model::guild::{Guild, Member, PartialGuild};
 use twilight_model::id::Id;
 use twilight_model::user::{CurrentUser, User};
-use twilight_util::builder::embed::image_source::ImageSourceUrlError;
-use twilight_util::builder::embed::{EmbedAuthorBuilder, ImageSource};
+use twilight_util::builder::embed::EmbedAuthorBuilder;
 
+use super::traits::GetIcon;
 use super::{Result, BRANDING};
-
-/// Discord content delivery network endpoint base URL.
-pub const CDN_BASE: &str = "https://cdn.discordapp.com";
-/// Discord's emoji repository's base URL.
-pub const UNICODE_BASE: &str = "https://raw.githubusercontent.com/discord/twemoji/master/assets";
 
 /// Provides extensions for [`EmbedAuthor`]s and [`EmbedAuthorBuilder`]s.
 pub trait EmbedAuthorExt<T>: Sized {
@@ -31,15 +24,42 @@ pub trait EmbedAuthorExt<T>: Sized {
     /// # Errors
     ///
     /// This function will return an error if the author could not be created.
-    fn create(value: &T) -> Result<Self, Self::Error>;
+    fn new_from(value: &T) -> Result<Self, Self::Error>;
 }
 
-impl<T: UserExt> EmbedAuthorExt<T> for EmbedAuthorBuilder {
-    type Error = ImageSourceUrlError;
+impl EmbedAuthorExt<CachedGuild> for EmbedAuthorBuilder {
+    type Error = <CachedGuild as GetIcon>::Error;
 
     #[inline]
-    fn create(value: &T) -> Result<Self, Self::Error> {
-        Ok(Self::new(value.tag()).icon_url(value.icon()?))
+    fn new_from(value: &CachedGuild) -> Result<Self, Self::Error> {
+        Ok(Self::new(value.name()).icon_url(<CachedGuild as GetIcon>::get_icon(value)?))
+    }
+}
+
+impl EmbedAuthorExt<Guild> for EmbedAuthorBuilder {
+    type Error = <Guild as GetIcon>::Error;
+
+    #[inline]
+    fn new_from(value: &Guild) -> Result<Self, Self::Error> {
+        Ok(Self::new(&value.name).icon_url(value.get_icon()?))
+    }
+}
+
+impl EmbedAuthorExt<PartialGuild> for EmbedAuthorBuilder {
+    type Error = <Guild as GetIcon>::Error;
+
+    #[inline]
+    fn new_from(value: &PartialGuild) -> Result<Self, Self::Error> {
+        Ok(Self::new(&value.name).icon_url(value.get_icon()?))
+    }
+}
+
+impl<T: GetIcon + UserExt> EmbedAuthorExt<T> for EmbedAuthorBuilder {
+    type Error = <T as GetIcon>::Error;
+
+    #[inline]
+    fn new_from(value: &T) -> Result<Self, Self::Error> {
+        Ok(Self::new(value.tag()).icon_url(value.get_icon()?))
     }
 }
 
@@ -50,26 +70,8 @@ where
     type Error = <EmbedAuthorBuilder as EmbedAuthorExt<T>>::Error;
 
     #[inline]
-    fn create(value: &T) -> Result<Self, Self::Error> {
-        EmbedAuthorBuilder::create(value).map(EmbedAuthorBuilder::build)
-    }
-}
-
-/// Provides extensions for values with associated creation dates.
-pub trait CreatedAtExt {
-    /// Returns the creation date of this value.
-    fn created_at(&self) -> OffsetDateTime;
-}
-
-impl<T> CreatedAtExt for Id<T> {
-    #[inline]
-    fn created_at(&self) -> OffsetDateTime {
-        const DISCORD_EPOCH: OffsetDateTime = datetime!(2015-01-01 00:00:00 UTC);
-
-        #[allow(clippy::cast_possible_wrap)]
-        let milliseconds = (self.get() >> 22) as i64;
-
-        DISCORD_EPOCH.saturating_add(milliseconds.milliseconds())
+    fn new_from(value: &T) -> Result<Self, Self::Error> {
+        Ok(EmbedAuthorBuilder::new_from(value)?.build())
     }
 }
 
@@ -97,100 +99,8 @@ impl InteractionExt for Interaction {
     }
 }
 
-/// Provides extensions for values with associated locales.
-pub trait LocalizedExt {
-    /// Returns the preferred locale of this value.
-    fn locale(&self) -> Locale;
-}
-
-impl LocalizedExt for CachedGuild {
-    #[inline]
-    fn locale(&self) -> Locale {
-        Locale::get(self.preferred_locale()).unwrap_or_else(|_| *localizer().preferred_locale())
-    }
-}
-
-impl LocalizedExt for CurrentUser {
-    #[inline]
-    fn locale(&self) -> Locale {
-        self.locale
-            .as_deref()
-            .and_then(|s| Locale::get(s).ok())
-            .unwrap_or_else(|| *localizer().preferred_locale())
-    }
-}
-
-impl LocalizedExt for Guild {
-    #[inline]
-    fn locale(&self) -> Locale {
-        Locale::get(&self.preferred_locale).unwrap_or_else(|_| *localizer().preferred_locale())
-    }
-}
-
-impl LocalizedExt for Member {
-    #[inline]
-    fn locale(&self) -> Locale { self.user.locale() }
-}
-
-impl LocalizedExt for PartialMember {
-    #[inline]
-    fn locale(&self) -> Locale { self.user.locale() }
-}
-
-impl LocalizedExt for User {
-    #[inline]
-    fn locale(&self) -> Locale {
-        self.locale
-            .as_deref()
-            .and_then(|s| Locale::get(s).ok())
-            .unwrap_or_else(|| *localizer().preferred_locale())
-    }
-}
-
-impl<T: LocalizedExt> LocalizedExt for &T {
-    #[inline]
-    fn locale(&self) -> Locale { <T as LocalizedExt>::locale(self) }
-}
-
-impl<T: LocalizedExt> LocalizedExt for Option<T> {
-    #[inline]
-    fn locale(&self) -> Locale {
-        self.as_ref()
-            .map_or_else(|| *localizer().preferred_locale(), LocalizedExt::locale)
-    }
-}
-
 /// Provides extensions for [`ReactionType`]s.
-pub trait ReactionTypeExt: Sized {
-    /// Returns an image source of the emoji's image.
-    ///
-    /// # Errors
-    ///
-    /// This function will return an error if the source has an invalid URL.
-    fn icon(&self) -> Result<ImageSource, ImageSourceUrlError>;
-}
-
-impl ReactionTypeExt for ReactionType {
-    fn icon(&self) -> Result<ImageSource, ImageSourceUrlError> {
-        let url = match self {
-            Self::Custom { animated, id, .. } => {
-                let ext = if *animated { "gif" } else { "png" };
-
-                format!("{CDN_BASE}/emojis/{id}.{ext}")
-            }
-            Self::Unicode { name } => {
-                let id: Vec<_> = name.chars().map(|n| format!("{:x}", n as u32)).collect();
-
-                format!("{UNICODE_BASE}/72x72/{}.png", id.join("-"))
-            }
-        };
-
-        ImageSource::url(url)
-    }
-}
-
-/// Provides a `parse` function for [`ReactionType`]s.
-pub trait ReactionTypeParseExt<T>: Sized {
+pub trait ReactionTypeExt<T>: Sized {
     /// Creates a new [`ReactionType`] from the given [`str`] reference.
     ///
     /// # Errors
@@ -199,27 +109,32 @@ pub trait ReactionTypeParseExt<T>: Sized {
     fn parse(value: T) -> Result<Self>;
 }
 
-impl ReactionTypeParseExt<String> for ReactionType {
+impl ReactionTypeExt<String> for ReactionType {
     #[inline]
     fn parse(value: String) -> Result<Self> { Self::parse(&(*value)) }
 }
 
-impl ReactionTypeParseExt<&String> for ReactionType {
+impl ReactionTypeExt<&String> for ReactionType {
     #[inline]
     fn parse(value: &String) -> Result<Self> { Self::parse(&(**value)) }
 }
 
-impl ReactionTypeParseExt<Box<str>> for ReactionType {
+impl ReactionTypeExt<Box<str>> for ReactionType {
     #[inline]
     fn parse(value: Box<str>) -> Result<Self> { Self::parse(&(*value)) }
 }
 
-impl ReactionTypeParseExt<&Box<str>> for ReactionType {
+impl ReactionTypeExt<&Box<str>> for ReactionType {
     #[inline]
     fn parse(value: &Box<str>) -> Result<Self> { Self::parse(&(**value)) }
 }
 
-impl ReactionTypeParseExt<&str> for ReactionType {
+impl ReactionTypeExt<Cow<'_, str>> for ReactionType {
+    #[inline]
+    fn parse(value: Cow<'_, str>) -> Result<Self> { Self::parse(&(*value)) }
+}
+
+impl ReactionTypeExt<&str> for ReactionType {
     fn parse(value: &str) -> Result<Self> {
         match value.chars().count() {
             0 => bail!("expected a non-empty string"),
@@ -256,7 +171,7 @@ impl ReactionTypeParseExt<&str> for ReactionType {
     }
 }
 
-impl ReactionTypeParseExt<char> for ReactionType {
+impl ReactionTypeExt<char> for ReactionType {
     #[inline]
     fn parse(value: char) -> Result<Self> { Ok(Self::Unicode { name: value.to_string() }) }
 }
@@ -280,15 +195,11 @@ pub trait UserExt {
     /// (`Username#1234`).
     fn tag(&self) -> String;
 
+    // /// Returns the display name of this [`User`].
+    // fn name(&self) -> String;
+
     /// Returns the accent color of this [`User`], or the bot's default brand color.
     fn color(&self) -> u32;
-
-    /// Returns the user's avatar image source, defaulting to a standard avatar.
-    ///
-    /// # Errors
-    ///
-    /// This function will return an error if the user's avatar hash is invalid.
-    fn icon(&self) -> Result<ImageSource, ImageSourceUrlError>;
 }
 
 impl UserExt for CurrentUser {
@@ -302,37 +213,14 @@ impl UserExt for CurrentUser {
 
     #[inline]
     fn color(&self) -> u32 { self.accent_color.unwrap_or(BRANDING) }
-
-    fn icon(&self) -> Result<ImageSource, ImageSourceUrlError> {
-        let url = self.avatar.map_or_else(
-            || format!("{CDN_BASE}/embed/avatars/{}.png", self.id.get() % 5),
-            |hash| format!("{CDN_BASE}/avatars/{}/{hash}.png", self.id),
-        );
-
-        ImageSource::url(url)
-    }
 }
 
 impl UserExt for Member {
-    fn tag(&self) -> String {
-        if self.user.discriminator == 0 {
-            format!("@{}", self.user.name)
-        } else {
-            format!("{}#{}", self.user.name, self.user.discriminator())
-        }
-    }
+    #[inline]
+    fn tag(&self) -> String { self.user.tag() }
 
     #[inline]
     fn color(&self) -> u32 { self.user.color() }
-
-    fn icon(&self) -> Result<ImageSource, ImageSourceUrlError> {
-        let url = self.avatar.or(self.user.avatar).map_or_else(
-            || format!("{CDN_BASE}/embed/avatars/{}.png", self.user.id.get() % 5),
-            |hash| format!("{CDN_BASE}/avatars/{}/{hash}.png", self.user.id),
-        );
-
-        ImageSource::url(url)
-    }
 }
 
 impl UserExt for User {
@@ -346,13 +234,4 @@ impl UserExt for User {
 
     #[inline]
     fn color(&self) -> u32 { self.accent_color.unwrap_or(BRANDING) }
-
-    fn icon(&self) -> Result<ImageSource, ImageSourceUrlError> {
-        let url = self.avatar.map_or_else(
-            || format!("{CDN_BASE}/embed/avatars/{}.png", self.id.get() % 5),
-            |hash| format!("{CDN_BASE}/avatars/{}/{hash}.png", self.id),
-        );
-
-        ImageSource::url(url)
-    }
 }

@@ -2,7 +2,7 @@ use doop_localizer::localize;
 use twilight_util::builder::embed::EmbedBuilder;
 
 use crate::bot::interact::{CommandCtx, InteractionEventHandler};
-use crate::util::ext::{CreatedAtExt, LocalizedExt};
+use crate::util::traits::{CreatedAt, Localized};
 use crate::util::{Result, BRANDING};
 
 crate::command! {

@@ -15,7 +15,8 @@ use crate::bot::interact::{
     CommandCtx, CommandOptionResolver, ComponentCtx, CustomData, InteractionEventHandler,
 };
 use crate::util::builder::ButtonBuilder;
-use crate::util::ext::{LocalizedExt, ReactionTypeParseExt};
+use crate::util::ext::ReactionTypeExt;
+use crate::util::traits::Localized;
 use crate::util::{button_rows, Result, BRANDING, FAILURE, SUCCESS};
 
 crate::command! {
@@ -89,13 +90,10 @@ impl Selector {
     ///
     /// This function will return an error if the button could not be created.
     pub fn button(&self, disabled: bool) -> Result<Button> {
-        let mut data = CustomData::new(Impl::NAME, "toggle");
-
-        data.insert(self.id.to_string());
-        data.validate()?;
+        let data = CustomData::new(Impl::NAME, "toggle").with(self.id.to_string());
 
         Ok(ButtonBuilder::new(ButtonStyle::Secondary)
-            .custom_id(data)
+            .custom_id(data.validate()?)
             .disabled(disabled)
             .emoji(ReactionType::parse(&self.icon)?)
             .label(self.name.clone())
