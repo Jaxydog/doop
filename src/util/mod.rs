@@ -69,10 +69,10 @@ pub struct Arguments {
     #[arg(long = "error-log-directory")]
     pub log_error_dir: Option<PathBuf>,
     /// The directory that contains the bot's localization files.
-    #[arg(short = 'L', long = "lang-directory")]
+    #[arg(long = "lang-directory")]
     pub lang_file_dir: Option<PathBuf>,
     /// The directory that contains the bot's data files.
-    #[arg(short = 'd', long = "data-directory")]
+    #[arg(long = "data-directory")]
     pub data_file_dir: Option<PathBuf>,
 }
 
