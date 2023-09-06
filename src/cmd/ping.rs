@@ -1,7 +1,7 @@
 use doop_localizer::localize;
 use twilight_util::builder::embed::EmbedBuilder;
 
-use crate::bot::interact::{CommandCtx, InteractionEventHandler};
+use crate::bot::interact::{CommandCtx, InteractionHandler};
 use crate::util::traits::{CreatedAt, Localized};
 use crate::util::{Result, BRANDING};
 
@@ -14,8 +14,8 @@ crate::command! {
 }
 
 #[async_trait::async_trait]
-impl InteractionEventHandler for Impl {
-    async fn handle_command(&self, ctx: CommandCtx<'_>) -> Result {
+impl InteractionHandler for Impl {
+    async fn handle_command<'api: 'evt, 'evt>(&self, ctx: CommandCtx<'api, 'evt>) -> Result {
         let locale = ctx.event.author().locale();
         let title = localize!(try locale => "text.{}.loading", Self::NAME);
         let embed = EmbedBuilder::new().color(BRANDING).title(title);

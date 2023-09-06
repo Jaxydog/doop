@@ -68,11 +68,11 @@ macro_rules! command {
             pub const KIND: ::twilight_model::application::command::CommandType = ::twilight_model::application::command::CommandType::$kind;
         }
 
-        impl $crate::bot::interact::EventHandler for Impl {
+        impl $crate::bot::interact::Handler for Impl {
             fn name(&self) -> &'static str { Self::NAME }
         }
 
-        impl $crate::bot::interact::CommandBuilder for Impl {
+        impl $crate::bot::interact::AsCommand for Impl {
             fn command(
                 &self,
                 guild_id: ::std::option::Option<::twilight_model::id::Id<::twilight_model::id::marker::GuildMarker>>

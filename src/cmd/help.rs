@@ -3,7 +3,7 @@ use twilight_model::application::command::Command;
 use twilight_model::channel::message::embed::EmbedAuthor;
 use twilight_util::builder::embed::{EmbedBuilder, EmbedFooterBuilder};
 
-use crate::bot::interact::{CommandCtx, InteractionEventHandler};
+use crate::bot::interact::{CommandCtx, InteractionHandler};
 use crate::util::ext::EmbedAuthorExt;
 use crate::util::traits::Localized;
 use crate::util::{Result, BRANDING};
@@ -17,8 +17,8 @@ crate::command! {
 }
 
 #[async_trait::async_trait]
-impl InteractionEventHandler for Impl {
-    async fn handle_command(&self, ctx: CommandCtx<'_>) -> Result {
+impl InteractionHandler for Impl {
+    async fn handle_command<'api: 'evt, 'evt>(&self, ctx: CommandCtx<'api, 'evt>) -> Result {
         crate::respond!(as ctx => {
             let kind = DeferredChannelMessageWithSource;
             let flags = EPHEMERAL;

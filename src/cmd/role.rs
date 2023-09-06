@@ -12,7 +12,7 @@ use twilight_model::id::Id;
 use twilight_util::builder::embed::EmbedBuilder;
 
 use crate::bot::interact::{
-    CommandCtx, CommandOptionResolver, ComponentCtx, CustomData, InteractionEventHandler,
+    CId, CommandCtx, CommandOptionResolver, ComponentCtx, InteractionHandler,
 };
 use crate::util::builder::ButtonBuilder;
 use crate::util::ext::ReactionTypeExt;
@@ -88,7 +88,7 @@ impl BuildButton for Selector {
     type Error = anyhow::Error;
 
     fn build_button(&self, disabled: Self::Arguments) -> Result<Button, Self::Error> {
-        let data = CustomData::new(Impl::NAME, "toggle").with(self.id.to_string());
+        let data = CId::new(Impl::NAME, "toggle").with(self.id.to_string());
 
         Ok(ButtonBuilder::new(ButtonStyle::Secondary)
             .custom_id(data.validate()?)
@@ -132,8 +132,8 @@ impl DerefMut for Selectors {
 }
 
 #[async_trait::async_trait]
-impl InteractionEventHandler for Impl {
-    async fn handle_command(&self, ctx: CommandCtx<'_>) -> Result {
+impl InteractionHandler for Impl {
+    async fn handle_command<'api: 'evt, 'evt>(&self, ctx: CommandCtx<'api, 'evt>) -> Result {
         crate::respond!(as ctx => {
             let kind = DeferredChannelMessageWithSource;
             let flags = EPHEMERAL;
@@ -158,7 +158,11 @@ impl InteractionEventHandler for Impl {
         bail!("unknown or missing subcommand");
     }
 
-    async fn handle_component(&self, ctx: ComponentCtx<'_>, data: CustomData) -> Result {
+    async fn handle_component<'api: 'evt, 'evt>(
+        &self,
+        ctx: ComponentCtx<'api, 'evt>,
+        cid: CId,
+    ) -> Result {
         crate::respond!(as ctx => {
             let kind = DeferredChannelMessageWithSource;
             let flags = EPHEMERAL | SUPPRESS_NOTIFICATIONS;
@@ -171,7 +175,7 @@ impl InteractionEventHandler for Impl {
         let Some(user_id) = ctx.event.author_id() else {
             bail!("component must be used by a user");
         };
-        let Some(role_id) = data.data().first() else {
+        let Some(role_id) = cid.data(0) else {
             bail!("missing role identifier");
         };
         let Some(role_id) = Id::new_checked(role_id.parse()?) else {
@@ -213,7 +217,10 @@ impl InteractionEventHandler for Impl {
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn add<'c>(ctx: CommandCtx<'c>, resolver: CommandOptionResolver<'c>) -> Result {
+async fn add<'api: 'evt, 'evt>(
+    ctx: CommandCtx<'api, 'evt>,
+    resolver: CommandOptionResolver<'evt>,
+) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -284,7 +291,10 @@ async fn add<'c>(ctx: CommandCtx<'c>, resolver: CommandOptionResolver<'c>) -> Re
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn remove<'c>(ctx: CommandCtx<'c>, resolver: CommandOptionResolver<'c>) -> Result {
+async fn remove<'api: 'evt, 'evt>(
+    ctx: CommandCtx<'api, 'evt>,
+    resolver: CommandOptionResolver<'evt>,
+) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -347,7 +357,10 @@ async fn remove<'c>(ctx: CommandCtx<'c>, resolver: CommandOptionResolver<'c>) ->
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn list<'c>(ctx: CommandCtx<'c>, _resolver: CommandOptionResolver<'c>) -> Result {
+async fn list<'api: 'evt, 'evt>(
+    ctx: CommandCtx<'api, 'evt>,
+    _resolver: CommandOptionResolver<'evt>,
+) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -389,7 +402,10 @@ async fn list<'c>(ctx: CommandCtx<'c>, _resolver: CommandOptionResolver<'c>) -> 
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn send<'c>(ctx: CommandCtx<'c>, resolver: CommandOptionResolver<'c>) -> Result {
+async fn send<'api: 'evt, 'evt>(
+    ctx: CommandCtx<'api, 'evt>,
+    resolver: CommandOptionResolver<'evt>,
+) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };

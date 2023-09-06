@@ -1,9 +1,10 @@
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 use std::sync::Arc;
 
-use anyhow::{anyhow, bail};
+use anyhow::bail;
 use doop_storage::{Compress, FileKey, MsgPack};
 use serde::{Deserialize, Serialize};
 use twilight_cache_inmemory::InMemoryCache;
@@ -24,126 +25,118 @@ use uuid::Uuid;
 
 use crate::util::Result;
 
-/// A command interaction context.
-pub type CommandCtx<'b> = Ctx<'b, &'b CommandData>;
-/// A component interaction context.
-pub type ComponentCtx<'b> = Ctx<'b, &'b MessageComponentInteractionData>;
-/// A modal interaction context.
-pub type ModalCtx<'b> = Ctx<'b, &'b ModalInteractionData>;
-
 /// A basic event handler.
-pub trait EventHandler: Send + Sync {
-    /// The name of this [`EventHandler`].
+pub trait Handler: Send + Sync {
+    /// The name of this [`Handler`].
     fn name(&self) -> &'static str;
 }
 
-/// An interaction event handler.
-#[allow(unused_variables)]
-#[async_trait::async_trait]
-pub trait InteractionEventHandler: CommandBuilder + EventHandler {
-    /// Handles a autocomplete interaction event.
+/// A value that can be converted into a Discord [`Command`].
+pub trait AsCommand {
+    /// Builds and returns the [`Command`] representation of this value.
     ///
     /// # Errors
     ///
-    /// This function will return an error if the autocomplete could not be handled.
-    async fn handle_autocomplete<'b>(
+    /// This function will return an error if the command could not be created.
+    fn command(&self, guild_id: Option<Id<GuildMarker>>) -> Result<Option<Command>>;
+}
+
+/// A basic interaction handler.
+#[allow(unused_variables)]
+#[async_trait::async_trait]
+pub trait InteractionHandler: AsCommand + Handler {
+    /// Handles an autocompletion interaction event.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the interaction could not be handled.
+    async fn handle_autocomplete<'api: 'evt, 'evt>(
         &self,
-        ctx: CommandCtx<'b>,
-        focus: (&'b str, CommandOptionType),
+        ctx: CommandCtx<'api, 'evt>,
+        focus: (&'evt str, CommandOptionType),
     ) -> Result<Vec<CommandOptionChoice>> {
-        bail!("unimplemented interaction type");
+        bail!("unhandleable inteaction type")
     }
 
     /// Handles a command interaction event.
     ///
     /// # Errors
     ///
-    /// This function will return an error if the command could not be handled.
-    async fn handle_command(&self, ctx: CommandCtx<'_>) -> Result {
-        bail!("unimplemented interaction type");
+    /// This function will return an error if the interaction could not be handled.
+    async fn handle_command<'api: 'evt, 'evt>(&self, ctx: CommandCtx<'api, 'evt>) -> Result {
+        bail!("unhandleable inteaction type")
     }
 
     /// Handles a component interaction event.
     ///
     /// # Errors
     ///
-    /// This function will return an error if the component could not be handled.
-    async fn handle_component(&self, ctx: ComponentCtx<'_>, data: CustomData) -> Result {
-        bail!("unimplemented interaction type");
+    /// This function will return an error if the interaction could not be handled.
+    async fn handle_component<'api: 'evt, 'evt>(
+        &self,
+        ctx: ComponentCtx<'api, 'evt>,
+        cid: CId,
+    ) -> Result {
+        bail!("unhandleable inteaction type")
     }
 
     /// Handles a modal interaction event.
     ///
     /// # Errors
     ///
-    /// This function will return an error if the modal could not be handled.
-    async fn handle_modal(&self, ctx: ModalCtx<'_>, data: CustomData) -> Result {
-        bail!("unimplemented interaction type");
+    /// This function will return an error if the interaction could not be handled.
+    async fn handle_modal<'api: 'evt, 'evt>(&self, ctx: ModalCtx<'api, 'evt>, cid: CId) -> Result {
+        bail!("unhandleable inteaction type")
     }
-}
-
-/// A value that can create a [`Command`].
-pub trait CommandBuilder {
-    /// Builds the [`Command`] of this [`EventHandler`].
-    ///
-    /// # Errors
-    ///
-    /// This function will return an error if the command could not be built.
-    fn command(&self, guild_id: Option<Id<GuildMarker>>) -> Result<Option<Command>>;
 }
 
 /// A reference to the bot's HTTP API and cache instance.
 #[derive(Clone, Copy, Debug)]
-pub struct Api<'b> {
+pub struct Api<'api> {
     /// The API's HTTP value.
-    http: &'b Arc<Client>,
+    http: &'api Arc<Client>,
     /// The API's cache value.
-    cache: &'b Arc<InMemoryCache>,
+    cache: &'api Arc<InMemoryCache>,
 }
 
-impl<'b> Api<'b> {
+impl<'api> Api<'api> {
     /// Creates a new [`Api`].
-    pub const fn new(http: &'b Arc<Client>, cache: &'b Arc<InMemoryCache>) -> Self {
+    pub const fn new(http: &'api Arc<Client>, cache: &'api Arc<InMemoryCache>) -> Self {
         Self { http, cache }
     }
 
     /// Returns a reference to the HTTP client of this [`Api`].
     #[must_use]
-    pub const fn http(&self) -> &'b Arc<Client> { self.http }
+    pub const fn http(&self) -> &'api Arc<Client> { self.http }
 
     /// Returns a reference to the cache of this [`Api`].
     #[must_use]
-    pub const fn cache(&self) -> &'b Arc<InMemoryCache> { self.cache }
+    pub const fn cache(&self) -> &'api Arc<InMemoryCache> { self.cache }
 }
 
-impl<'b> From<(&'b Arc<Client>, &'b Arc<InMemoryCache>)> for Api<'b> {
-    #[inline]
-    fn from((http, cache): (&'b Arc<Client>, &'b Arc<InMemoryCache>)) -> Self {
-        Self { http, cache }
-    }
-}
+/// A command interaction event context.
+pub type CommandCtx<'api, 'evt> = Ctx<'api, 'evt, &'evt CommandData>;
 
-impl<'b> From<(&'b Arc<InMemoryCache>, &'b Arc<Client>)> for Api<'b> {
-    #[inline]
-    fn from((cache, http): (&'b Arc<InMemoryCache>, &'b Arc<Client>)) -> Self {
-        Self { http, cache }
-    }
-}
+/// A component interaction event context.
+pub type ComponentCtx<'api, 'evt> = Ctx<'api, 'evt, &'evt MessageComponentInteractionData>;
 
-/// An interaction event context.
+/// A modal interaction event context.
+pub type ModalCtx<'api, 'evt> = Ctx<'api, 'evt, &'evt ModalInteractionData>;
+
+/// An event context.
 #[derive(Clone, Copy, Debug)]
-pub struct Ctx<'b, T> {
-    /// The context's HTTP API and cache.
-    pub api: Api<'b>,
-    /// The context's interaction event.
-    pub event: &'b Interaction,
-    /// The context's stored data.
+pub struct Ctx<'api: 'evt, 'evt, T> {
+    /// The HTTP API of this [`Ctx<T>`].
+    pub api: Api<'api>,
+    /// The referenced event of this [`Ctx<T>`].
+    pub event: &'evt Interaction,
+    /// The data of this [`Ctx<T>`].
     pub data: T,
 }
 
-impl<'b, T> Ctx<'b, T> {
+impl<'api: 'evt, 'evt, T> Ctx<'api, 'evt, T> {
     /// Creates a new [`Ctx<T>`].
-    pub const fn new(api: Api<'b>, event: &'b Interaction, data: T) -> Self {
+    pub const fn new(api: Api<'api>, event: &'evt Interaction, data: T) -> Self {
         Self { api, event, data }
     }
 
@@ -153,197 +146,215 @@ impl<'b, T> Ctx<'b, T> {
     }
 }
 
-/// Data stored within a component or modal's `custom_id`.
+/// A custom identifier with data storage.
 #[derive(Clone, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
-pub struct CustomData {
-    /// The source of the component.
-    source: (Box<str>, Box<str>),
+pub struct CId {
+    /// The name of the handler and its component.
+    name: (Box<str>, Box<str>),
     /// The internal stringified data.
     data: Vec<Box<str>>,
-    /// The storage key identifier.
+    /// The internal storage key identifier.
     uuid: Option<Uuid>,
 }
 
-impl CustomData {
+impl CId {
     /// The maximum length of an identifier in bytes.
     pub const MAX_LEN: usize = 100;
+    /// The character used to separate each part of the identifier.
+    pub const PART_SEP: char = '$';
+    /// The character used to serparate data values within the identifier.
+    pub const DATA_SEP: char = ';';
 
-    /// Creates a new [`CustomData`].
+    /// Creates a new [`CId`].
     pub fn new(handler: impl AsRef<str>, component: impl AsRef<str>) -> Self {
-        let name = handler.as_ref().into();
-        let kind = component.as_ref().into();
+        let name = (handler.as_ref().into(), component.as_ref().into());
 
-        Self { source: (name, kind), data: vec![], uuid: None }
+        Self { name, data: vec![], uuid: None }
     }
 
-    /// Validates this [`CustomData`].
+    /// Returns a reference to the event handler name of this [`CId`].
+    #[must_use]
+    pub const fn name(&self) -> &str { &self.name.0 }
+
+    /// Returns a reference to the component kind of this [`CId`].
+    #[must_use]
+    pub const fn kind(&self) -> &str { &self.name.1 }
+
+    /// Returns the data at the given index.
+    #[must_use]
+    pub fn data(&self, index: usize) -> Option<&str> { self.data.get(index).map(|b| &(**b)) }
+
+    /// Returns the storage key of this [`CId`].
+    #[must_use]
+    pub fn key<T>(&self) -> Option<FileKey<T, Compress<MsgPack, 4>>>
+    where
+        T: Serialize + for<'de> Deserialize<'de>,
+    {
+        Some(format!(".cid/{}/{}/{}", self.name.0, self.name.1, self.uuid?).into())
+    }
+
+    /// Generates a new random storage key for this [`CId`].
+    #[must_use]
+    pub fn with_key(mut self) -> Self {
+        self.uuid = Some(Uuid::new_v4());
+        self
+    }
+
+    /// Inserts the given data into the identifier.
+    #[must_use]
+    pub fn with(mut self, data: impl Into<String>) -> Self {
+        self.data.push(data.into().into_boxed_str());
+        self
+    }
+
+    /// Validates the length of this [`CId`].
     ///
     /// # Errors
     ///
     /// This function will return an error if the identifier is too long.
     pub fn validate(self) -> Result<Self> {
-        if self.to_string().len() > Self::MAX_LEN {
-            bail!("maximum identifier length exceeded (> {} bytes)", Self::MAX_LEN);
+        let string = self.to_string();
+
+        // currently, afaik, this is the only check we need; from what i can find custom identifiers
+        // are not limited by a specific charset, only by length.
+        if string.len() >= Self::MAX_LEN {
+            bail!("maximum identifier length exceeded ({}/{} bytes)", string.len(), Self::MAX_LEN);
         }
 
         Ok(self)
     }
-
-    /// Generates a new storage key for this [`CustomData`].
-    #[inline]
-    pub fn generate_key(&mut self) { self.uuid = Some(Uuid::new_v4()) }
-
-    /// Inserts the given data into this [`CustomData`].
-    #[inline]
-    pub fn insert(&mut self, data: impl AsRef<str>) { self.data.push(data.as_ref().into()); }
-
-    /// Inserts the given data into this [`CustomData`].
-    #[inline]
-    #[must_use]
-    pub fn with(mut self, data: impl AsRef<str>) -> Self {
-        self.insert(data);
-        self
-    }
-
-    /// Returns a reference to the handler name of this [`CustomData`].
-    #[inline]
-    #[must_use]
-    pub const fn handler_name(&self) -> &str { &self.source.0 }
-
-    /// Returns a reference to the component name of this [`CustomData`].
-    #[inline]
-    #[must_use]
-    pub const fn component_name(&self) -> &str { &self.source.1 }
-
-    /// Returns a reference to the data of this [`CustomData`].
-    #[inline]
-    #[must_use]
-    pub fn data(&self) -> &[Box<str>] { &self.data }
-
-    /// Returns the storage key of this [`CustomData`].
-    #[inline]
-    #[must_use]
-    pub fn key<T>(&self) -> Option<FileKey<T, Compress<MsgPack, 3>>>
-    where
-        T: Serialize + for<'de> Deserialize<'de>,
-    {
-        Some(format!(".persist/{}/{}/{}", self.source.0, self.source.1, self.uuid?).into())
-    }
 }
 
-impl TryFrom<String> for CustomData {
+impl TryFrom<&String> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: String) -> Result<Self, Self::Error> { Self::from_str(&value) }
+    fn try_from(value: &String) -> Result<Self, Self::Error> { Self::try_from(&(**value)) }
 }
 
-impl TryFrom<&String> for CustomData {
+impl TryFrom<String> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: &String) -> Result<Self, Self::Error> { Self::from_str(value) }
+    fn try_from(value: String) -> Result<Self, Self::Error> { Self::try_from(&(*value)) }
 }
 
-impl TryFrom<Box<str>> for CustomData {
+impl TryFrom<&Box<str>> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: Box<str>) -> Result<Self, Self::Error> { Self::from_str(&value) }
+    fn try_from(value: &Box<str>) -> Result<Self, Self::Error> { Self::try_from(&(**value)) }
 }
 
-impl TryFrom<&Box<str>> for CustomData {
+impl TryFrom<Box<str>> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: &Box<str>) -> Result<Self, Self::Error> { Self::from_str(value) }
+    fn try_from(value: Box<str>) -> Result<Self, Self::Error> { Self::try_from(&(*value)) }
 }
 
-impl TryFrom<&str> for CustomData {
+impl TryFrom<Cow<'_, str>> for CId {
+    type Error = <Self as FromStr>::Err;
+
+    #[inline]
+    fn try_from(value: Cow<str>) -> Result<Self, Self::Error> { Self::try_from(&(*value)) }
+}
+
+impl TryFrom<&str> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
     fn try_from(value: &str) -> Result<Self, Self::Error> { Self::from_str(value) }
 }
 
-impl FromStr for CustomData {
+impl FromStr for CId {
     type Err = anyhow::Error;
 
     fn from_str(value: &str) -> Result<Self, Self::Err> {
-        let mut parts = value.split('$').take(4);
+        let mut parts = value.split(Self::PART_SEP).take(4);
 
+        // every valid CID must have a handler name and component kind identifier.
         let Some(name) = parts.next() else {
             bail!("missing event handler name");
         };
         let Some(kind) = parts.next() else {
-            bail!("missing component name");
+            bail!("missing component kind");
         };
 
-        let mut id = Self::new(name, kind);
+        let mut cid = Self::new(name, kind);
 
+        // this will only run zero, one, or two times.
         for part in parts {
-            if let Ok(uuid) = part.parse() {
-                id.uuid = Some(uuid);
+            // we prefix the storage key with "K_" to *try* not to read data that contains a UUID as
+            // the storage key identifier.
+            if part.starts_with("K_") {
+                cid.uuid = Some(part.trim_start_matches("K_").parse()?);
             } else {
-                id.data = part.split(';').map(Into::into).collect();
-                break;
+                cid.data = part.split(Self::DATA_SEP).map(Into::into).collect();
             }
         }
 
-        Ok(id)
+        Ok(cid)
     }
 }
 
-impl From<CustomData> for String {
+impl From<CId> for String {
     #[inline]
-    fn from(value: CustomData) -> Self { value.to_string() }
+    fn from(value: CId) -> Self { value.to_string() }
 }
 
-impl Display for CustomData {
+impl From<CId> for Box<str> {
+    #[inline]
+    fn from(value: CId) -> Self { value.to_string().into_boxed_str() }
+}
+
+impl Display for CId {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let Self { source: (name, kind), data, uuid } = self;
+        let Self { name: (name, kind), data, uuid } = self;
 
-        write!(f, "{name}${kind}")?;
-        uuid.map_or(Ok(()), |uuid| write!(f, "${uuid}"))?;
+        write!(f, "{name}{}{kind}", Self::PART_SEP)?;
+        // only write the UUID if it exists; shorthand for an if-let-some statement.
+        uuid.map_or(Ok(()), |uuid| write!(f, "{}K_{uuid}", Self::PART_SEP))?;
 
-        if !data.is_empty() {
-            write!(f, "${}", data.join(";"))?;
+        if data.is_empty() {
+            Ok(())
+        } else {
+            // write all stringified internal data joined by the data separator character.
+            write!(f, "{}{}", Self::PART_SEP, data.join(&Self::DATA_SEP.to_string()))
         }
-
-        Ok(())
     }
 }
 
-/// Resolves and keep track of a command's options.
+/// Resolves and tracks a command's provided options.
 #[derive(Clone, Debug, PartialEq)]
-pub struct CommandOptionResolver<'c> {
+pub struct CommandOptionResolver<'evt> {
     /// The inner command data.
-    data: &'c CommandData,
-    /// The inner option map.
-    options: HashMap<&'c str, &'c CommandOptionValue>,
+    data: &'evt CommandData,
+    /// The inner map of options and their values.
+    options: HashMap<&'evt str, &'evt CommandOptionValue>,
 }
 
-impl<'c> CommandOptionResolver<'c> {
-    /// Creates a new [`CommandOptionResolver`] with the given options.
+impl<'evt> CommandOptionResolver<'evt> {
+    /// Creates a new [`CommandOptionResolver`] with the given data and options.
     #[inline]
     #[must_use]
-    pub fn new(data: &'c CommandData) -> Self { Self::new_from(data, &data.options) }
-
-    /// Creates a new [`CommandOptionResolver`] with the given options.
-    #[inline]
-    #[must_use]
-    fn new_from(data: &'c CommandData, options: &'c [CommandDataOption]) -> Self {
+    fn new_from(data: &'evt CommandData, options: &'evt [CommandDataOption]) -> Self {
         Self { data, options: options.iter().map(|o| (&(*o.name), &o.value)).collect() }
     }
+
+    /// Creates a new [`CommandOptionResolver`] with the given data.
+    #[inline]
+    #[must_use]
+    pub fn new(data: &'evt CommandData) -> Self { Self::new_from(data, &data.options) }
 
     /// Returns a reference to a stored [`CommandOptionValue`] with the given name.
     ///
     /// # Errors
     ///
-    /// This function will return an error if the option does not exist.
+    /// This function will return an error if the requested option does not exist.
     fn get(&self, name: &str) -> Result<&CommandOptionValue> {
         let Some(value) = self.options.get(name) else {
-            return Err(anyhow!("missing value for option '{name}'"));
+            bail!("missing value for option '{name}'");
         };
 
         Ok(*value)
@@ -355,12 +366,12 @@ impl<'c> CommandOptionResolver<'c> {
     ///
     /// This function will return an error if the sub-command does not exist or the value associated
     /// with the given option name is an invalid type.
-    pub fn get_subcommand(&'c self, name: &str) -> Result<Self> {
-        let CommandOptionValue::SubCommand(ref options) = self.get(name)? else {
+    pub fn get_subcommand(&'evt self, name: &str) -> Result<Self> {
+        let CommandOptionValue::SubCommand(ref value) = self.get(name)? else {
             bail!("invalid type for option '{name}'");
         };
 
-        Ok(Self::new_from(self.data, options))
+        Ok(Self::new_from(self.data, value))
     }
 
     /// Returns a new [`CommandOptionResolver`] containing a sub-command group's options.
@@ -369,32 +380,33 @@ impl<'c> CommandOptionResolver<'c> {
     ///
     /// This function will return an error if the sub-command group does not exist or the value
     /// associated with the given option name is an invalid type.
-    pub fn get_subcommand_group(&'c self, name: &str) -> Result<Self> {
-        let CommandOptionValue::SubCommandGroup(ref options) = self.get(name)? else {
+    pub fn get_subcommand_group(&'evt self, name: &str) -> Result<Self> {
+        let CommandOptionValue::SubCommandGroup(ref value) = self.get(name)? else {
             bail!("invalid type for option '{name}'");
         };
 
-        Ok(Self::new_from(self.data, options))
+        Ok(Self::new_from(self.data, value))
     }
 }
 
-/// Generates getter methods for the [`CommandOptionResolver`] type.
+/// Generates getter methods for the [`CommandOptionResolver`] struct.
+///
+/// # Examples
 ///
 /// ```
-/// cor_getter! {
-///     /// Getter method.
+/// command_option_resolver_getter! {
+///     /// Gets a boolean.
 ///     fn get_bool() -> Boolean as bool;
 /// }
 /// ```
-macro_rules! cor_getter {
-    {$(
+macro_rules! command_option_resolver_getter {
+    ($(
         $(#[$attribute:meta])*
         fn $name:ident() -> $variant:ident as $return:ty;
-    )*} => {
-        impl<'c> CommandOptionResolver<'c> {$(
+    )*) => {
+        impl<'evt> CommandOptionResolver<'evt> {$(
             $(#[$attribute])*
-            #[inline]
-            pub fn $name(&'c self, name: &str) -> Result<&'c $return> {
+            pub fn $name(&'evt self, name: &str) -> Result<&'evt $return> {
                 let CommandOptionValue::$variant(ref value) = self.get(name)? else {
                     bail!("invalid type for option '{name}'");
                 };
@@ -405,7 +417,7 @@ macro_rules! cor_getter {
     };
 }
 
-cor_getter! {
+command_option_resolver_getter! {
     /// Returns a reference to a stored [`Id<AttachmentMarker>`] with the given name.
     ///
     /// # Errors
@@ -413,6 +425,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_attachment_id() -> Attachment as Id<AttachmentMarker>;
+
     /// Returns a reference to a stored [`bool`] with the given name.
     ///
     /// # Errors
@@ -420,6 +433,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_bool() -> Boolean as bool;
+
     /// Returns a reference to a stored [`Id<ChannelMarker>`] with the given name.
     ///
     /// # Errors
@@ -427,6 +441,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_channel_id() -> Channel as Id<ChannelMarker>;
+
     /// Returns a reference to a stored [`i64`] with the given name.
     ///
     /// # Errors
@@ -434,6 +449,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_i64() -> Integer as i64;
+
     /// Returns a reference to a stored [`Id<GenericMarker>`] with the given name.
     ///
     /// # Errors
@@ -441,6 +457,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_mentionable_id() -> Mentionable as Id<GenericMarker>;
+
     /// Returns a reference to a stored [`f64`] with the given name.
     ///
     /// # Errors
@@ -448,6 +465,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_f64() -> Number as f64;
+
     /// Returns a reference to a stored [`Id<RoleMarker>`] with the given name.
     ///
     /// # Errors
@@ -455,6 +473,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_role_id() -> Role as Id<RoleMarker>;
+
     /// Returns a reference to a stored [`str`] with the given name.
     ///
     /// # Errors
@@ -462,6 +481,7 @@ cor_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_str() -> String as str;
+
     /// Returns a reference to a stored [`Id<UserMarker>`] with the given name.
     ///
     /// # Errors

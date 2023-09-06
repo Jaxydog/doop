@@ -3,7 +3,7 @@ use twilight_util::builder::embed::{
     EmbedAuthorBuilder, EmbedBuilder, EmbedFooterBuilder, ImageSource,
 };
 
-use crate::bot::interact::{CommandCtx, CommandOptionResolver, InteractionEventHandler};
+use crate::bot::interact::{CommandCtx, CommandOptionResolver, InteractionHandler};
 use crate::util::ext::{StrExt, UserExt};
 use crate::util::traits::Localized;
 use crate::util::{Result, BRANDING, FAILURE};
@@ -106,8 +106,8 @@ crate::command! {
 }
 
 #[async_trait::async_trait]
-impl InteractionEventHandler for Impl {
-    async fn handle_command(&self, ctx: CommandCtx<'_>) -> Result {
+impl InteractionHandler for Impl {
+    async fn handle_command<'api: 'evt, 'evt>(&self, ctx: CommandCtx<'api, 'evt>) -> Result {
         let resolver = CommandOptionResolver::new(ctx.data);
         let mut embed = EmbedBuilder::new();
         let mut empty = true;

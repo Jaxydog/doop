@@ -23,14 +23,15 @@ use twilight_model::id::marker::GuildMarker;
 use twilight_model::id::Id;
 use twilight_util::builder::embed::EmbedBuilder;
 
-use self::interact::{CustomData, InteractionEventHandler};
-use crate::bot::interact::{Api, Ctx};
+use crate::bot::interact::{Api, CId, Ctx, InteractionHandler};
 use crate::util::ext::{EmbedAuthorExt, InteractionExt};
 use crate::util::traits::Localized;
 use crate::util::{Result, FAILURE};
 
 /// Provides traits and types for working with interaction events.
 pub mod interact;
+// /// Provides traits and types for working with interaction events.
+// pub mod interact;
 
 /// The total number of possible error titles.
 pub const ERROR_TITLES: usize = 10;
@@ -46,7 +47,7 @@ pub const INTENTS: Intents = Intents::DIRECT_MESSAGES
 
 doop_macros::global! {
     /// The bot client's event handlers.
-    static HANDLERS: Box<[&'static dyn InteractionEventHandler]> = Box::new([
+    static HANDLERS: Box<[&'static dyn InteractionHandler]> = Box::new([
         &crate::cmd::embed::Impl,
         &crate::cmd::help::Impl,
         &crate::cmd::ping::Impl,
@@ -55,7 +56,7 @@ doop_macros::global! {
 }
 
 /// Returns an [`InteractionEventHandler`] with the given name.
-pub fn handler(name: impl AsRef<str>) -> Option<&'static dyn InteractionEventHandler> {
+pub fn handler(name: impl AsRef<str>) -> Option<&'static dyn InteractionHandler> {
     handlers().iter().find(|h| h.name() == name.as_ref()).copied()
 }
 
@@ -308,8 +309,8 @@ async fn handle_component(api: Api<'_>, event: &Interaction) -> Result {
         bail!("missing component data");
     };
 
-    let custom = data.custom_id.parse::<CustomData>()?;
-    let Some(handler) = handler(custom.handler_name()) else {
+    let custom = data.custom_id.parse::<CId>()?;
+    let Some(handler) = handler(custom.name()) else {
         bail!("missing interaction event handler");
     };
 
@@ -326,8 +327,8 @@ async fn handle_modal(api: Api<'_>, event: &Interaction) -> Result {
         bail!("missing modal data");
     };
 
-    let custom = data.custom_id.parse::<CustomData>()?;
-    let Some(handler) = handler(custom.handler_name()) else {
+    let custom = data.custom_id.parse::<CId>()?;
+    let Some(handler) = handler(custom.name()) else {
         bail!("missing interaction event handler");
     };
 
