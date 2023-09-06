@@ -70,9 +70,7 @@ pub async fn application() -> Result {
 ///
 /// This function will return an error if the logger could not output the installation notice log.
 fn install_logger(arguments: &Arguments) -> Result {
-    let Arguments {
-        log_no_print, log_no_write, log_no_error, log_write_dir, log_error_dir, ..
-    } = arguments;
+    let Arguments { log_no_print, log_no_write, log_no_error, log_write_dir, log_error_dir, .. } = arguments;
 
     let flags = Flags { no_print: *log_no_print, no_write: *log_no_write, no_error: *log_no_error };
     let write = log_write_dir.clone().unwrap_or_else(|| PathBuf::from("logs"));

@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use twilight_model::id::marker::{ChannelMarker, GuildMarker};
 use twilight_model::id::Id;
 
-use super::Result;
+use crate::util::Result;
 
 /// Returns the bot's client token.
 ///
@@ -12,7 +12,9 @@ use super::Result;
 ///
 /// This function will return an error if the variable was not set.
 #[inline]
-pub fn token() -> Result<Box<str>> { Ok(std::env::var("CLIENT_TOKEN")?.into_boxed_str()) }
+pub fn token() -> Result<Box<str>> {
+    Ok(std::env::var("CLIENT_TOKEN")?.into_boxed_str())
+}
 
 /// Returns the bot's data encryption key.
 ///
@@ -22,7 +24,9 @@ pub fn token() -> Result<Box<str>> { Ok(std::env::var("CLIENT_TOKEN")?.into_boxe
 ///
 /// This function will return an error if the variable was not set.
 #[inline]
-pub fn encrypt_key() -> Result<Box<str>> { Ok(std::env::var("ENCRYPT_KEY")?.into_boxed_str()) }
+pub fn encrypt_key() -> Result<Box<str>> {
+    Ok(std::env::var("ENCRYPT_KEY")?.into_boxed_str())
+}
 
 /// Returns the bot's testing guild identifier.
 ///
@@ -32,7 +36,9 @@ pub fn encrypt_key() -> Result<Box<str>> { Ok(std::env::var("ENCRYPT_KEY")?.into
 ///
 /// This function will return an error if the variable was not set or is equal to zero.
 #[inline]
-pub fn testing_guild_id() -> Result<Id<GuildMarker>> { self::generic_id("TESTING_GUILD_ID") }
+pub fn testing_guild_id() -> Result<Id<GuildMarker>> {
+    self::generic_id("TESTING_GUILD_ID")
+}
 
 /// Returns the bot's error channel identifier.
 ///
@@ -42,7 +48,9 @@ pub fn testing_guild_id() -> Result<Id<GuildMarker>> { self::generic_id("TESTING
 ///
 /// This function will return an error if the variable was not set or is equal to zero.
 #[inline]
-pub fn error_channel_id() -> Result<Id<ChannelMarker>> { self::generic_id("ERROR_CHANNEL_ID") }
+pub fn error_channel_id() -> Result<Id<ChannelMarker>> {
+    self::generic_id("ERROR_CHANNEL_ID")
+}
 
 /// Returns a generic identifier from the environment.
 ///

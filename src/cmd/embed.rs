@@ -1,7 +1,5 @@
 use doop_localizer::localize;
-use twilight_util::builder::embed::{
-    EmbedAuthorBuilder, EmbedBuilder, EmbedFooterBuilder, ImageSource,
-};
+use twilight_util::builder::embed::{EmbedAuthorBuilder, EmbedBuilder, EmbedFooterBuilder, ImageSource};
 
 use crate::bot::interact::{CommandCtx, CommandOptionResolver, InteractionHandler};
 use crate::util::ext::{StrExt, UserExt};

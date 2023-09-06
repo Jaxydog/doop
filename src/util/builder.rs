@@ -20,17 +20,23 @@ impl ActionRowBuilder {
     /// Build into an action row.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> ActionRow { self.0 }
+    pub fn build(self) -> ActionRow {
+        self.0
+    }
 }
 
 impl From<ActionRowBuilder> for ActionRow {
     #[inline]
-    fn from(value: ActionRowBuilder) -> Self { value.build() }
+    fn from(value: ActionRowBuilder) -> Self {
+        value.build()
+    }
 }
 
 impl From<ActionRowBuilder> for Component {
     #[inline]
-    fn from(value: ActionRowBuilder) -> Self { Self::ActionRow(value.build()) }
+    fn from(value: ActionRowBuilder) -> Self {
+        Self::ActionRow(value.build())
+    }
 }
 
 /// Create a button with a builder.
@@ -43,14 +49,7 @@ impl ButtonBuilder {
     /// Creates a new button builder.
     #[inline]
     pub fn new(style: impl Into<ButtonStyle>) -> Self {
-        Self(Button {
-            custom_id: None,
-            disabled: false,
-            emoji: None,
-            label: None,
-            style: style.into(),
-            url: None,
-        })
+        Self(Button { custom_id: None, disabled: false, emoji: None, label: None, style: style.into(), url: None })
     }
 
     /// Add a custom identifier.
@@ -91,17 +90,23 @@ impl ButtonBuilder {
     /// Build into a button.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> Button { self.0 }
+    pub fn build(self) -> Button {
+        self.0
+    }
 }
 
 impl From<ButtonBuilder> for Button {
     #[inline]
-    fn from(value: ButtonBuilder) -> Self { value.build() }
+    fn from(value: ButtonBuilder) -> Self {
+        value.build()
+    }
 }
 
 impl From<ButtonBuilder> for Component {
     #[inline]
-    fn from(value: ButtonBuilder) -> Self { Self::Button(value.build()) }
+    fn from(value: ButtonBuilder) -> Self {
+        Self::Button(value.build())
+    }
 }
 
 /// Create a select menu with a builder.
@@ -162,17 +167,23 @@ impl SelectMenuBuilder {
     /// Build into a select menu.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> SelectMenu { self.0 }
+    pub fn build(self) -> SelectMenu {
+        self.0
+    }
 }
 
 impl From<SelectMenuBuilder> for SelectMenu {
     #[inline]
-    fn from(value: SelectMenuBuilder) -> Self { value.build() }
+    fn from(value: SelectMenuBuilder) -> Self {
+        value.build()
+    }
 }
 
 impl From<SelectMenuBuilder> for Component {
     #[inline]
-    fn from(value: SelectMenuBuilder) -> Self { Self::SelectMenu(value.build()) }
+    fn from(value: SelectMenuBuilder) -> Self {
+        Self::SelectMenu(value.build())
+    }
 }
 
 /// Create a select menu option with a builder.
@@ -218,12 +229,16 @@ impl SelectMenuOptionBuilder {
     /// Build into a select menu option.
     #[inline]
     #[must_use = "should be used as part of a select menu"]
-    pub fn build(self) -> SelectMenuOption { self.0 }
+    pub fn build(self) -> SelectMenuOption {
+        self.0
+    }
 }
 
 impl From<SelectMenuOptionBuilder> for SelectMenuOption {
     #[inline]
-    fn from(value: SelectMenuOptionBuilder) -> Self { value.build() }
+    fn from(value: SelectMenuOptionBuilder) -> Self {
+        value.build()
+    }
 }
 
 /// Create a text input with a builder.
@@ -235,11 +250,7 @@ pub struct TextInputBuilder(TextInput);
 impl TextInputBuilder {
     /// Creates a new text input builder.
     #[inline]
-    pub fn new(
-        custom_id: impl Into<String>,
-        label: impl Into<String>,
-        style: impl Into<TextInputStyle>,
-    ) -> Self {
+    pub fn new(custom_id: impl Into<String>, label: impl Into<String>, style: impl Into<TextInputStyle>) -> Self {
         Self(TextInput {
             custom_id: custom_id.into(),
             label: label.into(),
@@ -290,15 +301,21 @@ impl TextInputBuilder {
     /// Build into a text input.
     #[inline]
     #[must_use = "should be used as part of a component"]
-    pub fn build(self) -> TextInput { self.0 }
+    pub fn build(self) -> TextInput {
+        self.0
+    }
 }
 
 impl From<TextInputBuilder> for TextInput {
     #[inline]
-    fn from(value: TextInputBuilder) -> Self { value.build() }
+    fn from(value: TextInputBuilder) -> Self {
+        value.build()
+    }
 }
 
 impl From<TextInputBuilder> for Component {
     #[inline]
-    fn from(value: TextInputBuilder) -> Self { Self::TextInput(value.build()) }
+    fn from(value: TextInputBuilder) -> Self {
+        Self::TextInput(value.build())
+    }
 }

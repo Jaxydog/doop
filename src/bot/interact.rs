@@ -17,9 +17,7 @@ use twilight_model::application::interaction::application_command::{
 use twilight_model::application::interaction::message_component::MessageComponentInteractionData;
 use twilight_model::application::interaction::modal::ModalInteractionData;
 use twilight_model::application::interaction::Interaction;
-use twilight_model::id::marker::{
-    AttachmentMarker, ChannelMarker, GenericMarker, GuildMarker, RoleMarker, UserMarker,
-};
+use twilight_model::id::marker::{AttachmentMarker, ChannelMarker, GenericMarker, GuildMarker, RoleMarker, UserMarker};
 use twilight_model::id::Id;
 use uuid::Uuid;
 
@@ -72,11 +70,7 @@ pub trait InteractionHandler: AsCommand + Handler {
     /// # Errors
     ///
     /// This function will return an error if the interaction could not be handled.
-    async fn handle_component<'api: 'evt, 'evt>(
-        &self,
-        ctx: ComponentCtx<'api, 'evt>,
-        cid: CId,
-    ) -> Result {
+    async fn handle_component<'api: 'evt, 'evt>(&self, ctx: ComponentCtx<'api, 'evt>, cid: CId) -> Result {
         bail!("unhandleable inteaction type")
     }
 
@@ -101,17 +95,24 @@ pub struct Api<'api> {
 
 impl<'api> Api<'api> {
     /// Creates a new [`Api`].
+    #[inline]
     pub const fn new(http: &'api Arc<Client>, cache: &'api Arc<InMemoryCache>) -> Self {
         Self { http, cache }
     }
 
     /// Returns a reference to the HTTP client of this [`Api`].
+    #[inline]
     #[must_use]
-    pub const fn http(&self) -> &'api Arc<Client> { self.http }
+    pub const fn http(&self) -> &'api Arc<Client> {
+        self.http
+    }
 
     /// Returns a reference to the cache of this [`Api`].
+    #[inline]
     #[must_use]
-    pub const fn cache(&self) -> &'api Arc<InMemoryCache> { self.cache }
+    pub const fn cache(&self) -> &'api Arc<InMemoryCache> {
+        self.cache
+    }
 }
 
 /// A command interaction event context.
@@ -136,11 +137,13 @@ pub struct Ctx<'api: 'evt, 'evt, T> {
 
 impl<'api: 'evt, 'evt, T> Ctx<'api, 'evt, T> {
     /// Creates a new [`Ctx<T>`].
+    #[inline]
     pub const fn new(api: Api<'api>, event: &'evt Interaction, data: T) -> Self {
         Self { api, event, data }
     }
 
     /// Returns the interaction client of this [`Ctx<T>`].
+    #[inline]
     pub fn client(&self) -> InteractionClient {
         self.api.http().interaction(self.event.application_id)
     }
@@ -173,18 +176,28 @@ impl CId {
     }
 
     /// Returns a reference to the event handler name of this [`CId`].
+    #[inline]
     #[must_use]
-    pub const fn name(&self) -> &str { &self.name.0 }
+    pub const fn name(&self) -> &str {
+        &self.name.0
+    }
 
     /// Returns a reference to the component kind of this [`CId`].
+    #[inline]
     #[must_use]
-    pub const fn kind(&self) -> &str { &self.name.1 }
+    pub const fn kind(&self) -> &str {
+        &self.name.1
+    }
 
     /// Returns the data at the given index.
+    #[inline]
     #[must_use]
-    pub fn data(&self, index: usize) -> Option<&str> { self.data.get(index).map(|b| &(**b)) }
+    pub fn data(&self, index: usize) -> Option<&str> {
+        self.data.get(index).map(|b| &(**b))
+    }
 
     /// Returns the storage key of this [`CId`].
+    #[inline]
     #[must_use]
     pub fn key<T>(&self) -> Option<FileKey<T, Compress<MsgPack, 4>>>
     where
@@ -197,6 +210,7 @@ impl CId {
     #[must_use]
     pub fn with_key(mut self) -> Self {
         self.uuid = Some(Uuid::new_v4());
+
         self
     }
 
@@ -204,6 +218,7 @@ impl CId {
     #[must_use]
     pub fn with(mut self, data: impl Into<String>) -> Self {
         self.data.push(data.into().into_boxed_str());
+
         self
     }
 
@@ -229,42 +244,54 @@ impl TryFrom<&String> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: &String) -> Result<Self, Self::Error> { Self::try_from(&(**value)) }
+    fn try_from(value: &String) -> Result<Self, Self::Error> {
+        Self::try_from(&(**value))
+    }
 }
 
 impl TryFrom<String> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: String) -> Result<Self, Self::Error> { Self::try_from(&(*value)) }
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        Self::try_from(&(*value))
+    }
 }
 
 impl TryFrom<&Box<str>> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: &Box<str>) -> Result<Self, Self::Error> { Self::try_from(&(**value)) }
+    fn try_from(value: &Box<str>) -> Result<Self, Self::Error> {
+        Self::try_from(&(**value))
+    }
 }
 
 impl TryFrom<Box<str>> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: Box<str>) -> Result<Self, Self::Error> { Self::try_from(&(*value)) }
+    fn try_from(value: Box<str>) -> Result<Self, Self::Error> {
+        Self::try_from(&(*value))
+    }
 }
 
 impl TryFrom<Cow<'_, str>> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: Cow<str>) -> Result<Self, Self::Error> { Self::try_from(&(*value)) }
+    fn try_from(value: Cow<str>) -> Result<Self, Self::Error> {
+        Self::try_from(&(*value))
+    }
 }
 
 impl TryFrom<&str> for CId {
     type Error = <Self as FromStr>::Err;
 
     #[inline]
-    fn try_from(value: &str) -> Result<Self, Self::Error> { Self::from_str(value) }
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        Self::from_str(value)
+    }
 }
 
 impl FromStr for CId {
@@ -300,12 +327,16 @@ impl FromStr for CId {
 
 impl From<CId> for String {
     #[inline]
-    fn from(value: CId) -> Self { value.to_string() }
+    fn from(value: CId) -> Self {
+        value.to_string()
+    }
 }
 
 impl From<CId> for Box<str> {
     #[inline]
-    fn from(value: CId) -> Self { value.to_string().into_boxed_str() }
+    fn from(value: CId) -> Self {
+        value.to_string().into_boxed_str()
+    }
 }
 
 impl Display for CId {
@@ -345,7 +376,9 @@ impl<'evt> CommandOptionResolver<'evt> {
     /// Creates a new [`CommandOptionResolver`] with the given data.
     #[inline]
     #[must_use]
-    pub fn new(data: &'evt CommandData) -> Self { Self::new_from(data, &data.options) }
+    pub fn new(data: &'evt CommandData) -> Self {
+        Self::new_from(data, &data.options)
+    }
 
     /// Returns a reference to a stored [`CommandOptionValue`] with the given name.
     ///

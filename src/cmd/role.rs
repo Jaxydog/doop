@@ -11,9 +11,7 @@ use twilight_model::id::marker::{GuildMarker, RoleMarker, UserMarker};
 use twilight_model::id::Id;
 use twilight_util::builder::embed::EmbedBuilder;
 
-use crate::bot::interact::{
-    CId, CommandCtx, CommandOptionResolver, ComponentCtx, InteractionHandler,
-};
+use crate::bot::interact::{CId, CommandCtx, CommandOptionResolver, ComponentCtx, InteractionHandler};
 use crate::util::builder::ButtonBuilder;
 use crate::util::ext::ReactionTypeExt;
 use crate::util::traits::{BuildButton, BuildButtons, Localized};
@@ -110,6 +108,7 @@ impl BuildButtons for Selectors {
     type Arguments = bool;
     type Error = anyhow::Error;
 
+    #[inline]
     fn build_buttons(&self, disabled: Self::Arguments) -> Result<Vec<Button>, Self::Error> {
         self.iter().try_fold(Vec::with_capacity(self.len()), |mut list, selector| {
             list.extend_from_slice(&[selector.build_button(disabled)?]);
@@ -123,12 +122,16 @@ impl Deref for Selectors {
     type Target = Vec<Selector>;
 
     #[inline]
-    fn deref(&self) -> &Self::Target { &self.0 }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 impl DerefMut for Selectors {
     #[inline]
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.0 }
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
 }
 
 #[async_trait::async_trait]
@@ -158,11 +161,7 @@ impl InteractionHandler for Impl {
         bail!("unknown or missing subcommand");
     }
 
-    async fn handle_component<'api: 'evt, 'evt>(
-        &self,
-        ctx: ComponentCtx<'api, 'evt>,
-        cid: CId,
-    ) -> Result {
+    async fn handle_component<'api: 'evt, 'evt>(&self, ctx: ComponentCtx<'api, 'evt>, cid: CId) -> Result {
         crate::respond!(as ctx => {
             let kind = DeferredChannelMessageWithSource;
             let flags = EPHEMERAL | SUPPRESS_NOTIFICATIONS;
@@ -194,11 +193,7 @@ impl InteractionHandler for Impl {
             localize!(try locale => "text.{}.toggle_on", Self::NAME)
         };
 
-        ctx.api
-            .http()
-            .update_guild_member(guild_id, user_id)
-            .roles(&member.roles)
-            .await?;
+        ctx.api.http().update_guild_member(guild_id, user_id).roles(&member.roles).await?;
 
         let embed = EmbedBuilder::new().color(SUCCESS).title(title);
 
@@ -217,10 +212,7 @@ impl InteractionHandler for Impl {
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn add<'api: 'evt, 'evt>(
-    ctx: CommandCtx<'api, 'evt>,
-    resolver: CommandOptionResolver<'evt>,
-) -> Result {
+async fn add<'api: 'evt, 'evt>(ctx: CommandCtx<'api, 'evt>, resolver: CommandOptionResolver<'evt>) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -291,10 +283,7 @@ async fn add<'api: 'evt, 'evt>(
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn remove<'api: 'evt, 'evt>(
-    ctx: CommandCtx<'api, 'evt>,
-    resolver: CommandOptionResolver<'evt>,
-) -> Result {
+async fn remove<'api: 'evt, 'evt>(ctx: CommandCtx<'api, 'evt>, resolver: CommandOptionResolver<'evt>) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -357,10 +346,7 @@ async fn remove<'api: 'evt, 'evt>(
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn list<'api: 'evt, 'evt>(
-    ctx: CommandCtx<'api, 'evt>,
-    _resolver: CommandOptionResolver<'evt>,
-) -> Result {
+async fn list<'api: 'evt, 'evt>(ctx: CommandCtx<'api, 'evt>, _resolver: CommandOptionResolver<'evt>) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -402,10 +388,7 @@ async fn list<'api: 'evt, 'evt>(
 /// # Errors
 ///
 /// This function will return an error if execution fails.
-async fn send<'api: 'evt, 'evt>(
-    ctx: CommandCtx<'api, 'evt>,
-    resolver: CommandOptionResolver<'evt>,
-) -> Result {
+async fn send<'api: 'evt, 'evt>(ctx: CommandCtx<'api, 'evt>, resolver: CommandOptionResolver<'evt>) -> Result {
     let Some(guild_id) = ctx.data.guild_id else {
         bail!("command must be used in a guild");
     };
@@ -435,12 +418,7 @@ async fn send<'api: 'evt, 'evt>(
     let buttons = button_rows(selectors.data().build_buttons(false)?);
     let embed = EmbedBuilder::new().color(BRANDING).title(text);
 
-    ctx.api
-        .http()
-        .create_message(channel_id)
-        .embeds(&[embed.build()])?
-        .components(&buttons)?
-        .await?;
+    ctx.api.http().create_message(channel_id).embeds(&[embed.build()])?.components(&buttons)?.await?;
 
     selectors.key_owned().remove()?;
 

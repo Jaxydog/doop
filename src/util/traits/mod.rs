@@ -12,8 +12,8 @@ use twilight_model::user::{CurrentUser, CurrentUserGuild, User};
 use twilight_util::builder::embed::image_source::ImageSourceUrlError;
 use twilight_util::builder::embed::ImageSource;
 
-pub use self::builder::*;
-use super::{CDN_URL, TWEMOJI_URL};
+pub use crate::util::traits::builder::*;
+use crate::util::{CDN_URL, TWEMOJI_URL};
 
 /// Builder traits.
 mod builder;
@@ -164,7 +164,9 @@ impl<T: GetIcon> GetIcon for &T {
     type Error = T::Error;
 
     #[inline]
-    fn get_icon(&self) -> Result<ImageSource, Self::Error> { T::get_icon(self) }
+    fn get_icon(&self) -> Result<ImageSource, Self::Error> {
+        T::get_icon(self)
+    }
 }
 
 /// Provides a method that returns the implementing type's associated icon.
@@ -257,42 +259,58 @@ pub trait Localized {
 
 impl Localized for CachedGuild {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { Locale::get(self.preferred_locale()).ok() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        Locale::get(self.preferred_locale()).ok()
+    }
 }
 
 impl Localized for CurrentUser {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { Locale::get(self.locale.as_ref()?).ok() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        Locale::get(self.locale.as_ref()?).ok()
+    }
 }
 
 impl Localized for Guild {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { Locale::get(&self.preferred_locale).ok() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        Locale::get(&self.preferred_locale).ok()
+    }
 }
 
 impl Localized for PartialGuild {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { Locale::get(&self.preferred_locale).ok() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        Locale::get(&self.preferred_locale).ok()
+    }
 }
 
 impl Localized for User {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { Locale::get(self.locale.as_ref()?).ok() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        Locale::get(self.locale.as_ref()?).ok()
+    }
 }
 
 impl Localized for Member {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { self.user.preferred_locale() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        self.user.preferred_locale()
+    }
 }
 
 impl Localized for PartialMember {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { self.user.as_ref()?.preferred_locale() }
+    fn preferred_locale(&self) -> Option<Locale> {
+        self.user.as_ref()?.preferred_locale()
+    }
 }
 
 impl<T: Localized> Localized for &T {
     #[inline]
-    fn preferred_locale(&self) -> Option<Locale> { <T as Localized>::preferred_locale(self) }
+    fn preferred_locale(&self) -> Option<Locale> {
+        <T as Localized>::preferred_locale(self)
+    }
 }
 
 impl<T: Localized> Localized for Option<T> {

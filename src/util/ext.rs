@@ -11,8 +11,8 @@ use twilight_model::id::Id;
 use twilight_model::user::{CurrentUser, User};
 use twilight_util::builder::embed::EmbedAuthorBuilder;
 
-use super::traits::GetIcon;
-use super::{Result, BRANDING};
+use crate::util::traits::GetIcon;
+use crate::util::{Result, BRANDING};
 
 /// Provides extensions for [`EmbedAuthor`]s and [`EmbedAuthorBuilder`]s.
 pub trait EmbedAuthorExt<T>: Sized {
@@ -111,27 +111,37 @@ pub trait ReactionTypeExt<T>: Sized {
 
 impl ReactionTypeExt<String> for ReactionType {
     #[inline]
-    fn parse(value: String) -> Result<Self> { Self::parse(&(*value)) }
+    fn parse(value: String) -> Result<Self> {
+        Self::parse(&(*value))
+    }
 }
 
 impl ReactionTypeExt<&String> for ReactionType {
     #[inline]
-    fn parse(value: &String) -> Result<Self> { Self::parse(&(**value)) }
+    fn parse(value: &String) -> Result<Self> {
+        Self::parse(&(**value))
+    }
 }
 
 impl ReactionTypeExt<Box<str>> for ReactionType {
     #[inline]
-    fn parse(value: Box<str>) -> Result<Self> { Self::parse(&(*value)) }
+    fn parse(value: Box<str>) -> Result<Self> {
+        Self::parse(&(*value))
+    }
 }
 
 impl ReactionTypeExt<&Box<str>> for ReactionType {
     #[inline]
-    fn parse(value: &Box<str>) -> Result<Self> { Self::parse(&(**value)) }
+    fn parse(value: &Box<str>) -> Result<Self> {
+        Self::parse(&(**value))
+    }
 }
 
 impl ReactionTypeExt<Cow<'_, str>> for ReactionType {
     #[inline]
-    fn parse(value: Cow<'_, str>) -> Result<Self> { Self::parse(&(*value)) }
+    fn parse(value: Cow<'_, str>) -> Result<Self> {
+        Self::parse(&(*value))
+    }
 }
 
 impl ReactionTypeExt<&str> for ReactionType {
@@ -173,7 +183,9 @@ impl ReactionTypeExt<&str> for ReactionType {
 
 impl ReactionTypeExt<char> for ReactionType {
     #[inline]
-    fn parse(value: char) -> Result<Self> { Ok(Self::Unicode { name: value.to_string() }) }
+    fn parse(value: char) -> Result<Self> {
+        Ok(Self::Unicode { name: value.to_string() })
+    }
 }
 
 /// Provides extensions for [`str`]s.
@@ -212,15 +224,21 @@ impl UserExt for CurrentUser {
     }
 
     #[inline]
-    fn color(&self) -> u32 { self.accent_color.unwrap_or(BRANDING) }
+    fn color(&self) -> u32 {
+        self.accent_color.unwrap_or(BRANDING)
+    }
 }
 
 impl UserExt for Member {
     #[inline]
-    fn tag(&self) -> String { self.user.tag() }
+    fn tag(&self) -> String {
+        self.user.tag()
+    }
 
     #[inline]
-    fn color(&self) -> u32 { self.user.color() }
+    fn color(&self) -> u32 {
+        self.user.color()
+    }
 }
 
 impl UserExt for User {
@@ -233,5 +251,7 @@ impl UserExt for User {
     }
 
     #[inline]
-    fn color(&self) -> u32 { self.accent_color.unwrap_or(BRANDING) }
+    fn color(&self) -> u32 {
+        self.accent_color.unwrap_or(BRANDING)
+    }
 }

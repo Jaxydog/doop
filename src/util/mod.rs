@@ -11,8 +11,8 @@ use twilight_model::channel::Message;
 use twilight_model::id::marker::{ChannelMarker, GuildMarker, MessageMarker};
 use twilight_model::id::Id;
 
-use self::builder::ActionRowBuilder;
 use crate::bot::interact::Api;
+use crate::util::builder::ActionRowBuilder;
 
 /// Provides model builders.
 pub mod builder;
@@ -206,9 +206,5 @@ pub fn button_rows(buttons: impl IntoIterator<Item = impl Into<Button>>) -> Vec<
 /// Automatically sorts text inputs into action rows.
 #[inline]
 pub fn text_input_rows(inputs: impl IntoIterator<Item = impl Into<TextInput>>) -> Vec<Component> {
-    inputs
-        .into_iter()
-        .map(Into::into)
-        .map(|i| Component::from(ActionRowBuilder::new([i])))
-        .collect()
+    inputs.into_iter().map(Into::into).map(|i| Component::from(ActionRowBuilder::new([i]))).collect()
 }

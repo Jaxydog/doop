@@ -105,9 +105,5 @@ pub fn stringify(locale: Locale, command: &Command) -> String {
         |id| format!("</{name}:{id}> - {localized_description}"),
     );
 
-    if flags.is_empty() {
-        entry
-    } else {
-        format!("{entry}\n> *{}*", flags.join(", "))
-    }
+    if flags.is_empty() { entry } else { format!("{entry}\n> *{}*", flags.join(", ")) }
 }

@@ -56,6 +56,7 @@ doop_macros::global! {
 }
 
 /// Returns an [`InteractionEventHandler`] with the given name.
+#[inline]
 pub fn handler(name: impl AsRef<str>) -> Option<&'static dyn InteractionHandler> {
     handlers().iter().find(|h| h.name() == name.as_ref()).copied()
 }
@@ -358,12 +359,9 @@ async fn handle_error(api: Api<'_>, event: &Interaction, error: &anyhow::Error) 
 /// This function will return an error if the user could not be notified.
 async fn error_notify_user(api: Api<'_>, event: &Interaction, error: &anyhow::Error) -> Result {
     let locale = event.author().locale();
-    let index = thread_rng().gen_range(0..ERROR_TITLES);
+    let index = thread_rng().gen_range(0 .. ERROR_TITLES);
     let title = localize!(try locale => "text.error.title_{index}");
-    let embed = EmbedBuilder::new()
-        .color(FAILURE)
-        .description(format!("> {error}"))
-        .title(title);
+    let embed = EmbedBuilder::new().color(FAILURE).description(format!("> {error}")).title(title);
 
     crate::respond!(as api.http(), event => {
         let kind = DeferredChannelMessageWithSource;
@@ -387,7 +385,7 @@ async fn error_notify_user(api: Api<'_>, event: &Interaction, error: &anyhow::Er
 ///
 /// This function will return an error if the developers could not be notified.
 async fn error_notify_devs(api: Api<'_>, event: &Interaction, error: &anyhow::Error) -> Result {
-    let index = thread_rng().gen_range(0..ERROR_TITLES);
+    let index = thread_rng().gen_range(0 .. ERROR_TITLES);
     let title = localize!("text.error.title_{index}");
     let mut embed = EmbedBuilder::new()
         .color(FAILURE)
