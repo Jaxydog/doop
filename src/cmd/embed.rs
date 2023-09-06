@@ -112,19 +112,6 @@ impl InteractionEventHandler for Impl {
         let mut embed = EmbedBuilder::new();
         let mut empty = true;
 
-        if resolver.get_bool("ephemeral").copied().unwrap_or(false) {
-            crate::respond!(as ctx => {
-                let kind = DeferredChannelMessageWithSource;
-                let flags = EPHEMERAL;
-            })
-            .await
-        } else {
-            crate::respond!(as ctx => {
-                let kind = DeferredChannelMessageWithSource;
-            })
-            .await
-        }?;
-
         if let Ok(name) = resolver.get_str("author_name") {
             let mut author = EmbedAuthorBuilder::new(name);
 
@@ -194,8 +181,9 @@ impl InteractionEventHandler for Impl {
             let title = localize!(try locale => "text.{}.empty", Self::NAME);
             let embed = EmbedBuilder::new().color(FAILURE).title(title);
 
-            crate::followup!(as ctx => {
-                let embeds = &[embed.build()];
+            crate::respond!(as ctx => {
+                let kind = ChannelMessageWithSource;
+                let embeds = [embed.build()];
                 let flags = EPHEMERAL;
             })
             .await?;
@@ -211,8 +199,9 @@ impl InteractionEventHandler for Impl {
                 let reason = format!("> {error}");
                 let embed = EmbedBuilder::new().color(FAILURE).title(title).description(reason);
 
-                crate::followup!(as ctx => {
-                    let embeds = &[embed.build()];
+                crate::respond!(as ctx => {
+                    let kind = ChannelMessageWithSource;
+                    let embeds = [embed.build()];
                     let flags = EPHEMERAL;
                 })
                 .await?;
@@ -221,10 +210,20 @@ impl InteractionEventHandler for Impl {
             }
         };
 
-        crate::followup!(as ctx => {
-            let embeds = &[embed.validate()?.build()];
-        })
-        .await?;
+        if resolver.get_bool("ephemeral").copied().unwrap_or(false) {
+            crate::respond!(as ctx => {
+                let kind = ChannelMessageWithSource;
+                let embeds = [embed.build()];
+                let flags = EPHEMERAL;
+            })
+            .await
+        } else {
+            crate::respond!(as ctx => {
+                let kind = ChannelMessageWithSource;
+                let embeds = [embed.build()];
+            })
+            .await
+        }?;
 
         Ok(())
     }
