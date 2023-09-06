@@ -47,7 +47,7 @@ macro_rules! traits {
         }
 
         /// Builds a value.
-        #[async_trait::async_trait]
+        #[::async_trait::async_trait]
         pub trait $one_trait_async {
             /// The arguments provided to the builder method.
             type Arguments;
@@ -63,7 +63,7 @@ macro_rules! traits {
         }
 
         /// Builds a list of values.
-        #[async_trait::async_trait]
+        #[::async_trait::async_trait]
         pub trait $many_trait_async {
             /// The arguments provided to the builder method.
             type Arguments;

@@ -27,7 +27,7 @@
 [dependencies]
     anyhow = "1.0"
     async-trait = "0.1"
-    clap = { version = "4.3", features = ["derive"] }
+    clap = { version = "4.4", features = ["derive"] }
     doop-localizer = { version = "0.1", path = "crates/doop-localizer" }
     doop-logger = { version = "0.1", path = "crates/doop-logger" }
     doop-macros = { version = "0.1", path = "crates/doop-macros" }
@@ -37,7 +37,7 @@
     rand = { version = "0.8", features = ["nightly"] }
     serde = { version = "1.0", features = ["derive", "rc"] }
     time = { version = "0.3", features = ["formatting", "local-offset", "macros", "serde"] }
-    tokio = { version = "1.29", features = ["full"] }
+    tokio = { version = "1.32", features = ["full"] }
     twilight-cache-inmemory = "0.15"
     twilight-gateway = { version = "0.15", features = ["rustls-native-roots"] }
     twilight-http = "0.15"

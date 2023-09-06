@@ -10,8 +10,8 @@ use futures_util::future::{select, Either};
 use futures_util::pin_mut;
 use tokio::runtime::Builder;
 
-use self::bot::BotClient;
-use self::util::{Arguments, Result};
+use crate::bot::BotClient;
+use crate::util::{Arguments, Result};
 
 /// Defines and implements the bot client and event handling.
 pub mod bot;
@@ -26,11 +26,11 @@ pub mod util;
 ///
 /// This function will return an error if the process encounters a fatal error.
 pub fn main() -> Result {
-    let arguments = self::util::arguments();
+    let arguments = crate::util::arguments();
 
-    self::install_logger(arguments)?;
-    self::install_localizer(arguments)?;
-    self::install_storage(arguments)?;
+    install_logger(arguments)?;
+    install_localizer(arguments)?;
+    install_storage(arguments)?;
 
     dotenvy::dotenv()?;
     info!("loaded environment variables")?;
@@ -43,7 +43,6 @@ pub fn main() -> Result {
 /// # Errors
 ///
 /// This function will return an error if the process encounters a fatal error.
-#[allow(clippy::unused_async)] // TODO: remove
 pub async fn application() -> Result {
     info!("initialized asynchronous runtime")?;
 

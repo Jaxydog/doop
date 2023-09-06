@@ -14,7 +14,7 @@
     repository = "https://github.com/Jaxydog/doop/"
 
 [dependencies]
-    clap = { version = "4.3", features = ["derive"] }
+    clap = { version = "4.4", features = ["derive"] }
     doop-macros = { version = "0.1", path = "../doop-macros" }
     serde = { version = "1.0", features = ["derive"] }
     serde_json = "1.0"

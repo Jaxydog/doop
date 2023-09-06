@@ -229,7 +229,7 @@ macro_rules! locales {
 
         impl Locale {
             /// A list of every locale.
-            pub const LIST: &[Self] = &[$(Self::$name),*];
+            pub const LIST: &'static [Self] = &[$(Self::$name),*];
 
             /// Returns the locale's associated localization key.
             #[must_use]

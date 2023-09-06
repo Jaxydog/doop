@@ -238,7 +238,7 @@ impl<T: GetIcon> GetIconWith for T {
     type Error = <T as GetIcon>::Error;
 
     #[inline]
-    fn get_icon_with(&self, _: Self::Arguments) -> Result<ImageSource, Self::Error> {
+    fn get_icon_with(&self, (): Self::Arguments) -> Result<ImageSource, Self::Error> {
         self.get_icon()
     }
 }
