@@ -203,6 +203,9 @@ impl StrExt for &str {
 
 /// Provides extensions for [`User`]s.
 pub trait UserExt {
+    /// Returns the displayed name of this user, defaulting to their tag.
+    fn display(&self) -> String;
+
     /// Returns the tag of this [`User`], either in the current format (`@username`) or old format
     /// (`Username#1234`).
     fn tag(&self) -> String;
@@ -215,6 +218,11 @@ pub trait UserExt {
 }
 
 impl UserExt for CurrentUser {
+    #[inline]
+    fn display(&self) -> String {
+        self.tag()
+    }
+
     fn tag(&self) -> String {
         if self.discriminator == 0 {
             format!("@{}", self.name)
@@ -231,6 +239,11 @@ impl UserExt for CurrentUser {
 
 impl UserExt for Member {
     #[inline]
+    fn display(&self) -> String {
+        self.nick.as_deref().map_or_else(|| self.user.display(), Into::into)
+    }
+
+    #[inline]
     fn tag(&self) -> String {
         self.user.tag()
     }
@@ -242,6 +255,11 @@ impl UserExt for Member {
 }
 
 impl UserExt for User {
+    #[inline]
+    fn display(&self) -> String {
+        self.global_name.as_deref().map_or_else(|| self.tag(), Into::into)
+    }
+
     fn tag(&self) -> String {
         if self.discriminator == 0 {
             format!("@{}", self.name)
@@ -253,5 +271,22 @@ impl UserExt for User {
     #[inline]
     fn color(&self) -> u32 {
         self.accent_color.unwrap_or(BRANDING)
+    }
+}
+
+impl<T: UserExt> UserExt for &T {
+    #[inline]
+    fn display(&self) -> String {
+        <T as UserExt>::display(self)
+    }
+
+    #[inline]
+    fn tag(&self) -> String {
+        <T as UserExt>::tag(self)
+    }
+
+    #[inline]
+    fn color(&self) -> u32 {
+        <T as UserExt>::color(self)
     }
 }

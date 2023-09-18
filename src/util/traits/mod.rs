@@ -36,6 +36,13 @@ impl<T> CreatedAt for Id<T> {
     }
 }
 
+impl<T: CreatedAt> CreatedAt for &T {
+    #[inline]
+    fn created_at(&self) -> OffsetDateTime {
+        <T as CreatedAt>::created_at(self)
+    }
+}
+
 /// Provides a method that returns the implementing type's associated icon.
 pub trait GetIcon {
     /// The type returned if an icon cannot be created.
