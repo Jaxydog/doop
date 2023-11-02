@@ -1,0 +1,6 @@
+/log
+/res/*
+/target
+/.env
+
+!/res/lang/

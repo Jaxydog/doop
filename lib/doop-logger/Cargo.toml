@@ -1,0 +1,20 @@
+[package]
+    name = "doop-logger"
+    description = "Implements a terminal and file system logger for the Doop Discord bot."
+    categories = ["command-line-utilities", "filesystem"]
+    keywords = ["bot", "discord", "doop", "logger", "logging"]
+
+    version = "0.1.0"
+    edition.workspace = true
+    publish = false
+
+    authors.workspace = true
+    license.workspace = true
+    readme.workspace = true
+    repository.workspace = true
+
+[dependencies]
+    crossbeam-channel = "0.5"
+    doop-threads = { version = "*", path = "../doop-threads" }
+    owo-colors = { version = "3.5", features = ["supports-colors"] }
+    time = { version = "0.3", features = ["formatting", "local-offset", "macros"] }

@@ -1,0 +1,29 @@
+{
+    "text.error.title_0": "Something broke!",
+    "text.error.title_1": "That's an error!",
+    "text.error.title_2": "Oh god not again...",
+    "text.error.title_3": "Bad coding.",
+    "text.error.title_4": "That doesn't seem right?",
+    "text.error.title_5": "That was unexpected!",
+    "text.error.title_6": "This is fine (lying).",
+    "text.error.title_7": "Back to the drawing board...",
+    "text.error.title_8": "A wild error appeared!",
+    "text.error.title_9": "Behold! An error.",
+
+    "command.help.name": "help",
+    "command.help.description": "Displays a list of the bot's commands.",
+    "text.help.title": "Thank you for using Doop!",
+    "text.help.header": "The command listings below were generated on-the-fly!\nIf something seems wrong or you receive an error, please [create an issue](https://github.com/Jaxydog/doop/issues)!",
+    "text.help.footer": "Doop is an open-source Discord bot whose primary purpose is to assist administrators with guild management. If you have any questions, you may view Doop's source or just ask <3",
+    "text.help.server_header": "Server Commands",
+    "text.help.global_header": "Global Commands",
+    "text.help.missing_commands": "...looks like there's nothing here!",
+    "text.help.has_subcommands": "Has Sub-Commands",
+    "text.help.allows_dms": "Usable in DMs",
+    "text.help.is_nsfw": "Is NSFW",
+
+    "command.ping.name": "ping",
+    "command.ping.description": "Calculates the bot's response time.",
+    "text.ping.calculate": "Calculating...",
+    "text.ping.finished": "Pong!"
+}

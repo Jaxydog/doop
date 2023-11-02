@@ -1,0 +1,17 @@
+[package]
+    name = "doop-threads"
+    description = "Provides solutions for multithreading for the Doop Discord bot."
+    categories = ["asynchronous"]
+    keywords = ["bot", "channel", "discord", "doop", "thread"]
+
+    version = "0.1.0"
+    edition.workspace = true
+    publish = false
+
+    authors.workspace = true
+    license.workspace = true
+    readme.workspace = true
+    repository.workspace = true
+
+[dependencies]
+    crossbeam-channel = "0.5"

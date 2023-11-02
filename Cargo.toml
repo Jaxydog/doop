@@ -1,0 +1,52 @@
+[package]
+    name = "doop"
+    description = "An open-source Discord server moderation bot."
+    categories = ["command-line-utilities"]
+    keywords = ["bot", "discord", "doop", "guild", "moderation"]
+
+    version = "0.1.0"
+    edition.workspace = true
+    publish = false
+
+    authors.workspace = true
+    license.workspace = true
+    readme.workspace = true
+    repository.workspace = true
+
+[workspace]
+    members = ["lib/*"]
+    package.authors = ["Jaxydog"]
+    package.edition = "2021"
+    package.license = "MIT OR ISC OR Apache-2.0"
+    package.readme = "README.md"
+    package.repository = "https://github.com/Jaxydog/doop"
+
+[features]
+    default = ["dotenv"]
+    dotenv = ["dep:dotenvy"]
+
+[profile.dev]
+    opt-level = 1
+    package."*" = { opt-level = 3 }
+
+[dependencies]
+    anyhow = "1.0"
+    async-trait = "0.1"
+    clap = { version = "4.4", features = ["derive"] }
+    doop-localizer = { version = "*", path = "lib/doop-localizer" }
+    doop-logger = { version = "*", path = "lib/doop-logger" }
+    doop-macros = { version = "*", path = "lib/doop-macros" }
+    doop-storage = { version = "*", path = "lib/doop-storage", features = ["full"] }
+    doop-threads = { version = "*", path = "lib/doop-threads" }
+    dotenvy = { version = "0.15", optional = true }
+    futures-util = { version = "0.3", default-features = false }
+    rand = { version = "0.8", features = ["nightly"] }
+    serde = { version = "1.0", features = ["derive"] }
+    time = { version = "0.3", features = ["formatting", "local-offset", "macros", "serde"] }
+    tokio = { version = "1.33", features = ["full"] }
+    twilight-cache-inmemory = "0.15"
+    twilight-gateway = { version = "0.15", features = ["rustls-native-roots"] }
+    twilight-http = "0.15"
+    twilight-model = "0.15"
+    twilight-util = { version = "0.15", features = ["builder", "link", "snowflake"] }
+    uuid = { version = "1.5", features = ["fast-rng", "serde", "v4"] }

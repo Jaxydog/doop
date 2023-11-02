@@ -1,0 +1,22 @@
+[package]
+    name = "doop-macros"
+    description = "Provides procedural macro definitions for the Doop Discord bot."
+    categories = ["development-tools"]
+    keywords = ["bot", "discord", "doop", "macro", "procedural"]
+
+    version = "0.1.0"
+    edition.workspace = true
+    publish = false
+
+    authors.workspace = true
+    license.workspace = true
+    readme.workspace = true
+    repository.workspace = true
+
+[lib]
+    proc-macro = true
+
+[dependencies]
+    proc-macro2 = { version = "1.0", features = ["nightly"] }
+    quote = "1.0"
+    syn = { version = "2.0", features = ["full"] }
