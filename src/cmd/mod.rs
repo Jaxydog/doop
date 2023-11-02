@@ -494,22 +494,20 @@ macro_rules! register_command {
             )?
     }};
     (@option($entry:expr, SubCommand($name:literal) {
-        $(let required = $required:literal;)?
         $(let options = [$($option_kind:ident($option_name:literal) {$($args:tt)*}),* $(,)?];)?
     })) => {{
         ::twilight_util::builder::command::SubCommandBuilder::new($name, ::doop_localizer::localize!("option.{}.{}.description", $entry.name, $name))
             .name_localizations(::doop_localizer::localize!(in *, "option.{}.{}.name", $entry.name, $name))
             .description_localizations(::doop_localizer::localize!(in *, "option.{}.{}.description", $entry.name, $name))
-            $($(.option($crate::register_command!(@option(entry, $option_kind($option_name) { $($args)* }))))*)?
+            $($(.option($crate::register_command!(@option($entry, $option_kind($option_name) { $($args)* }))))*)?
     }};
     (@option($entry:expr, SubCommandGroup($name:literal) {
-        $(let required = $required:literal;)?
         $(let commands = [$($option_kind:ident($option_name:literal) {$($args:tt)*}),* $(,)?];)?
     })) => {{
         ::twilight_util::builder::command::SubCommandGroupBuilder::new($name, ::doop_localizer::localize!("option.{}.{}.description", $entry.name, $name))
             .name_localizations(::doop_localizer::localize!(in *, "option.{}.{}.name", $entry.name, $name))
             .description_localizations(::doop_localizer::localize!(in *, "option.{}.{}.description", $entry.name, $name))
-            $(.subcommands(vec![$($crate::register_command!(@option(entry, $option_kind($option_name) { $($args)* }))),*]))?
+            $(.subcommands(vec![$($crate::register_command!(@option($entry, $option_kind($option_name) { $($args)* }))),*]))?
     }};
     (@option($entry:expr, User($name:literal) {
         $(let required = $required:literal;)?
