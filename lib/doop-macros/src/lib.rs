@@ -14,7 +14,7 @@ mod storage;
 /// ```
 /// #[derive(Storage, Serialize, Deserialize)]
 /// #[format(Compress<MsgPack, 3>)]
-/// #[path("{}/{}", u64, String)]
+/// #[location("{}/{}", u64, String)]
 /// struct Data {
 ///     id: Id<GuildMarker>,
 ///     time: OffsetDateTime,
