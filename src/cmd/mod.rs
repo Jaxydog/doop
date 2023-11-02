@@ -20,6 +20,8 @@ use crate::util::{DataId, Result};
 pub mod help;
 /// The ping command.
 pub mod ping;
+/// The role command.
+pub mod role;
 
 /// The bot's command registry.
 static REGISTRY: OnceLock<CommandRegistry> = OnceLock::new();
@@ -498,7 +500,7 @@ macro_rules! register_command {
         ::twilight_util::builder::command::SubCommandBuilder::new($name, ::doop_localizer::localize!("option.{}.{}.description", $entry.name, $name))
             .name_localizations(::doop_localizer::localize!(in *, "option.{}.{}.name", $entry.name, $name))
             .description_localizations(::doop_localizer::localize!(in *, "option.{}.{}.description", $entry.name, $name))
-            $($(.option($crate::register_command!(@option(entry, $option_kind($option_name) { $($args)* }))))*)?;
+            $($(.option($crate::register_command!(@option(entry, $option_kind($option_name) { $($args)* }))))*)?
     }};
     (@option($entry:expr, SubCommandGroup($name:literal) {
         $(let required = $required:literal;)?
