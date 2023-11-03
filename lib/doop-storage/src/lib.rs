@@ -6,8 +6,32 @@
 use std::fmt::{Debug, Display};
 use std::marker::PhantomData;
 use std::path::Path;
+use std::sync::OnceLock;
 
 use serde::{Deserialize, Serialize};
+
+/// Stores the preferred storage directory.
+static DIRECTORY: OnceLock<Box<Path>> = OnceLock::new();
+
+/// Returns a reference to the preferred storage directory's path.
+///
+/// # Panics
+///
+/// Panics if the directory has not been set.
+#[allow(clippy::expect_used)]
+pub fn directory() -> &'static Path {
+    DIRECTORY.get().map(|p| &**p).expect("the storage directory has not been set")
+}
+
+/// Initializes the preferred storage directory.
+///
+/// # Panics
+///
+/// Panics if the directory has already been set.
+#[allow(clippy::expect_used)]
+pub fn install(dir: impl AsRef<Path>) {
+    DIRECTORY.set(dir.as_ref().into()).expect("the storage directory has already been set");
+}
 
 #[cfg(feature = "compress")] pub use crate::compress::*;
 #[cfg(feature = "compress")] mod compress;
@@ -88,7 +112,9 @@ where
 {
     /// Creates a new [`Key<T, F>`].
     pub fn new(path: impl AsRef<Path>, format: F) -> Self {
-        Self { path: Box::from(path.as_ref()), format, _marker: PhantomData }
+        let path = directory().join(path).into_boxed_path();
+
+        Self { path, format, _marker: PhantomData }
     }
 
     /// Creates a new [`Key<T, F>`] with a defaulted format.

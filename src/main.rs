@@ -32,6 +32,10 @@ pub fn main() -> Result {
 
     info!("initialized logging thread")?;
 
+    install_storage(arguments);
+
+    info!("initialized storage directory")?;
+
     install_localizer(arguments);
 
     info!("initialized localizer instance")?;
@@ -94,9 +98,17 @@ fn install_logger(arguments: &Arguments) -> std::io::Result<doop_logger::LogThre
     doop_logger::install(config, dir)
 }
 
+/// Installs the storage directory.
+fn install_storage(arguments: &Arguments) {
+    let dir = arguments.data_dir.clone().unwrap_or_else(|| PathBuf::from("res").into());
+
+    doop_storage::install(dir);
+}
+
 /// Installs the localizer instance.
 fn install_localizer(arguments: &Arguments) {
-    let dir = arguments.l18n_map_dir.clone().unwrap_or_else(|| PathBuf::from("res/lang").into());
+    let dir = arguments.data_dir.clone().unwrap_or_else(|| PathBuf::from("res").into());
+    let dir = arguments.l18n_map_dir.clone().unwrap_or_else(|| dir.join("lang").into());
     let prefer = arguments.l18n_prefer.unwrap_or(doop_localizer::Locale::EnglishUS);
 
     doop_localizer::install(prefer, dir);

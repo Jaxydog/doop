@@ -79,6 +79,10 @@ pub struct Arguments {
     /// The localizer's map input directory.
     #[arg(long = "localization-dir")]
     pub l18n_map_dir: Option<Box<Path>>,
+
+    /// The preferred data storage directory.
+    #[arg(short = 'o', long = "data-dir")]
+    pub data_dir: Option<Box<Path>>,
 }
 
 /// Represents a single message's location.
