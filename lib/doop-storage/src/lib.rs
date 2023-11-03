@@ -223,6 +223,15 @@ where
     pub fn write(&self) -> Result<(), Error<F>> {
         self.key.write(&self.value)
     }
+
+    /// Removes the resource associated with this [`Value<T, F>`].
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the resource could not be removed.
+    pub fn remove(&self) -> Result<(), Error<F>> {
+        self.key.remove()
+    }
 }
 
 /// Provides a data storage key builder for the implementing type.
