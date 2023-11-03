@@ -145,6 +145,7 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
     /// # Errors
     ///
     /// This function will return an error if the interaction could not be responded to.
+    #[inline]
     pub async fn success(self, locale: Locale, key: impl Display + Send, has_desc: bool) -> Result {
         self.complete(locale, "success", key, SUCCESS, has_desc).await
     }
@@ -154,6 +155,7 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
     /// # Errors
     ///
     /// This function will return an error if the interaction could not be responded to.
+    #[inline]
     pub async fn notify(self, locale: Locale, key: impl Display + Send, has_desc: bool) -> Result {
         self.complete(locale, "notify", key, BRANDING, has_desc).await
     }
@@ -163,6 +165,7 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
     /// # Errors
     ///
     /// This function will return an error if the interaction could not be responded to.
+    #[inline]
     pub async fn failure(self, locale: Locale, key: impl Display + Send, has_desc: bool) -> Result {
         self.complete(locale, "failure", key, FAILURE, has_desc).await
     }
