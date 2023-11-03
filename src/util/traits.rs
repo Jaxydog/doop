@@ -4,13 +4,15 @@ use time::ext::NumericalDuration;
 use time::macros::datetime;
 use time::OffsetDateTime;
 use twilight_cache_inmemory::model::{CachedGuild, CachedMember};
+use twilight_model::channel::message::ReactionType;
 use twilight_model::guild::{Guild, Member, PartialMember};
 use twilight_model::id::marker::GuildMarker;
 use twilight_model::id::Id;
 use twilight_model::user::{CurrentUser, CurrentUserGuild, User};
+use twilight_util::builder::embed::image_source::ImageSourceUrlError;
 use twilight_util::builder::embed::ImageSource;
 
-use crate::util::CDN_URL;
+use crate::util::{CDN_URL, TWEMOJI_URL};
 
 /// Provides a method that returns the implementing type's creation date.
 pub trait Created {
@@ -106,6 +108,25 @@ impl IntoImageSource for &Guild {
         let url = format!("{CDN_URL}/icons/{}/{hash}.{ext}", self.id);
 
         Ok(ImageSource::url(url)?)
+    }
+}
+
+impl IntoImageSource for &ReactionType {
+    type Error = ImageSourceUrlError;
+
+    fn into_image_source(self) -> Result<ImageSource, Self::Error> {
+        ImageSource::url(match self {
+            ReactionType::Custom { animated, id, .. } => {
+                let ext = if *animated { "gif" } else { "png" };
+
+                format!("{CDN_URL}/emojis/{id}.{ext}")
+            }
+            ReactionType::Unicode { name } => {
+                let id = name.chars().map(|c| format!("{:x}", c as u32)).collect::<Vec<_>>();
+
+                format!("{TWEMOJI_URL}/72x72/{}.png", id.join("-"))
+            }
+        })
     }
 }
 
