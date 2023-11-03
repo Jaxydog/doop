@@ -123,18 +123,28 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
             embed = embed.description(description);
         }
 
-        if self.defer_state.is_some() {
-            crate::followup!(as self => {
-                let embeds = &[embed.build()];
-            })
-            .await?;
-        } else {
-            crate::respond!(as self => {
-                let kind = ChannelMessageWithSource;
-                let embeds = [embed.build()];
-                let flags = EPHEMERAL;
-            })
-            .await?;
+        match self.defer_state {
+            Some(false) => {
+                crate::followup!(as self => {
+                    let embeds = &[embed.build()];
+                })
+                .await?;
+            }
+            Some(true) => {
+                crate::followup!(as self => {
+                    let embeds = &[embed.build()];
+                    let flags = EPHEMERAL;
+                })
+                .await?;
+            }
+            None => {
+                crate::respond!(as self => {
+                    let kind = ChannelMessageWithSource;
+                    let embeds = [embed.build()];
+                    let flags = EPHEMERAL;
+                })
+                .await?;
+            }
         }
 
         Ok(())
