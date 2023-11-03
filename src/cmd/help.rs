@@ -95,10 +95,10 @@ fn stringify(entry: CommandEntry, locale: Locale, command: &Command) -> String {
     if options.iter().any(|o| o.options.is_some()) {
         flags.push(localize!(try in locale, "text.{}.has_subcommands", entry.name));
     }
-    if dm_permission.unwrap_or(true) {
+    if dm_permission.unwrap_or_default() {
         flags.push(localize!(try in locale, "text.{}.allows_dms", entry.name));
     }
-    if nsfw.unwrap_or(false) {
+    if nsfw.unwrap_or_default() {
         flags.push(localize!(try in locale, "text.{}.is_nsfw", entry.name));
     }
 
