@@ -118,7 +118,7 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
         let mut embed = EmbedBuilder::new().color(color).title(title);
 
         if has_desc {
-            let description = localize!(try in locale, "success.{key}.description");
+            let description = localize!(try in locale, "{group}.{key}.description");
 
             embed = embed.description(description);
         }
