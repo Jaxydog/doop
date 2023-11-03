@@ -239,8 +239,20 @@ async fn on_complete(api: ApiRef<'_>, event: &Interaction) -> Result {
     let Some(executor) = command.complete() else {
         bail!("missing bot command handler for '{}'", data.name);
     };
-    let Some(focus) = data.options.iter().find_map(|o| match o.value {
-        CommandOptionValue::Focused(ref n, k) => Some((&(**n), k)),
+
+    let Some(focus) = data.options.iter().find_map(|o| match &o.value {
+        CommandOptionValue::Focused(n, k) => Some((&(*o.name), &(**n), *k)),
+        CommandOptionValue::SubCommand(c) => c.iter().find_map(|o| match &o.value {
+            CommandOptionValue::Focused(n, k) => Some((&(*o.name), &(**n), *k)),
+            _ => None,
+        }),
+        CommandOptionValue::SubCommandGroup(g) => g.iter().find_map(|c| match &c.value {
+            CommandOptionValue::SubCommand(c) => c.iter().find_map(|o| match &o.value {
+                CommandOptionValue::Focused(n, k) => Some((&(*o.name), &(**n), *k)),
+                _ => None,
+            }),
+            _ => None,
+        }),
         _ => None,
     }) else {
         bail!("an option is not currently focused");
@@ -326,6 +338,12 @@ async fn on_error_notify_user(
     event: &Interaction,
     error: &anyhow::Error,
 ) -> Result {
+    use InteractionType::{ApplicationCommand, MessageComponent, ModalSubmit};
+
+    if !matches!(event.kind, ApplicationCommand | MessageComponent | ModalSubmit) {
+        return Ok(());
+    }
+
     let locale = event.author().preferred_locale();
     let index = thread_rng().gen_range(0 .. ERROR_TITLES);
     let title = localize!(try in locale, "text.error.title_{index}");

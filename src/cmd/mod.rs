@@ -48,7 +48,7 @@ macro_rules! init_registry {
     };
 }
 
-init_registry![self::help::entry, self::ping::entry];
+init_registry![self::help::entry, self::ping::entry, self::role::entry];
 
 /// A builder function.
 pub type BuildFn = fn(&CommandEntry, Option<Id<GuildMarker>>) -> Result<Option<Command>>;
@@ -216,7 +216,7 @@ pub trait OnComplete {
     async fn execute<'api: 'evt, 'evt>(
         &self,
         ctx: CommandCtx<'api, 'evt>,
-        focus: (&'evt str, CommandOptionType),
+        focus: (&'evt str, &'evt str, CommandOptionType),
     ) -> Result<Vec<CommandOptionChoice>>;
 }
 
@@ -351,7 +351,7 @@ macro_rules! register_command {
                         async fn execute<'api: 'evt, 'evt>(
                             &self,
                             ctx: $crate::bot::interaction::CommandCtx<'api, 'evt>,
-                            focus: (&'evt str, CommandOptionType)
+                            focus: (&'evt str, &'evt str, CommandOptionType)
                         ) -> $crate::util::Result<::std::vec::Vec<::twilight_model::application::command::CommandOptionChoice>> {
                             $complete(self, ctx, focus).await
                         }
