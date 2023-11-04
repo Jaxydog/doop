@@ -16,6 +16,8 @@ use twilight_model::id::Id;
 use crate::bot::interaction::{CommandCtx, ComponentCtx, ModalCtx};
 use crate::util::{DataId, Result};
 
+/// The embed command.
+pub mod embed;
 /// The help command.
 pub mod help;
 /// The ping command.
@@ -48,7 +50,7 @@ macro_rules! init_registry {
     };
 }
 
-init_registry![self::help::entry, self::ping::entry, self::role::entry];
+init_registry![self::embed::entry, self::help::entry, self::ping::entry, self::role::entry];
 
 /// A builder function.
 pub type BuildFn = fn(&CommandEntry, Option<Id<GuildMarker>>) -> Result<Option<Command>>;
