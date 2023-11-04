@@ -419,7 +419,7 @@ async fn execute_component<'api: 'evt, 'evt>(
     mut ctx: ComponentCtx<'api, 'evt>,
     id: DataId,
 ) -> Result {
-    ctx.defer_update(true).await?;
+    ctx.defer(true).await?;
 
     let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
