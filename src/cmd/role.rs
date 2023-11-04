@@ -66,7 +66,7 @@ crate::register_command! {
 
 /// A role selector.
 #[derive(Clone, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Selector {
+struct Selector {
     /// The role identifier.
     pub id: Id<RoleMarker>,
     /// The selector's icon.
@@ -101,7 +101,7 @@ impl Selector {
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize, Storage)]
 #[format(Compress<MsgPack, 5>)]
 #[location("role/{}/{}", Id<GuildMarker>, Id<UserMarker>)]
-pub struct Selectors {
+struct Selectors {
     inner: Vec<Selector>,
 }
 
