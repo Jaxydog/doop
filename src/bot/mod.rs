@@ -157,7 +157,7 @@ async fn handle_event_task(api: Api, event: Event) -> Result {
 ///
 /// This function will return an error if the client's commands could not be updated.
 async fn on_ready(api: Api, event: Ready) -> Result {
-    info!("api connection established")?;
+    info!("established api connection")?;
 
     let client = api.http.interaction(event.application.id);
     let registry = crate::cmd::registry();
@@ -185,7 +185,7 @@ async fn on_ready(api: Api, event: Ready) -> Result {
 ///
 /// This function will return an error if the event could not be handled.
 async fn on_interaction(api: ApiRef<'_>, event: InteractionCreate) -> Result {
-    info!("interaction received: {}", event.marker())?;
+    info!("received interaction: {}", event.marker())?;
 
     let result: Result = match event.kind {
         InteractionType::ApplicationCommand => self::on_command(api, &event).await,
@@ -196,10 +196,10 @@ async fn on_interaction(api: ApiRef<'_>, event: InteractionCreate) -> Result {
     };
 
     if let Err(ref error) = result {
-        warn!("interaction failed: {} - {error}", event.marker())?;
+        warn!("failed interaction: {} - {error}", event.marker())?;
         self::on_error(api, &event, error).await?;
     } else {
-        info!("interaction succeeded: {}", event.marker())?;
+        info!("succeeded interaction: {}", event.marker())?;
     }
 
     result

@@ -77,7 +77,7 @@ pub async fn main_async() -> Result {
         Either::Right(_) => info!("received termination signal")?,
     }
 
-    Ok(info!("stopped application process")?)
+    Ok(info!("stopped client process")?)
 }
 
 /// Installs the logger instance.

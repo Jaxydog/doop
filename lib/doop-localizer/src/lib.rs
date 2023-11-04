@@ -63,8 +63,7 @@ impl Localizer {
             match serde_json::from_slice(&bytes) {
                 Ok(value) => Some((*locale, value)),
                 Err(error) => {
-                    warn!("unable to load localization map '{}' - {error}", locale.key()).ok();
-
+                    warn!("failed to load localization map '{}' - {error}", locale.key()).ok();
                     None
                 }
             }
