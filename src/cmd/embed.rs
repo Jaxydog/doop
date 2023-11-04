@@ -215,12 +215,12 @@ async fn execute_complete<'api: 'evt, 'evt>(
     };
 
     let locale = ctx.event.author().preferred_locale();
-    let value = value.trim_start_matches('#').to_lowercase();
+    let strip = value.trim_start_matches('#').to_lowercase();
 
     let options = COLORS
         .iter()
         .filter(|(name, color)| {
-            value.is_empty() || name.contains(&value) || color.to_lowercase().contains(&value)
+            strip.is_empty() || name.contains(&strip) || color.to_lowercase().contains(&strip)
         })
         .map(|(name, color)| CommandOptionChoice {
             name: localize!(try in locale, "text.{}.color_{name}", acp.entry().name).into_owned(),
@@ -233,10 +233,12 @@ async fn execute_complete<'api: 'evt, 'evt>(
         return Ok(options);
     }
 
-    let options = i64::from_str_radix(&value, 16).map(|color| CommandOptionChoice {
-        name: format!("#{color:0<6X}"),
-        name_localizations: None,
-        value: CommandOptionChoiceValue::String(format!("#{color:0<6X}")),
+    let options = value.strip_prefix('#').and_then(|s| {
+        i64::from_str_radix(s, 16).ok().map(|color| CommandOptionChoice {
+            name: format!("#{color:0<6X}"),
+            name_localizations: None,
+            value: CommandOptionChoiceValue::String(format!("#{color:0<6X}")),
+        })
     });
 
     Ok(options.into_iter().collect())
