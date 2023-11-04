@@ -214,7 +214,7 @@ macro_rules! respond {
         $(let content = $content:expr;)?
         $(let custom_id = $custom_id:expr;)?
         $(let embeds = $embeds:expr;)?
-        $(let flags = $($flag:ident)|*;)?
+        $(let flags = $($flag:ident)|+;)?
         $(let mentions = { $($mentions:tt)+ })?
         $(let title = $title:expr;)?
         $(let tts = $tts:literal;)?
@@ -229,7 +229,7 @@ macro_rules! respond {
                     $(.content($content))?
                     $(.custom_id($custom_id))?
                     $(.embeds($embeds))?
-                    $(.flags(::twilight_model::channel::message::MessageFlags::empty()$(.union(::twilight_model::channel::message::MessageFlags::$flag))*))?
+                    $(.flags(::twilight_model::channel::message::MessageFlags::empty()$(.union(::twilight_model::channel::message::MessageFlags::$flag))+))?
                     $(.allowed_mentions(::twilight_model::channel::message::AllowedMentions { $($mentions)+ }))?
                     $(.title($title))?
                     $(.tts($tts))?
@@ -269,7 +269,7 @@ macro_rules! followup {
         $(let components = $components:expr;)?
         $(let content = $content:expr;)?
         $(let embeds = $embeds:expr;)?
-        $(let flags = $($flag:ident)|*;)?
+        $(let flags = $($flag:ident)|+;)?
         $(let mentions = { $($mentions:tt)+ })?
         $(let tts = $tts:literal;)?
     })) => {
@@ -278,7 +278,7 @@ macro_rules! followup {
             $(.components($components)?)?
             $(.content($content)?)?
             $(.embeds($embeds)?)?
-            $(.flags(::twilight_model::channel::message::MessageFlags::empty()$(.union(::twilight_model::channel::message::MessageFlags::$flag))*))?
+            $(.flags(::twilight_model::channel::message::MessageFlags::empty()$(.union(::twilight_model::channel::message::MessageFlags::$flag))+))?
             $(.allowed_mentions(::twilight_model::channel::message::AllowedMentions { $($mentions)+ }))?
             $(.tts($tts))?
     };
