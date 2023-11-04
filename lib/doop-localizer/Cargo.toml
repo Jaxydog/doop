@@ -15,7 +15,7 @@
 
 [dependencies]
     clap = { version = "4.4", features = ["derive"] }
-doop-threads = { version = "0.1.0", path = "../doop-threads" }
+    doop-logger = { version = "*", path = "../doop-logger" }
     serde = { version = "1.0", features = ["derive"] }
     serde_json = "1.0"
     thiserror = "1.0"

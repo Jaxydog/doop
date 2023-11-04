@@ -8,6 +8,8 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::sync::OnceLock;
 
+use doop_logger::{info, warn};
+
 pub use crate::locale::*;
 
 mod locale;
@@ -32,7 +34,12 @@ pub fn localizer() -> &'static Localizer {
 /// Panics if the localizer has already been initialized.
 #[allow(clippy::expect_used)]
 pub fn install(prefer: Locale, dir: impl AsRef<Path>) {
-    LOCALIZER.set(Localizer::new(prefer, dir)).expect("the localizer has already been initialized");
+    let localizer = Localizer::new(prefer, dir);
+    let locales = localizer.content.keys().map(|l| l.key()).collect::<Vec<_>>().join(", ");
+
+    info!("loaded localizations: [{locales}]",).ok();
+
+    LOCALIZER.set(localizer).expect("the localizer has already been initialized");
 }
 
 /// Provides an interface for content localization.
@@ -52,9 +59,15 @@ impl Localizer {
         let content = Locale::LIST.iter().filter_map(|locale| {
             let path = dir.join(locale.key()).with_extension("json");
             let bytes = std::fs::read(path).ok()?;
-            let value = serde_json::from_slice(&bytes).ok()?;
 
-            Some((*locale, value))
+            match serde_json::from_slice(&bytes) {
+                Ok(value) => Some((*locale, value)),
+                Err(error) => {
+                    warn!("unable to load localization map '{}' - {error}", locale.key()).ok();
+
+                    None
+                }
+            }
         });
 
         Self { prefer, content: content.collect() }
