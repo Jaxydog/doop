@@ -210,7 +210,7 @@ async fn create<'api: 'evt, 'evt>(
     role_id: Id<RoleMarker>,
     icon: &'evt str,
 ) -> Result {
-    let Some(guild_id) = ctx.data.guild_id else {
+    let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
     };
     let Some(user) = ctx.event.author() else {
@@ -252,7 +252,7 @@ async fn remove<'api: 'evt, 'evt>(
     ctx: CommandCtx<'api, 'evt>,
     role_id: Id<RoleMarker>,
 ) -> Result {
-    let Some(guild_id) = ctx.data.guild_id else {
+    let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
     };
     let Some(user) = ctx.event.author() else {
@@ -278,7 +278,7 @@ async fn view<'api: 'evt, 'evt>(
     cmd: &(dyn OnCommand + Send + Sync),
     ctx: CommandCtx<'api, 'evt>,
 ) -> Result {
-    let Some(guild_id) = ctx.data.guild_id else {
+    let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
     };
     let Some(user) = ctx.event.author() else {
@@ -309,7 +309,7 @@ async fn send<'api: 'evt, 'evt>(
     ctx: CommandCtx<'api, 'evt>,
     text: &'evt str,
 ) -> Result {
-    let Some(guild_id) = ctx.data.guild_id else {
+    let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
     };
     let Some(channel_id) = ctx.event.channel.as_ref().map(|c| c.id) else {
@@ -359,7 +359,7 @@ fn fill_contained_role<'api: 'evt, 'evt>(
     ctx: CommandCtx<'api, 'evt>,
     value: &'evt str,
 ) -> Result<Vec<CommandOptionChoice>> {
-    let Some(guild_id) = ctx.data.guild_id else {
+    let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
     };
     let Some(user) = ctx.event.author() else {
@@ -383,7 +383,7 @@ async fn fill_missing_role<'api: 'evt, 'evt>(
     ctx: CommandCtx<'api, 'evt>,
     value: &'evt str,
 ) -> Result<Vec<CommandOptionChoice>> {
-    let Some(guild_id) = ctx.data.guild_id else {
+    let Some(guild_id) = ctx.event.guild_id else {
         bail!("command must be used within a guild");
     };
     let Some(user) = ctx.event.author() else {
