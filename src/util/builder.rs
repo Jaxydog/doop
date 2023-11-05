@@ -1,4 +1,5 @@
 use anyhow::bail;
+use serde::{Deserialize, Serialize};
 use twilight_model::channel::message::component::{
     ActionRow, Button, ButtonStyle, SelectMenu, SelectMenuOption, TextInput, TextInputStyle,
 };
@@ -34,6 +35,7 @@ impl ActionRowBuilder {
     }
 
     /// Builds the action row.
+    #[inline]
     #[must_use]
     pub fn build(self) -> ActionRow {
         self.0
@@ -117,6 +119,7 @@ impl ButtonBuilder {
     }
 
     /// Builds the button.
+    #[inline]
     #[must_use]
     pub fn build(self) -> Button {
         self.0
@@ -134,6 +137,59 @@ impl From<ButtonBuilder> for Component {
     #[inline]
     fn from(value: ButtonBuilder) -> Self {
         Self::Button(value.build())
+    }
+}
+
+/// Text input modal.
+#[derive(Clone, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Modal {
+    /// The modal's custom identifier.
+    pub custom_id: Option<String>,
+    /// The modal's title.
+    pub title: String,
+    /// The modal's component list.
+    pub components: Vec<Component>,
+}
+
+/// Creates a modal.
+#[must_use = "must be constructed"]
+#[repr(transparent)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ModalBuilder(Modal);
+
+impl ModalBuilder {
+    /// Creates a new [`ModalBuilder`].
+    pub fn new(title: impl Into<String>) -> Self {
+        Self(Modal { custom_id: None, title: title.into(), components: vec![] })
+    }
+
+    /// Appends an element to the action row.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the modal contains five or more components.
+    pub fn push(&mut self, component: impl Into<Component>) -> Result {
+        if self.0.components.len() < 5 {
+            self.0.components.push(component.into());
+
+            Ok(())
+        } else {
+            bail!("a maximum of 5 components is supported");
+        }
+    }
+
+    /// Builds the modal.
+    #[inline]
+    #[must_use]
+    pub fn build(self) -> Modal {
+        self.0
+    }
+}
+
+impl From<ModalBuilder> for Modal {
+    #[inline]
+    fn from(value: ModalBuilder) -> Self {
+        value.build()
     }
 }
 
@@ -192,6 +248,7 @@ impl SelectMenuBuilder {
     }
 
     /// Builds the select menu.
+    #[inline]
     #[must_use]
     pub fn build(self) -> SelectMenu {
         self.0
@@ -252,6 +309,7 @@ impl SelectMenuOptionBuilder {
     }
 
     /// Builds the select menu option.
+    #[inline]
     #[must_use]
     pub fn build(self) -> SelectMenuOption {
         self.0
@@ -327,6 +385,7 @@ impl TextInputBuilder {
     }
 
     /// Builds the text input.
+    #[inline]
     #[must_use]
     pub fn build(self) -> TextInput {
         self.0
