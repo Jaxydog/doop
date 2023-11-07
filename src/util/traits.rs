@@ -4,6 +4,7 @@ use time::ext::NumericalDuration;
 use time::macros::datetime;
 use time::OffsetDateTime;
 use twilight_cache_inmemory::model::{CachedGuild, CachedMember};
+use twilight_model::application::interaction::Interaction;
 use twilight_model::channel::message::ReactionType;
 use twilight_model::guild::{Guild, Member, PartialMember};
 use twilight_model::id::marker::GuildMarker;
@@ -252,6 +253,16 @@ impl PreferLocale for CurrentUser {
 impl PreferLocale for Guild {
     fn preferred_locale(&self) -> Locale {
         Locale::get(&self.preferred_locale).unwrap_or_else(|| *localizer().preferred_locale())
+    }
+}
+
+impl PreferLocale for Interaction {
+    #[inline]
+    fn preferred_locale(&self) -> Locale {
+        self.locale
+            .as_deref()
+            .and_then(Locale::get)
+            .unwrap_or_else(|| *localizer().preferred_locale())
     }
 }
 
