@@ -144,7 +144,7 @@ impl From<ButtonBuilder> for Component {
 #[derive(Clone, Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Modal {
     /// The modal's custom identifier.
-    pub custom_id: Option<String>,
+    pub custom_id: String,
     /// The modal's title.
     pub title: String,
     /// The modal's component list.
@@ -159,8 +159,8 @@ pub struct ModalBuilder(Modal);
 
 impl ModalBuilder {
     /// Creates a new [`ModalBuilder`].
-    pub fn new(title: impl Into<String>) -> Self {
-        Self(Modal { custom_id: None, title: title.into(), components: vec![] })
+    pub fn new(custom_id: impl Into<String>, title: impl Into<String>) -> Self {
+        Self(Modal { custom_id: custom_id.into(), title: title.into(), components: vec![] })
     }
 
     /// Appends an element to the action row.
@@ -168,14 +168,16 @@ impl ModalBuilder {
     /// # Errors
     ///
     /// This function will return an error if the modal contains five or more components.
-    pub fn push(&mut self, component: impl Into<Component>) -> Result {
-        if self.0.components.len() < 5 {
-            self.0.components.push(component.into());
-
-            Ok(())
-        } else {
+    pub fn push(&mut self, component: impl Into<TextInput>) -> Result {
+        if self.0.components.len() >= 5 {
             bail!("a maximum of 5 components is supported");
         }
+
+        let input = Component::TextInput(component.into());
+
+        self.0.components.push(ActionRow { components: vec![input] }.into());
+
+        Ok(())
     }
 
     /// Builds the modal.
