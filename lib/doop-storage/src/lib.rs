@@ -112,7 +112,7 @@ where
 {
     /// Creates a new [`Key<T, F>`].
     pub fn new(path: impl AsRef<Path>, format: F) -> Self {
-        let path = directory().join(path).into_boxed_path();
+        let path = directory().join(path).with_extension(format.extension()).into_boxed_path();
 
         Self { path, format, _marker: PhantomData }
     }
