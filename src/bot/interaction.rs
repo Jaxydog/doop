@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use anyhow::bail;
 use doop_localizer::{localize, Locale};
 use twilight_http::client::InteractionClient;
 use twilight_model::application::interaction::application_command::CommandData;
@@ -9,6 +10,7 @@ use twilight_model::application::interaction::Interaction;
 use twilight_util::builder::embed::EmbedBuilder;
 
 use crate::bot::client::ApiRef;
+use crate::util::builder::Modal;
 use crate::util::{Result, BRANDING, FAILURE, SUCCESS};
 
 /// A command interaction event context.
@@ -37,6 +39,18 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
     /// Creates a new interaction event [`Ctx<T>`].
     pub const fn new(api: ApiRef<'api>, event: &'evt Interaction, data: T) -> Self {
         Self { api, event, data, defer_state: None }
+    }
+
+    /// Returns whether this [`Ctx<T>`] has been deferred.
+    #[inline]
+    pub const fn is_deferred(&self) -> bool {
+        self.defer_state.is_some()
+    }
+
+    /// Returns whether this [`Ctx<T>`] has been deferred as possibly ephemeral.
+    #[inline]
+    pub fn is_deferred_as(&self, ephemeral: bool) -> bool {
+        self.defer_state.is_some_and(|e| e == ephemeral)
     }
 
     /// Returns the interaction client of this interaction event [`Ctx<T>`].
@@ -97,6 +111,27 @@ impl<'api: 'evt, 'evt, T: Send> Ctx<'api, 'evt, T> {
         }
 
         self.defer_state = Some(ephemeral);
+
+        Ok(())
+    }
+
+    /// Responds to the interaction with a modal.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if responding fails or the interaction was deferred.
+    pub async fn modal(self, Modal { custom_id, title, components }: Modal) -> Result {
+        if self.defer_state.is_some() {
+            bail!("the interaction must not be deferred");
+        }
+
+        crate::respond!(as self => {
+            let kind = Modal;
+            let components = components;
+            let custom_id = custom_id;
+            let title = title;
+        })
+        .await?;
 
         Ok(())
     }
