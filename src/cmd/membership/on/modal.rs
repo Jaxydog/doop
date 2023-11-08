@@ -170,7 +170,7 @@ pub async fn update<'api: 'evt, 'evt>(
 
     if status == StatusKind::Accepted && !member.roles.contains(&member_role_id) {
         member.roles.push(config.get().submission.member_role_id);
-    } else if member.roles.contains(&member_role_id) {
+    } else if status != StatusKind::Accepted && member.roles.contains(&member_role_id) {
         member.roles.retain(|id| id != &member_role_id);
     }
 
