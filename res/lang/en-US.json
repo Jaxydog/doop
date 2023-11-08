@@ -64,6 +64,18 @@
     "failure.embed.empty.title": "You must include a visible element!",
     "failure.embed.invalid.title": "The given embed is invalid!",
 
+    "command.lang.name": "lang",
+    "command.lang.description": "Provides access to the bot's localizer.",
+    "option.lang.reload.name": "reload",
+    "option.lang.reload.description": "Reloads the localizer.",
+    "option.lang.localize.name": "localize",
+    "option.lang.localize.description": "Localizes the given key.",
+    "option.lang.key.name": "key",
+    "option.lang.key.description": "The localization key.",
+    "option.lang.locale.name": "locale",
+    "option.lang.locale.description": "The target locale.",
+    "success.lang.reloaded.title": "Localizer reloaded!",
+
     "command.help.name": "help",
     "command.help.description": "Displays a list of the bot's commands.",
     "text.help.title": "Thank you for using Doop!",

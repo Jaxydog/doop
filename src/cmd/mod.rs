@@ -23,6 +23,8 @@ use crate::util::{DataId, Result};
 pub mod embed;
 /// The help command.
 pub mod help;
+/// The data command.
+pub mod lang;
 /// The membership command.
 pub mod membership;
 /// The ping command.
@@ -58,6 +60,7 @@ macro_rules! init_registry {
 init_registry![
     self::embed::entry,
     self::help::entry,
+    self::lang::entry,
     self::membership::entry,
     self::ping::entry,
     self::role::entry
