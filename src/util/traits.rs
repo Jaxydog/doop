@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use anyhow::bail;
 use doop_localizer::{localizer, Locale};
 use time::ext::NumericalDuration;
@@ -211,6 +213,25 @@ impl IntoImageSourceWith for &PartialMember {
         let url = format!("{CDN_URL}/guilds/{guild_id}/users/{}/avatars/{hash}.{ext}", user.id);
 
         Ok(ImageSource::url(url)?)
+    }
+}
+
+/// Provides localization aliases for the implementing type.
+pub trait Localized {
+    /// The arguments provided to the localization function.
+    type Arguments;
+
+    /// Localizes this value in the given locale.
+    ///
+    /// Alias for `localize!(try in locale, {fmt_args})`.
+    fn localize_in(&self, locale: Locale, arguments: Self::Arguments) -> Cow<str>;
+
+    /// Localizes this value in the default locale.
+    ///
+    /// Alias for `localize!({fmt_args})`.
+    #[inline]
+    fn localize(&self, arguments: Self::Arguments) -> Cow<str> {
+        self.localize_in(*doop_localizer::localizer().preferred_locale(), arguments)
     }
 }
 
