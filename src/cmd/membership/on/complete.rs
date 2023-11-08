@@ -57,7 +57,11 @@ pub fn configuration<'api: 'evt, 'evt>(
     .map(|s| CommandOptionChoice {
         name: localize!(try in locale, "text.{}.configuration.filled", entry.name).into_string(),
         name_localizations: None,
-        value: CommandOptionChoiceValue::String(s.to_string()),
+        value: CommandOptionChoiceValue::String(if matches!(name, "title" | "description") {
+            format!("%{name}%")
+        } else {
+            s.to_string()
+        }),
     })
     .collect())
 }

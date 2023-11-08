@@ -40,8 +40,12 @@ impl Config {
     /// # Errors
     ///
     /// This function will return an error if a required argument is missing.
-    pub fn new(id: Id<GuildMarker>, resolver: &CommandOptionResolver) -> Result<Self> {
-        let entrypoint = ConfigEntrypoint::try_from(resolver)?;
+    pub fn new(
+        id: Id<GuildMarker>,
+        resolver: &CommandOptionResolver,
+        previous: Option<&Self>,
+    ) -> Result<Self> {
+        let entrypoint = ConfigEntrypoint::try_from((resolver, previous))?;
         let submission = ConfigSubmission::try_from(resolver)?;
 
         Ok(Self { id, anchor: None, entrypoint, submission })
@@ -130,12 +134,24 @@ pub struct ConfigEntrypoint {
     pub open: bool,
 }
 
-impl TryFrom<&CommandOptionResolver<'_>> for ConfigEntrypoint {
+impl TryFrom<(&CommandOptionResolver<'_>, Option<&Config>)> for ConfigEntrypoint {
     type Error = anyhow::Error;
 
-    fn try_from(resolver: &CommandOptionResolver<'_>) -> std::result::Result<Self, Self::Error> {
-        let title = Box::from(resolver.get_str("title")?);
-        let description = resolver.get_str("description")?.collapse().into_boxed_str();
+    #[allow(unsafe_code)]
+    fn try_from(
+        (resolver, previous): (&CommandOptionResolver<'_>, Option<&Config>),
+    ) -> Result<Self, Self::Error> {
+        let mut title = Box::from(resolver.get_str("title")?);
+        let mut description = resolver.get_str("description")?.collapse().into_boxed_str();
+
+        if &(*title) == "%title%" && previous.is_some() {
+            // Safety: we just checked that this is `Some`.
+            title = unsafe { previous.unwrap_unchecked() }.entrypoint.title.clone();
+        }
+        if &(*description) == "%description%" {
+            // Safety: we just checked that this is `Some`.
+            description = unsafe { previous.unwrap_unchecked() }.entrypoint.description.clone();
+        }
 
         Ok(Self { title, description, open: true })
     }

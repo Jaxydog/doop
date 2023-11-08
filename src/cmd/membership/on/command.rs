@@ -2,7 +2,7 @@ use std::num::NonZeroU64;
 
 use anyhow::bail;
 use doop_localizer::localize;
-use doop_storage::Stored;
+use doop_storage::{Stored, Value};
 use time::OffsetDateTime;
 use twilight_model::channel::message::embed::EmbedAuthor;
 use twilight_model::id::Id;
@@ -30,7 +30,8 @@ pub async fn configure<'api: 'evt, 'evt>(
 
     let locale = ctx.event.preferred_locale();
     let key = Config::stored((entry.name, guild_id));
-    let mut config = Config::new(guild_id, &resolver)?;
+    let previous = key.read().ok().map(Value::get_owned);
+    let mut config = Config::new(guild_id, &resolver, previous.as_ref())?;
     let (embed, components) = config.build_entrypoint(entry, ctx.api).await?;
 
     if let Some(mut anchor) = key.read().ok().and_then(|v| v.get_owned().anchor) {
