@@ -14,7 +14,7 @@ use crate::bot::client::ApiRef;
 use crate::cmd::membership::submission::Submission;
 use crate::cmd::{CommandEntry, CommandOptionResolver};
 use crate::util::builder::{ButtonBuilder, Modal, ModalBuilder, TextInputBuilder};
-use crate::util::extension::{EmbedAuthorExtension, ReactionTypeExtension};
+use crate::util::extension::{EmbedAuthorExtension, ReactionTypeExtension, StrExtension};
 use crate::util::traits::{IntoImageSource, PreferLocale};
 use crate::util::{Anchor, DataId, Result, BRANDING};
 
@@ -135,7 +135,7 @@ impl TryFrom<&CommandOptionResolver<'_>> for ConfigEntrypoint {
 
     fn try_from(resolver: &CommandOptionResolver<'_>) -> std::result::Result<Self, Self::Error> {
         let title = Box::from(resolver.get_str("title")?);
-        let description = Box::from(resolver.get_str("description")?);
+        let description = resolver.get_str("description")?.collapse().into_boxed_str();
 
         Ok(Self { title, description, open: true })
     }
