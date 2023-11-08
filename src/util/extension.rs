@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use anyhow::{anyhow, bail};
 use twilight_cache_inmemory::model::CachedGuild;
-use twilight_model::application::interaction::Interaction;
+use twilight_model::application::interaction::{Interaction, InteractionType};
 use twilight_model::channel::message::embed::EmbedAuthor;
 use twilight_model::channel::message::ReactionType;
 use twilight_model::gateway::payload::incoming::InteractionCreate;
@@ -102,9 +102,18 @@ pub trait InteractionExtension {
 
 impl InteractionExtension for Interaction {
     fn marker(&self) -> String {
+        let kind = match self.kind {
+            InteractionType::Ping => "ping",
+            InteractionType::ApplicationCommand => "command",
+            InteractionType::MessageComponent => "component",
+            InteractionType::ApplicationCommandAutocomplete => "complete",
+            InteractionType::ModalSubmit => "modal",
+            _ => "unknown",
+        };
+
         self.author_id().map_or_else(
-            || format!("<{:?} #{}>", self.kind, self.id),
-            |id| format!("<{:?} #{} @{id}>", self.kind, self.id),
+            || format!("<{kind} #{}>", self.id),
+            |id| format!("<{kind} #{} @{id}>", self.id),
         )
     }
 }
