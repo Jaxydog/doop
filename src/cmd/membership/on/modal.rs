@@ -53,10 +53,9 @@ pub async fn application<'api: 'evt, 'evt>(
     let mut answers = Vec::with_capacity(config.get().submission.questions.len());
 
     for (index, question) in config.get().submission.questions.iter().enumerate() {
-        let answer = resolver.get(&index.to_string()).map_or_else(
-            |_| localize!(try in locale, "text.{}.no_answer", entry.name).into(),
-            Into::into,
-        );
+        let answer = resolver
+            .get(&index.to_string())
+            .map_or_else(|_| localize!(try in locale, "text.{}.no_answer", entry.name), Into::into);
 
         answers.push((question.clone(), answer));
     }
@@ -92,7 +91,7 @@ pub async fn application<'api: 'evt, 'evt>(
     let status = submission.status.kind.localization_key();
     let title = localize!(try in locale, "text.{}.update_{status}.title", entry.name);
     let mut description =
-        localize!(try in locale, "text.{}.update_{status}.description", entry.name).into_owned();
+        localize!(try in locale, "text.{}.update_{status}.description", entry.name).to_string();
 
     if let Ok(comment) = resolver.get("comment") {
         description.write_fmt(format_args!("\n\n> {comment}"))?;
@@ -180,7 +179,7 @@ pub async fn update<'api: 'evt, 'evt>(
     let key = status.localization_key();
     let title = localize!(try in locale, "text.{}.update_{key}.title", entry.name);
     let mut description =
-        localize!(try in locale, "text.{}.update_{key}.description", entry.name).into_owned();
+        localize!(try in locale, "text.{}.update_{key}.description", entry.name).to_string();
 
     if let Ok(comment) = resolver.get("comment") {
         description.write_fmt(format_args!("\n\n> {comment}"))?;

@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use anyhow::bail;
 use doop_localizer::{localizer, Locale};
 use time::ext::NumericalDuration;
@@ -224,13 +222,13 @@ pub trait Localized {
     /// Localizes this value in the given locale.
     ///
     /// Alias for `localize!(try in locale, {fmt_args})`.
-    fn localize_in(&self, locale: Locale, arguments: Self::Arguments) -> Cow<str>;
+    fn localize_in(&self, locale: Locale, arguments: Self::Arguments) -> Box<str>;
 
     /// Localizes this value in the default locale.
     ///
     /// Alias for `localize!({fmt_args})`.
     #[inline]
-    fn localize(&self, arguments: Self::Arguments) -> Cow<str> {
+    fn localize(&self, arguments: Self::Arguments) -> Box<str> {
         self.localize_in(*doop_localizer::localizer().preferred_locale(), arguments)
     }
 }

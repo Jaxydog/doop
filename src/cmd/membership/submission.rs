@@ -267,7 +267,7 @@ impl StatusKind {
 impl Localized for StatusKind {
     type Arguments = CommandEntry;
 
-    fn localize_in(&self, locale: Locale, entry: Self::Arguments) -> std::borrow::Cow<str> {
+    fn localize_in(&self, locale: Locale, entry: Self::Arguments) -> Box<str> {
         localize!(try in locale, "text.{}.status.{}", entry.name, self.localization_key())
     }
 }

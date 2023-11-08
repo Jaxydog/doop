@@ -27,7 +27,7 @@ async fn execute_command<'api: 'evt, 'evt>(
     ctx.defer(true).await?;
 
     let locale = ctx.event.author().preferred_locale();
-    let mut text = localize!(try in locale, "text.{}.header", cmd.entry().name).into_owned();
+    let mut text = localize!(try in locale, "text.{}.header", cmd.entry().name).to_string();
 
     if let Some(guild_id) = ctx.event.guild_id {
         let commands = ctx.client().guild_commands(guild_id).await?.model().await?;

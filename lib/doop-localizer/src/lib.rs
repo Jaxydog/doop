@@ -3,10 +3,9 @@
 #![warn(clippy::nursery, clippy::todo, clippy::pedantic, missing_docs)]
 #![allow(clippy::module_name_repetitions)]
 
-use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::Path;
-use std::sync::OnceLock;
+use std::sync::{OnceLock, RwLock, RwLockReadGuard};
 
 use doop_logger::{info, warn};
 
@@ -15,16 +14,16 @@ pub use crate::locale::*;
 mod locale;
 
 /// The global localizer.
-static LOCALIZER: OnceLock<Localizer> = OnceLock::new();
+static LOCALIZER: OnceLock<RwLock<Localizer>> = OnceLock::new();
 
 /// Returns a reference to the global localizer.
 ///
 /// # Panics
 ///
-/// Panics if the localizer has not been initialized.
-#[allow(clippy::expect_used)]
-pub fn localizer() -> &'static Localizer {
-    LOCALIZER.get().expect("the localizer has not been initialized")
+/// Panics if the localizer has not been initialized or is poisoned.
+#[allow(clippy::expect_used, clippy::unwrap_used)]
+pub fn localizer() -> RwLockReadGuard<'static, Localizer> {
+    LOCALIZER.get().expect("the localizer has not been initialized").read().unwrap()
 }
 
 /// Initializes the global localizer.
@@ -39,7 +38,22 @@ pub fn install(prefer: Locale, dir: impl AsRef<Path>) {
 
     info!("loaded localizations: [{locales}]",).ok();
 
-    LOCALIZER.set(localizer).expect("the localizer has already been initialized");
+    LOCALIZER.set(RwLock::new(localizer)).expect("the localizer has already been initialized");
+}
+
+/// Reloads the global localizer.
+///
+/// # Panics
+///
+/// Panics if the localizer has not been initialized or is poisoned.
+#[allow(clippy::expect_used, clippy::unwrap_used)]
+pub fn reload(prefer: Locale, dir: impl AsRef<Path>) {
+    let localizer = Localizer::new(prefer, dir);
+    let locales = localizer.content.keys().map(|l| l.key()).collect::<Vec<_>>().join(", ");
+
+    info!("loaded localizations: [{locales}]",).ok();
+
+    *LOCALIZER.get().expect("the localizer has not been initialized").write().unwrap() = localizer;
 }
 
 /// Provides an interface for content localization.
@@ -81,32 +95,32 @@ impl Localizer {
     /// Returns the text assigned to the provided key in the preferred locale.
     ///
     /// If the locale is missing or the key is unassigned, the key is returned.
-    pub fn localize_preferred(&self, key: impl AsRef<str>) -> Cow<str> {
+    pub fn localize_preferred(&self, key: impl AsRef<str>) -> Box<str> {
         let key = key.as_ref();
         let text = self.content.get(self.preferred_locale()).and_then(|map| map.get(key));
 
-        text.map_or_else(|| Cow::Owned(key.to_string()), |text| Cow::Borrowed(&(**text)))
+        text.map_or_else(|| key.into(), Clone::clone)
     }
 
     /// Returns the text assigned to the provided key in the given locale.
     ///
     /// If the locale is missing or the key is unassigned, the key is returned.
-    pub fn localize(&self, locale: Locale, key: impl AsRef<str>) -> Cow<str> {
+    pub fn localize(&self, locale: Locale, key: impl AsRef<str>) -> Box<str> {
         let key = key.as_ref();
         let text = self.content.get(&locale).and_then(|map| map.get(key));
 
-        text.map_or_else(|| Cow::Owned(key.to_string()), |text| Cow::Borrowed(&(**text)))
+        text.map_or_else(|| key.into(), Clone::clone)
     }
 
     /// Returns the text assigned to the provided key in the given locale or the preferred locale.
     ///
     /// If either locale is missing or the key is unassigned, the key is returned.
-    pub fn maybe_localize(&self, locale: Locale, key: impl AsRef<str>) -> Cow<str> {
+    pub fn maybe_localize(&self, locale: Locale, key: impl AsRef<str>) -> Box<str> {
         let key = key.as_ref();
         let map = self.content.get(&locale).or_else(|| self.content.get(self.preferred_locale()));
         let text = map.and_then(|map| map.get(key));
 
-        text.map_or_else(|| Cow::Owned(key.to_string()), |text| Cow::Borrowed(&(**text)))
+        text.map_or_else(|| key.into(), Clone::clone)
     }
 
     /// Returns a map containing all loaded locales that contain the given key and their assigned

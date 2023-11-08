@@ -223,7 +223,7 @@ async fn execute_complete<'api: 'evt, 'evt>(
             strip.is_empty() || name.contains(&strip) || color.to_lowercase().contains(&strip)
         })
         .map(|(name, color)| CommandOptionChoice {
-            name: localize!(try in locale, "text.{}.color.{name}", acp.entry().name).into_owned(),
+            name: localize!(try in locale, "text.{}.color.{name}", acp.entry().name).to_string(),
             name_localizations: Some(localize!(in *, "text.{}.color.{name}", acp.entry().name)),
             value: CommandOptionChoiceValue::String((*color).to_string()),
         })
