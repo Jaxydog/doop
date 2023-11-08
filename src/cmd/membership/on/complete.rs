@@ -1,6 +1,7 @@
 use std::num::NonZeroU64;
 
 use anyhow::bail;
+use doop_localizer::localize;
 use doop_storage::{Stored, Value};
 use twilight_model::application::command::{
     CommandOptionChoice, CommandOptionChoiceValue, CommandOptionType,
@@ -13,6 +14,7 @@ use crate::bot::interaction::CommandCtx;
 use crate::cmd::membership::configuration::Config;
 use crate::cmd::CommandEntry;
 use crate::util::extension::UserExtension;
+use crate::util::traits::PreferLocale;
 use crate::util::Result;
 
 pub fn configuration<'api: 'evt, 'evt>(
@@ -27,6 +29,7 @@ pub fn configuration<'api: 'evt, 'evt>(
         return Ok(vec![]);
     };
 
+    let locale = ctx.event.preferred_locale();
     let value = value.to_lowercase();
 
     Ok(match (name, kind) {
@@ -52,7 +55,7 @@ pub fn configuration<'api: 'evt, 'evt>(
     .into_iter()
     .filter(|s| s.to_lowercase().contains(&value))
     .map(|s| CommandOptionChoice {
-        name: s.to_string(),
+        name: localize!(try in locale, "text.{}.configuration.filled", entry.name).into_string(),
         name_localizations: None,
         value: CommandOptionChoiceValue::String(s.to_string()),
     })
