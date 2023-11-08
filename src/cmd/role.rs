@@ -376,7 +376,7 @@ fn fill_contained_role<'api: 'evt, 'evt>(
         }
     });
 
-    Ok(options.collect())
+    Ok(options.take(25).collect())
 }
 
 async fn fill_missing_role<'api: 'evt, 'evt>(
@@ -411,7 +411,7 @@ async fn fill_missing_role<'api: 'evt, 'evt>(
         })
     });
 
-    Ok(options.collect())
+    Ok(options.take(25).collect())
 }
 
 async fn execute_component<'api: 'evt, 'evt>(

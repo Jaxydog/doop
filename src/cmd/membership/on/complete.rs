@@ -120,5 +120,8 @@ pub async fn member<'api: 'evt, 'evt>(
         }
     }
 
+    options.dedup();
+    options.truncate(25);
+
     Ok(options)
 }
