@@ -1,3 +1,4 @@
+use std::fmt::Write;
 use std::num::NonZeroU64;
 
 use anyhow::bail;
@@ -369,8 +370,15 @@ fn fill_contained_role<'api: 'evt, 'evt>(
     let selectors = Selectors::stored((guild_id, user.id));
     let selectors = selectors.read_or_default();
     let options = selectors.get().inner.iter().filter(|&s| s.name.contains(value)).map(|s| {
+        let mut name = s.name.to_string();
+
+        if name.len() > 100 {
+            name.truncate(97);
+            name += "...";
+        }
+
         CommandOptionChoice {
-            name: s.name.to_string(),
+            name,
             name_localizations: None,
             value: CommandOptionChoiceValue::String(s.id.to_string()),
         }
@@ -402,6 +410,13 @@ async fn fill_missing_role<'api: 'evt, 'evt>(
             || role.id.cast() == guild_id
         {
             return None;
+        }
+
+        let mut name = role.name.to_string();
+
+        if name.len() > 100 {
+            name.truncate(97);
+            name += "...";
         }
 
         Some(CommandOptionChoice {
