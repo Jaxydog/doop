@@ -134,6 +134,8 @@
     "modal.membership.update.title_reject": "Reject Application",
     "modal.membership.update.title_revise": "Request Revision",
     "modal.membership.update.title_discard": "Discard Application",
+    "text.membership.archives.empty": "No archives yet!",
+    "text.membership.archives.title": "Application Archives",
     "text.membership.form.author": "Author",
     "text.membership.form.comment": "Comment",
     "text.membership.form.created": "Received",

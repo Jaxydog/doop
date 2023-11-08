@@ -88,10 +88,69 @@ pub async fn update<'api: 'evt, 'evt>(
 
 pub async fn entries<'api: 'evt, 'evt>(
     entry: &CommandEntry,
-    ctx: ComponentCtx<'api, 'evt>,
+    mut ctx: ComponentCtx<'api, 'evt>,
     id: DataId,
 ) -> Result {
-    bail!("not yet implemented");
+    ctx.defer(true).await?;
+
+    let Some(guild_id) = ctx.event.guild_id else {
+        bail!("component must be used within a guild");
+    };
+
+    let Some(user_id) = id.data(0) else {
+        bail!("missing user identifier");
+    };
+    let user_id = Id::from(user_id.parse::<NonZeroU64>()?);
+    let user = ctx.api.http.user(user_id).await?.model().await?;
+
+    let locale = ctx.event.preferred_locale();
+    let submission = Submission::stored((entry.name, guild_id, user_id));
+    let Ok(submission) = submission.read().map(Value::get_owned) else {
+        return ctx.failure(locale, format!("{}.no_entry", entry.name), false).await;
+    };
+
+    let mut text = String::new();
+
+    /// Appends a label to the `text` buffer.
+    macro_rules! label {
+        ($key:literal, $value:expr) => {
+            text.write_fmt(format_args!("> **{}:** {}\n", localize!(try in locale, "text.{}.form.{}", entry.name, $key), $value))
+        };
+    }
+
+    for archive in submission.archives.iter().rev() {
+        text.write_str("\n")?;
+
+        label!("created", format!("<t:{}:R>", archive.timestamp.unix_timestamp()))?;
+        label!("status", archive.status.kind.localize_in(locale, *entry))?;
+
+        text.write_str("> \n")?;
+
+        for (question, answer) in archive.answers.iter() {
+            text.write_fmt(format_args!("> - **{question}:** {answer}\n"))?;
+        }
+    }
+
+    if text.is_empty() {
+        text = format!("> *{}*", localize!(try in locale, "text.{}.archives.empty", entry.name));
+    } else if text.len() > 4096 {
+        text = text[.. 4093].to_string() + "...";
+    }
+
+    let embed = EmbedBuilder::new()
+        .author(EmbedAuthor::parse(&user)?)
+        .color(user.color())
+        .description(text.trim())
+        .thumbnail((&user).into_image_source()?)
+        .title(localize!(try in locale, "text.{}.archives.title", entry.name));
+
+    crate::followup!(as ctx => {
+        let embeds = &[embed.build()];
+        let flags = EPHEMERAL;
+    })
+    .await?;
+
+    Ok(())
 }
 
 pub async fn updates<'api: 'evt, 'evt>(
@@ -146,6 +205,8 @@ pub async fn updates<'api: 'evt, 'evt>(
 
     if text.is_empty() {
         text = format!("> *{}*", localize!(try in locale, "text.{}.updates.empty", entry.name));
+    } else if text.len() > 4096 {
+        text = text[.. 4093].to_string() + "...";
     }
 
     let embed = EmbedBuilder::new()
