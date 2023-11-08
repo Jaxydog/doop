@@ -8,6 +8,9 @@ use twilight_model::application::command::{Command, CommandOptionChoice, Command
 use twilight_model::application::interaction::application_command::{
     CommandData, CommandDataOption, CommandOptionValue,
 };
+use twilight_model::application::interaction::modal::{
+    ModalInteractionData, ModalInteractionDataActionRow,
+};
 use twilight_model::id::marker::{
     AttachmentMarker, ChannelMarker, GenericMarker, GuildMarker, RoleMarker, UserMarker,
 };
@@ -20,6 +23,8 @@ use crate::util::{DataId, Result};
 pub mod embed;
 /// The help command.
 pub mod help;
+/// The membership command.
+pub mod membership;
 /// The ping command.
 pub mod ping;
 /// The role command.
@@ -50,7 +55,13 @@ macro_rules! init_registry {
     };
 }
 
-init_registry![self::embed::entry, self::help::entry, self::ping::entry, self::role::entry];
+init_registry![
+    self::embed::entry,
+    self::help::entry,
+    self::membership::entry,
+    self::ping::entry,
+    self::role::entry
+];
 
 /// A builder function.
 pub type BuildFn = fn(&CommandEntry, Option<Id<GuildMarker>>) -> Result<Option<Command>>;
@@ -687,4 +698,52 @@ command_option_resolver_getter! {
     /// This function will return an error if the option does not exist or the value associated with
     /// the given option name is an invalid type.
     fn get_user_id() -> User as Id<UserMarker>;
+}
+
+/// Resolves and tracks a modal's provided fields.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ModalFieldResolver<'evt> {
+    /// The inner modal data.
+    data: &'evt ModalInteractionData,
+    /// The inner map of fields and their values.
+    fields: HashMap<&'evt str, &'evt str>,
+}
+
+impl<'evt> ModalFieldResolver<'evt> {
+    /// Creates a new [`ModalFieldResolver`] with the given data and fields.
+    #[must_use]
+    pub fn new_from(
+        data: &'evt ModalInteractionData,
+        fields: &'evt [ModalInteractionDataActionRow],
+    ) -> Self {
+        let fields = fields
+            .iter()
+            .filter_map(|r| r.components.first())
+            .filter_map(|c| Some((&(*c.custom_id), c.value.as_deref()?)));
+
+        Self { data, fields: fields.collect() }
+    }
+
+    /// Creates a new [`ModalFieldResolver`].
+    #[inline]
+    #[must_use]
+    pub fn new(data: &'evt ModalInteractionData) -> Self {
+        Self::new_from(data, &data.components)
+    }
+
+    /// Returns a reference to a stored field with the given name.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the requested field does not exist.
+    fn get(&self, name: &str) -> Result<&str> {
+        let Some(value) = self.fields.get(name) else {
+            bail!("missing value for field '{name}'");
+        };
+        if value.is_empty() {
+            bail!("empty value for field '{name}'");
+        }
+
+        Ok(*value)
+    }
 }
