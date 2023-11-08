@@ -1,4 +1,3 @@
-use std::fmt::Write;
 use std::num::NonZeroU64;
 
 use anyhow::bail;
