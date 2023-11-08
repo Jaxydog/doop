@@ -15,7 +15,7 @@ impl Format for MsgPack {
     }
 
     fn encode<T: Serialize>(&self, value: &T) -> Result<Vec<u8>, Self::EncodingError> {
-        rmp_serde::to_vec(value)
+        rmp_serde::to_vec_named(value)
     }
 
     fn decode<T: for<'de> Deserialize<'de>>(&self, bytes: &[u8]) -> Result<T, Self::DecodingError> {
