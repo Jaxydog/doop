@@ -16,14 +16,14 @@ use crate::util::{Result, BRANDING, FAILURE};
 const COLORS: &[(&str, &str)] = &[
     ("user", "user"),
     ("red", "#B4202A"),
-    ("orange", "#B4202A"),
+    ("orange", "#FA6A0A"),
     ("yellow", "#FFD541"),
     ("green", "#59C135"),
     ("blue", "#249FDE"),
     ("purple", "#BC4A9B"),
     ("pink", "#F5A097"),
     ("dark_red", "#73172D"),
-    ("dark_orange", "#DF3E23"),
+    ("dark_orange", "#71413B"),
     ("dark_yellow", "#F9A31B"),
     ("dark_green", "#1A7A3E"),
     ("dark_blue", "#285CC4"),
@@ -223,8 +223,8 @@ async fn execute_complete<'api: 'evt, 'evt>(
             strip.is_empty() || name.contains(&strip) || color.to_lowercase().contains(&strip)
         })
         .map(|(name, color)| CommandOptionChoice {
-            name: localize!(try in locale, "text.{}.color_{name}", acp.entry().name).into_owned(),
-            name_localizations: Some(localize!(in *, "text.{}.color_{name}", acp.entry().name)),
+            name: localize!(try in locale, "text.{}.color.{name}", acp.entry().name).into_owned(),
+            name_localizations: Some(localize!(in *, "text.{}.color.{name}", acp.entry().name)),
             value: CommandOptionChoiceValue::String((*color).to_string()),
         })
         .collect::<Vec<_>>();
