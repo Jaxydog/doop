@@ -153,6 +153,8 @@
     "text.membership.update_revise.description": "Thank you for applying, however you have been asked to submit a new application with updated information.",
     "text.membership.update_discard.title": "Your application has been discarded.",
     "text.membership.update_discard.description": "Thank you for applying, however your application has been discarded. You may re-apply at any time.",
+    "text.membership.updates.empty": "No updates yet!",
+    "text.membership.updates.title": "Application Updates",
     "text.membership.status.pending": "Pending",
     "text.membership.status.accept": "Accepted",
     "text.membership.status.reject": "Rejected",

@@ -68,11 +68,18 @@ pub async fn application<'api: 'evt, 'evt>(
 
         archives.push(SubmissionArchive {
             timestamp: previous.timestamp,
-            status: previous.status,
+            status: previous.status.clone(),
             answers: previous.answers,
         });
 
         submission.archives = archives.into_boxed_slice();
+        submission.status.update = Some(StatusUpdate {
+            author_id: user_id,
+            timestamp: OffsetDateTime::now_utc(),
+            reason: None,
+            comment: None,
+            previous: Some(Box::new(previous.status)),
+        });
     };
 
     let (embed, components) = submission.build_form(entry, ctx.api).await?;
