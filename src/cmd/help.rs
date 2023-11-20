@@ -83,14 +83,7 @@ fn stringify_all(entry: CommandEntry, locale: Locale, commands: &[Command]) -> S
 fn stringify(entry: CommandEntry, locale: Locale, command: &Command) -> String {
     let Command { name, id, dm_permission, nsfw, options, .. } = command;
 
-    let localized_name = localize!(try in locale, "command.{name}.name");
-    let localized_description = localize!(try in locale, "command.{name}.description");
-
     let mut flags = vec![];
-    let content = options.iter().any(|o| o.options.is_some()).then_some(*id).flatten().map_or_else(
-        || format!("- `/{localized_name}` - {localized_description}"),
-        |id| format!("- </{name}:{id}> - {localized_description}"),
-    );
 
     if options.iter().any(|o| o.options.is_some()) {
         flags.push(localize!(try in locale, "text.{}.has_subcommands", entry.name));
@@ -101,6 +94,13 @@ fn stringify(entry: CommandEntry, locale: Locale, command: &Command) -> String {
     if nsfw.unwrap_or_default() {
         flags.push(localize!(try in locale, "text.{}.is_nsfw", entry.name));
     }
+
+    let localized_name = localize!(try in locale, "command.{name}.name");
+    let localized_description = localize!(try in locale, "command.{name}.description");
+    let content = options.iter().any(|o| o.options.is_some()).then_some(*id).flatten().map_or_else(
+        || format!("- `/{localized_name}` - {localized_description}"),
+        |id| format!("- </{name}:{id}> - {localized_description}"),
+    );
 
     if flags.is_empty() { content } else { format!("{content}\n> *{}*", flags.join(", ")) }
 }
