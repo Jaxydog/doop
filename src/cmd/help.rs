@@ -97,7 +97,7 @@ fn stringify(entry: CommandEntry, locale: Locale, command: &Command) -> String {
 
     let localized_name = localize!(try in locale, "command.{name}.name");
     let localized_description = localize!(try in locale, "command.{name}.description");
-    let content = options.iter().any(|o| o.options.is_some()).then_some(*id).flatten().map_or_else(
+    let content = options.iter().all(|o| o.options.is_none()).then_some(*id).flatten().map_or_else(
         || format!("- `/{localized_name}` - {localized_description}"),
         |id| format!("- </{name}:{id}> - {localized_description}"),
     );
