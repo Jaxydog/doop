@@ -27,7 +27,7 @@
 
 [profile.dev]
     opt-level = 1
-    package."*" = { opt-level = 3 }
+    package."*".opt-level = 3
 
 [dependencies]
     anyhow = "1.0"
