@@ -50,4 +50,4 @@
     twilight-http = "0.15"
     twilight-model = "0.15"
     twilight-util = { version = "0.15", features = ["builder", "link", "snowflake"] }
-    uuid = { version = "1.6", features = ["fast-rng", "serde", "v4"] }
+    uuid = { version = "1.7", features = ["fast-rng", "serde", "v4"] }
