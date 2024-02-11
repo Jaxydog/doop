@@ -32,7 +32,7 @@
 [dependencies]
     anyhow = "1.0"
     async-trait = "0.1"
-    clap = { version = "4.4", features = ["derive"] }
+    clap = { version = "4.5", features = ["derive"] }
     doop-localizer = { version = "*", path = "lib/doop-localizer" }
     doop-logger = { version = "*", path = "lib/doop-logger" }
     doop-macros = { version = "*", path = "lib/doop-macros" }
@@ -44,7 +44,7 @@
     serde = { version = "1.0", features = ["derive"] }
     serde_repr = "0.1"
     time = { version = "0.3", features = ["formatting", "local-offset", "macros", "serde"] }
-    tokio = { version = "1.35", features = ["full"] }
+    tokio = { version = "1.36", features = ["full"] }
     twilight-cache-inmemory = "0.15"
     twilight-gateway = { version = "0.15", features = ["rustls-native-roots"] }
     twilight-http = "0.15"

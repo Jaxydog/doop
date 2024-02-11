@@ -14,7 +14,7 @@
     repository.workspace = true
 
 [dependencies]
-    clap = { version = "4.4", features = ["derive"] }
+    clap = { version = "4.5", features = ["derive"] }
     doop-logger = { version = "*", path = "../doop-logger" }
     serde = { version = "1.0", features = ["derive"] }
     serde_json = "1.0"

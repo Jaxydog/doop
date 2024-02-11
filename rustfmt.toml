@@ -15,6 +15,7 @@ imports_granularity = "Module"
 imports_indent = "Block"
 inline_attribute_width = 100
 max_width = 100
+merge_derives = false
 newline_style = "Unix"
 normalize_comments = true
 normalize_doc_attributes = true
